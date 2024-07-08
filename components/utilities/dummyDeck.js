@@ -1,3 +1,4 @@
+/* For Testing Card Component */
 import { makeCard } from './card.js';
 
 const suits = ['♥', '♦', '♠', '♣'];

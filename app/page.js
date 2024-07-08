@@ -1,10 +1,16 @@
+'use client';
+
 import Image from "next/image";
 import styles from "./page.module.css";
+import { Hand } from '@/components/gameComponents/hand.js';
 
 export default function Home() {
   return (
     <main className={styles.main}>
-      <div>Main Page.</div>
+      <div>
+        <h1>Hand</h1>
+        <Hand />
+      </div>
     </main>
   );
 }
