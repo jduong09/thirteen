@@ -13,6 +13,10 @@
   margin: 2px;
 }
 
+.card.selected {
+  background-color: beige;
+}
+
 .cardTopLeft {
   position: absolute;
   top: 8%;

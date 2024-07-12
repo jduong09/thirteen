@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import styles from "@/app/page.module.css";
 import { convertedHand } from '@/components/utilities/card';
 
@@ -6,7 +6,8 @@ import { convertedHand } from '@/components/utilities/card';
 // Need to check if allowed to shed a card or not.
 export const Hand = () => {
   const [hand, setHand] = useState(convertedHand);
-
+  const [combo, setCombo] = useState([]);
+  
   // Remove 1 card.
   const removeCard = (removedCard, e) => {
     e.preventDefault();
@@ -14,13 +15,20 @@ export const Hand = () => {
     setHand(newHand);
   }
 
-  // Need logic to remove combos.
-  // State to accumulate users turn.
+  // Logic to manipulate combo state.
+  const selectCard = (idx, e) => {
+    e.preventDefault();
+    const newCombo = (combo.length === 0 || !combo.includes(idx))
+      ? [...combo, idx]
+      : combo.filter((cardIdx) => cardIdx !== idx);
+
+    setCombo(newCombo);
+  }
 
   const listOfCards = hand.map((card, idx) => {
     return (
       <li key={idx}>
-        <div className={styles.card} onClick={(e) => removeCard(card, e)}>
+        <div className={`${styles.card} ${combo.includes(idx) && styles.selected}`} onClick={(e) => selectCard(idx, e)}>
           <div className={styles.cardTopLeft}>
             <span>{card.rank}</span>
             <span>{card.suit}</span>
