@@ -28,7 +28,7 @@ const Game = () => {
   };
   const shuffled = shuffle(deck);
 
-  // Deal Cards
+  // Build player hand structure
   const hands = [
     {player: 0, hand: []},
     {player: 1, hand: []},
@@ -36,8 +36,10 @@ const Game = () => {
     {player: 3, hand: []},
   ];
 
-  let introContent;
-  const onClick = () => {
+  /**
+   * @description Randomly shuffles the card deck using the fisher-yates shuffle algorithm and deals 13 cards to each player. Established the first player.
+   */
+  const onShuffleClick = () => {
     showIntro(true);
 
     shuffled.forEach((card, idx) => {
@@ -47,13 +49,15 @@ const Game = () => {
         setPlayerTurn(player);
       };
     });
+
     setTimeout(() => {
       showIntro(false);
       shuffleDeck(true);
     }, 10000);
   };
 
-  const shuffleBtn = deckIsShuffled ? null : <button class={gameStyles.shuffleBtn} onClick={onClick}>Shuffle Deck</button>;
+  // Only show shuffle button at start or end of game
+  const shuffleBtn = deckIsShuffled ? null : <button class={gameStyles.shuffleBtn} onClick={onShuffleClick}>Shuffle Deck</button>;
 
   return (
     <game>
