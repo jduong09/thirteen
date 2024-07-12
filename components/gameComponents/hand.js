@@ -1,10 +1,10 @@
-import { useRef, useEffect, useState } from 'react';
+import {  useState } from 'react';
 import styles from "@/app/page.module.css";
 import { convertedHand } from '@/components/utilities/card';
 
 // Prop
 // Need to check if allowed to shed a card or not.
-export const Hand = () => {
+export const Hand = (takeTurn) => {
   const [hand, setHand] = useState(convertedHand);
   const [combo, setCombo] = useState([]);
   
@@ -40,8 +40,16 @@ export const Hand = () => {
           </div>
         </div>
       </li>
-    )
+    );
   });
 
-  return <ul className={styles.hand}>{listOfCards}</ul>;
+  return (
+    <div>
+      <ul className={styles.hand}>{listOfCards}</ul>
+      <div>
+        <button>Finalize Turn</button>
+        <button>Pass</button>
+      </div>
+    </div>
+  );
 }
