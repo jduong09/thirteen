@@ -1,8 +1,7 @@
-'use client';
-
+"use client";
 import Image from "next/image";
 import styles from "./page.module.css";
-import { Hand } from '@/components/gameComponents/hand.js';
+import { Hand } from "@/components/gameComponents/hand.js";
 
 export default function Home() {
   return (
