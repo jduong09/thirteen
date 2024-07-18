@@ -2,6 +2,7 @@
 import Image from "next/image";
 import styles from "./page.module.css";
 import { Hand } from "@/components/gameComponents/hand.js";
+import Game from '../components/game/game.js';
 
 export default function Home() {
   return (
@@ -10,6 +11,7 @@ export default function Home() {
         <h1>Hand</h1>
         <Hand />
       </div>
+      <Game></Game>
     </main>
   );
 }
