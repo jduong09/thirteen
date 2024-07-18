@@ -57,15 +57,15 @@ const Game = () => {
   };
 
   // Only show shuffle button at start or end of game
-  const shuffleBtn = deckIsShuffled ? null : <button class={gameStyles.shuffleBtn} onClick={onShuffleClick}>Shuffle Deck</button>;
-
+  const shuffleBtn = deckIsShuffled ? null : <button className={gameStyles.shuffleBtn} onClick={onShuffleClick}>Shuffle Deck</button>;
+  
   return (
     <game>
       {introIsVisible
         ? <div className={gameStyles.intro}>
-          <p class={gameStyles.fade5}>Starting game.</p>
-          <p class={gameStyles.fade10}>Shuffling deck...</p>
-          <p class={gameStyles.showShuffle}>The deck has been shuffled and dealt. The first player to start is player {playerTurn + 1}</p>
+          <p className={gameStyles.fade5}>Starting game.</p>
+          <p className={gameStyles.fade10}>Shuffling deck...</p>
+          <p className={gameStyles.showShuffle}>The deck has been shuffled and dealt. The first player to start is player {playerTurn + 1}</p>
         </div>
         : shuffleBtn}
 
