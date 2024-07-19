@@ -108,7 +108,7 @@ const Hand = ({ cards, requestCombo, passTurn }) => {
   return (
     <div>
       <ul className={styles.hand}>{listOfCards}</ul>
-      <div>
+      <div className={styles.handBtns}>
         <button onClick={finalizeTurn}>Finalize Turn</button>
         <button onClick={() => passTurn()}>Pass Turn</button>
       </div>
