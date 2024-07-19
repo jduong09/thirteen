@@ -1,17 +1,23 @@
 import {  React, useState } from "react";
 import styles from "@/app/page.module.css";
-import { convertedHand } from "@/components/utilities/card";
+
+const icons = {
+  'hearts': '♥',
+  'diamonds': '♦',
+  'spades': '♠',
+  'clubs': '♣',
+}
 
 // Prop
 // Need to check if allowed to shed a card or not.
-export const Hand = (takeTurn) => {
-  const [hand, setHand] = useState(convertedHand);
+const Hand = ({ cards, requestCombo, passTurn }) => {
+  const [hand, setHand] = useState(cards);
   const [combo, setCombo] = useState([]);
   
   // Remove 1 card.
   const removeCard = (removedCard, e) => {
     e.preventDefault();
-    const newHand = hand.filter((card) => (card.suit != removedCard.suit || card.rank != removedCard.rank) ? true : false);
+    const newHand = hand.filter((card) => (card.value != removedCard.value) ? true : false);
     setHand(newHand);
   }
 
@@ -20,31 +26,29 @@ export const Hand = (takeTurn) => {
   // Need logic to handle the combo being accepted or denied.
   // Set up cypress
   // Logic to manipulate combo state.
+
+  // Game send function to hand to ask for combo.
   const selectCard = (selectedCard, e) => {
-    console.log(`SelectedCard: ${selectedCard.rank} ${selectedCard.suit}`)
     e.preventDefault();
 
     // if no card has been selected for a combo, we add the card to the combo array.
     if (combo.length === 0) {
-      console.log('Combo array is empty');
       setHand(hand.map((card) => {
-        if (card.rank === selectedCard.rank && card.suit === selectedCard.suit) {
+        if (card.value === selectedCard.value) {
           card.selected = true;
         }
         return card;
       }));
-      setCombo([...combo, { rank: selectedCard.rank, suit: selectedCard.suit }]);
+      setCombo([...combo, { number: selectedCard.number, suite: selectedCard.suite, value: selectedCard.value  }]);
       return;
     } else {
       // in this conditional, we have a combo array that has some card objects.
-      console.log('Combo Array is not empty');
-
       // We need to check...    
       // Is the selectedCard in the combo
       let removedSelected = false;
 
       const newCombo = combo.filter((card) => {
-        if (card.rank === selectedCard.rank && card.suit === selectedCard.suit) {
+        if (card.value === selectedCard.value) {
           // remove card from the combo.
           removedSelected = true;
           return false;
@@ -55,7 +59,7 @@ export const Hand = (takeTurn) => {
 
       if (removedSelected) {
         setHand(hand.map((card) => {
-          if (card.rank === selectedCard.rank && card.suit === selectedCard.suit) {
+          if (card.value === selectedCard.value) {
             card.selected = false;
           }
           return card;
@@ -63,44 +67,53 @@ export const Hand = (takeTurn) => {
         setCombo(newCombo);
       } else {
         setHand(hand.map((card) => {
-          if (card.rank === selectedCard.rank && card.suit === selectedCard.suit) {
+          if (card.value === selectedCard.value) {
             card.selected = true;
           }
           return card;
         }));
-        setCombo([...newCombo, { rank: selectedCard.rank, suit: selectedCard.suit, selected: true }]);
+        setCombo([...newCombo, { number: selectedCard.number, suite: selectedCard.suite, value: selectedCard.value, selected: true }]);
       }      
     }
   }
 
+  const finalizeTurn = (e) => {
+    e.preventDefault();
 
-  console.log('Combo', combo);
+    if (!combo.length) {
+      console.log('Hand submitted nothing, combo not sent to game component.');
+      return;
+    }
+
+    requestCombo(combo.map((card) => { return { number: card.number, suite: card.suite, value: card.value } }));
+  } 
+
   const listOfCards = hand.map((card, idx) => {
     return (
       <li key={idx}>
         <div className={`${styles.card} ${card.selected && styles.selected}`} onClick={(e) => selectCard(card, e)}>
           <div className={styles.cardTopLeft}>
-            <span>{card.rank}</span>
-            <span>{card.suit}</span>
+            <span>{card.number}</span>
+            <span>{icons[card.suite]}</span>
           </div>
-
           <div className={styles.cardBottomRight}>
-            <span>{card.suit}</span>
-            <span>{card.rank}</span>
+            <span>{icons[card.suite]}</span>
+            <span>{card.number}</span>
           </div>
         </div>
       </li>
     );
   });
 
-  const finalizeTurn = (e) => {
-    e.preventDefault();
-    takeTurn(combo);
-  }
-
   return (
     <div>
       <ul className={styles.hand}>{listOfCards}</ul>
+      <div>
+        <button onClick={finalizeTurn}>Finalize Turn</button>
+        <button onClick={() => passTurn()}>Pass Turn</button>
+      </div>
     </div>
   );
 }
+
+export default Hand;
