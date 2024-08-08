@@ -1,10 +1,12 @@
 import gameStyles from './game.module.scss';
 import { useState } from 'react';
+import Hand from "@/components/gameComponents/hand.js";
 
 const Game = () => {
   const [deckIsShuffled, shuffleDeck] = useState(false);
   const [introIsVisible, showIntro] = useState(false);
   const [playerTurn, setPlayerTurn] = useState(0);
+  const [hands, setHands] = useState(null);
 
   // Build Card Deck
   const suites = ['spades', 'clubs', 'diamonds', 'hearts'];
@@ -28,27 +30,28 @@ const Game = () => {
   };
   const shuffled = shuffle(deck);
 
-  // Build player hand structure
-  const hands = [
-    {player: 0, hand: []},
-    {player: 1, hand: []},
-    {player: 2, hand: []},
-    {player: 3, hand: []},
-  ];
-
   /**
    * @description Randomly shuffles the card deck using the fisher-yates shuffle algorithm and deals 13 cards to each player. Established the first player.
    */
   const onShuffleClick = () => {
     showIntro(true);
 
+    const tempHands = [
+      {player: 0, hand: []},
+      {player: 1, hand: []},
+      {player: 2, hand: []},
+      {player: 3, hand: []},
+    ];
+
     shuffled.forEach((card, idx) => {
       const player = idx % 4;
-      hands[player].hand.push(card);
+      tempHands[player].hand.push(card);
       if(card.number === '3' && card.suite === 'spades') {
         setPlayerTurn(player);
       };
     });
+
+    setHands(tempHands);
 
     setTimeout(() => {
       showIntro(false);
@@ -56,9 +59,17 @@ const Game = () => {
     }, 10000);
   };
 
+  const requestCombo = (combo) => {
+    console.log('Combo sent back to game component: ');
+    console.log(combo);
+  }
+
+  const passTurn = () => {
+    console.log('Pass Turn');
+  }
+
   // Only show shuffle button at start or end of game
   const shuffleBtn = deckIsShuffled ? null : <button className={gameStyles.shuffleBtn} onClick={onShuffleClick}>Shuffle Deck</button>;
-  
   return (
     <game>
       {introIsVisible
@@ -72,7 +83,7 @@ const Game = () => {
       {deckIsShuffled &&
         <div>
           <h3>Your Hand:</h3>
-          {/** The <Hand hand={hands[0].hand}> component will go here  */}
+          <Hand cards={hands[0].hand} requestCombo={requestCombo} passTurn={passTurn} />
         </div>
       }
     </game>
