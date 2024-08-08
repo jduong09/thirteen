@@ -10,9 +10,19 @@ const icons = {
 
 // Prop
 // Need to check if allowed to shed a card or not.
-const Hand = ({ cards, requestCombo, passTurn }) => {
+const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, passTurn }) => {
   const [hand, setHand] = useState(cards);
   const [combo, setCombo] = useState([]);
+  const [hasReset, resetCombo] = useState(false);
+  const isMyTurn = playerTurn === 0;
+
+  // FIXME: I don't love that I had to use a dumb hasReset flag to get this to work...
+  if(!isMyTurn && !hasReset) {
+    // Reset selected cards
+    hand.forEach(card => card.selected = false);
+    setCombo([]);
+    resetCombo(true);
+  }
   
   // Remove 1 card.
   const removeCard = (removedCard, e) => {
@@ -73,7 +83,7 @@ const Hand = ({ cards, requestCombo, passTurn }) => {
           return card;
         }));
         setCombo([...newCombo, { number: selectedCard.number, suite: selectedCard.suite, value: selectedCard.value, selected: true }]);
-      }      
+      }
     }
   }
 
@@ -108,9 +118,10 @@ const Hand = ({ cards, requestCombo, passTurn }) => {
   return (
     <div>
       <ul className={styles.hand}>{listOfCards}</ul>
+      {comboIsValid === false && <div>Invalid Combo. Try a different combo or pass.</div>}
       <div className={styles.handBtns}>
-        <button onClick={finalizeTurn}>Finalize Turn</button>
-        <button onClick={() => passTurn()}>Pass Turn</button>
+        <button disabled={!isMyTurn} onClick={finalizeTurn}>Finalize Turn</button>
+        <button disabled={!isMyTurn} onClick={() => passTurn()}>Pass Turn</button>
       </div>
     </div>
   );

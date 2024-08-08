@@ -7,6 +7,7 @@ const Game = () => {
   const [introIsVisible, showIntro] = useState(false);
   const [playerTurn, setPlayerTurn] = useState(0);
   const [hands, setHands] = useState(null);
+  const [comboIsValid, setComboStatus] = useState(null);
 
   // Build Card Deck
   const suites = ['spades', 'clubs', 'diamonds', 'hearts'];
@@ -14,7 +15,11 @@ const Game = () => {
   let value = 1; // 3 of spades is the lowest card
   const deck = numbers.map((number, idx) => suites.map((suite, i) => ({ number, suite, value: value++ }))).flat();
 
-  // Shuffle Deck >> Fisher-Yates Shuffle
+  /**
+   * @description Randomly shuffles the card deck using the Fisher-Yates Shuffle algorithm.
+   * @param {Object[]} array - Array of card objects
+   * @returns {Object[]} - Shuffled array of card objects
+   */
   const shuffle = (array) => {
     const arrCopy = JSON.parse(JSON.stringify(array));
     // While there remain elements to shuffle...
@@ -57,15 +62,45 @@ const Game = () => {
       showIntro(false);
       shuffleDeck(true);
     }, 10000);
+
+    // TODO: For testing purposes, set player 0 to be first player. Remove when done testing.
+    setPlayerTurn(0);
   };
 
-  const requestCombo = (combo) => {
-    console.log('Combo sent back to game component: ');
-    console.log(combo);
+  /**
+   * @description - Validates the submitted combo against the last combo played.
+   * @param {Object[]} combo - Array of card objects
+   * @returns {Boolean}
+   */
+  const validateCombo = (combo) => {
+    let isValid = false;
+    // TODO: A separate ticket to handle validating the combo move
+    return isValid;
   }
 
+  /**
+   * @description Validates player's submitted combo. If valid, proceed. If invalid, return the combo to the player.
+   * @param {Object[]} combo - Array of card objects
+   */
+  const requestCombo = (combo) => {
+    // Check if combo is valid
+    if(validateCombo(combo)) {
+      // Accept combo and set player turn
+      setComboStatus(true);
+      passTurn();
+      // TODO: Pass back updated hand to player
+    } else {
+      // Reject combo
+      setComboStatus(false);
+    }
+  }
+
+  /**
+   * @description Updates the player turn to the next player.
+   */
   const passTurn = () => {
-    console.log('Pass Turn');
+    setPlayerTurn(playerTurn === 3 ? 0 : playerTurn + 1);
+    setComboStatus(true);
   }
 
   // Only show shuffle button at start or end of game
@@ -82,8 +117,14 @@ const Game = () => {
 
       {deckIsShuffled &&
         <div>
+          <h2 className={gameStyles.turnIndicator}>{playerTurn === 0 ? 'Your' : `Player ${playerTurn + 1}'s`} turn.</h2>
           <h3>Your Hand:</h3>
-          <Hand cards={hands[0].hand} requestCombo={requestCombo} passTurn={passTurn} />
+          <Hand cards={hands[0].hand}
+            playerTurn={playerTurn}
+            comboIsValid={comboIsValid}
+            requestCombo={requestCombo}
+            passTurn={passTurn}
+          />
         </div>
       }
     </game>
