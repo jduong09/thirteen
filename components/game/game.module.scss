@@ -44,3 +44,16 @@ $primary-color: #2600ff;
 @keyframes cssAnimation {
   to { visibility: visible; }
 }
+
+.turnIndicator {
+  padding: 1rem;
+  margin: 1rem;
+  font-weight: bold;
+  font-size: large;
+  background-color: $primary-color;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+}
