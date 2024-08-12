@@ -103,6 +103,7 @@ const Game = () => {
     setComboStatus(true);
   }
 
+  console.log(hands);
   // Only show shuffle button at start or end of game
   const shuffleBtn = deckIsShuffled ? null : <button className={gameStyles.shuffleBtn} onClick={onShuffleClick}>Shuffle Deck</button>;
   return (
