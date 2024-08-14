@@ -1,6 +1,7 @@
 import gameStyles from './game.module.scss';
 import { useState } from 'react';
 import Hand from "@/components/gameComponents/hand.js";
+import { dictionaryCombinations } from '@/components/utilities/combination.js';
 
 const Game = () => {
   const [deckIsShuffled, shuffleDeck] = useState(false);
@@ -8,6 +9,8 @@ const Game = () => {
   const [playerTurn, setPlayerTurn] = useState(0);
   const [hands, setHands] = useState(null);
   const [comboIsValid, setComboStatus] = useState(null);
+  const [prompt, setPrompt] = useState(null);
+  const [currentTurnCombo, setCurrentTurnCombo] = useState(null);
 
   // Build Card Deck
   const suites = ['spades', 'clubs', 'diamonds', 'hearts'];
@@ -61,6 +64,7 @@ const Game = () => {
     setTimeout(() => {
       showIntro(false);
       shuffleDeck(true);
+      comboChoiceLoop()
     }, 10000);
 
     // TODO: For testing purposes, set player 0 to be first player. Remove when done testing.
@@ -72,22 +76,25 @@ const Game = () => {
    * @param {Object[]} combo - Array of card objects
    * @returns {Boolean}
    */
-  const validateCombo = (combo) => {
-    let isValid = false;
+  const validateCombo = (combo, combination) => {
     // TODO: A separate ticket to handle validating the combo move
-    return isValid;
+    return dictionaryCombinations[combination].isValid(combo);
   }
 
   /**
    * @description Validates player's submitted combo. If valid, proceed. If invalid, return the combo to the player.
    * @param {Object[]} combo - Array of card objects
    */
-  const requestCombo = (combo) => {
+  const requestCombo = (combo, combination) => {
+
     // Check if combo is valid
-    if(validateCombo(combo)) {
+    if(validateCombo(combo, combination)) {
       // Accept combo and set player turn
       setComboStatus(true);
-      passTurn();
+
+      // For purposes of Dictionary of Combinations PR, commenting out passTurn and infinitely looping comboChoiceLoop
+      // passTurn();
+      comboChoiceLoop();
       // TODO: Pass back updated hand to player
     } else {
       // Reject combo
@@ -103,7 +110,43 @@ const Game = () => {
     setComboStatus(true);
   }
 
-  console.log(hands);
+  /**
+   * @description Simulates user selecting combos.
+   */
+  const comboChoiceLoop = () => {
+    const randomInt = Math.floor(Math.random() * (6 - 1 + 1) + 1);
+
+    if (randomInt === 1) {
+      setPrompt('Select a combo that fits SINGLE');
+      setCurrentTurnCombo('single')
+    } else if (randomInt === 2) {
+      setPrompt('Select a combo that fits PAIR');
+      setCurrentTurnCombo('pair');
+    } else if (randomInt === 3) {
+      setPrompt('Select a combo that fits TRIPLET');
+      setCurrentTurnCombo('triplet');
+    } else if (randomInt === 4) {
+      setPrompt('Select a combo that fits QUARTET');
+      setCurrentTurnCombo('quartet');
+    } else if (randomInt === 5) {
+      setPrompt('Select a combo that fits SINGLE SEQUENCE');
+      setCurrentTurnCombo('sequence');
+    } else {
+      setPrompt('Select a combo that fits DOUBLE SEQUENCE');
+      setCurrentTurnCombo('double sequence')
+    }
+  }
+
+  /**
+   * @description Reshuffle deck to test combos.
+   */
+
+  const reshuffleDeck = () => {
+    shuffleDeck(false);
+    setComboStatus(null);
+    onShuffleClick();
+  }
+
   // Only show shuffle button at start or end of game
   const shuffleBtn = deckIsShuffled ? null : <button className={gameStyles.shuffleBtn} onClick={onShuffleClick}>Shuffle Deck</button>;
   return (
@@ -119,14 +162,19 @@ const Game = () => {
       {deckIsShuffled &&
         <div>
           <h2 className={gameStyles.turnIndicator}>{playerTurn === 0 ? 'Your' : `Player ${playerTurn + 1}'s`} turn.</h2>
+          <h2>{prompt}</h2>
           <h3>Your Hand:</h3>
           <Hand cards={hands[0].hand}
             playerTurn={playerTurn}
             comboIsValid={comboIsValid}
             requestCombo={requestCombo}
+            currentTurnCombo={currentTurnCombo}
             passTurn={passTurn}
           />
+          <button className={gameStyles.shuffleBtn} onClick={comboChoiceLoop}>Change Combo Type</button>
+          <button className={gameStyles.shuffleBtn} onClick={reshuffleDeck}>Reshuffle Deck</button>
         </div>
+        
       }
     </game>
   );

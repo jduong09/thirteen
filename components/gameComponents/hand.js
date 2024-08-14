@@ -10,7 +10,7 @@ const icons = {
 
 // Prop
 // Need to check if allowed to shed a card or not.
-const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, passTurn }) => {
+const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo, passTurn }) => {
   const [hand, setHand] = useState(cards);
   const [combo, setCombo] = useState([]);
   const [hasReset, resetCombo] = useState(false);
@@ -95,7 +95,7 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, passTurn }) => {
       return;
     }
 
-    requestCombo(combo.map((card) => { return { number: card.number, suite: card.suite, value: card.value } }));
+    requestCombo(combo.map((card) => { return { number: card.number, suite: card.suite, value: card.value } }), currentTurnCombo);
   } 
 
   const listOfCards = hand.map((card, idx) => {
@@ -114,11 +114,12 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, passTurn }) => {
       </li>
     );
   });
-
+  // Line 122: Removed sentence 'Try a different combo or pass' and replaced with 'Try a different combo or press Change Combo Type' for this PR specifically.
   return (
     <div>
       <ul className={styles.hand}>{listOfCards}</ul>
-      {comboIsValid === false && <div>Invalid Combo. Try a different combo or pass.</div>}
+
+      {comboIsValid === false && <div>Invalid Combo. Try a different combo or press Change Combo Type.</div>}
       <div className={styles.handBtns}>
         <button disabled={!isMyTurn} onClick={finalizeTurn}>Finalize Turn</button>
         <button disabled={!isMyTurn} onClick={() => passTurn()}>Pass Turn</button>
