@@ -66,11 +66,27 @@ const Game = () => {
       shuffleDeck(true);
       comboChoiceLoop()
     }, 1000);
-
-    // TODO: For testing purposes, set player 0 to be first player. Remove when done testing.
-    setPlayerTurn(0);
   };
 
+  /**
+   * @description Changes the player turn to the next player.
+   */
+  const changeTurn = () => setPlayerTurn(playerTurn === 3 ? 0 : playerTurn + 1);
+
+  /**
+   * @description Determines the combination type for the current turn based on the cards submitted
+   * NOTE: This is currently unused. But will be once we have the logic in place for the AI moves (or if the user has the first turn)
+   * @param {Object[]} combo - Array of card objects
+   */
+  const determineCombination = (combo) => {
+    const [combination] = Object.entries(dictionaryCombinations).find(([key, val]) => val.isValid(combo)) || [];
+    if(combination) {
+      setCurrentTurnCombo(combination);
+    } else {
+      // Invalid combination --> reject combo
+      setComboStatus(false);
+    }
+  }
   /**
    * @description - Validates the submitted combo against the last combo played.
    * @param {Object[]} combo - Array of card objects
@@ -86,7 +102,6 @@ const Game = () => {
    * @param {Object[]} combo - Array of card objects
    */
   const requestCombo = (combo, combination) => {
-
     // Check if combo is valid
     if(validateCombo(combo, combination)) {
       // Accept combo and set player turn
@@ -94,11 +109,15 @@ const Game = () => {
 
       // For purposes of Dictionary of Combinations PR, commenting out passTurn and infinitely looping comboChoiceLoop
       // passTurn();
-      comboChoiceLoop();
+      // comboChoiceLoop();
+
       combo.forEach((card) => {
         hands[playerTurn].hand = hands[playerTurn].hand.filter((handCard) => handCard.value !== card.value);
       });
       setHands(hands);
+
+      // TODO: Remove when done testing. This is just to simulate a fake game.
+      setTimeout(() => changeTurn(), 3000);
     } else {
       // Reject combo
       setComboStatus(false);
@@ -109,7 +128,7 @@ const Game = () => {
    * @description Updates the player turn to the next player.
    */
   const passTurn = () => {
-    setPlayerTurn(playerTurn === 3 ? 0 : playerTurn + 1);
+    changeTurn();
     setComboStatus(true);
   }
 
@@ -118,7 +137,7 @@ const Game = () => {
    */
   const comboChoiceLoop = () => {
     // const randomInt = Math.floor(Math.random() * (6 - 1 + 1) + 1);
-    const randomInt = 2; // TODO: This is just for quick testing
+    const randomInt = 1; // TODO: Clean this up later; this is just for quick testing
 
     if (randomInt === 1) {
       setPrompt('Select a combo that fits SINGLE');
@@ -144,7 +163,6 @@ const Game = () => {
   /**
    * @description Reshuffle deck to test combos.
    */
-
   const reshuffleDeck = () => {
     shuffleDeck(false);
     setComboStatus(null);
@@ -153,6 +171,26 @@ const Game = () => {
 
   // Only show shuffle button at start or end of game
   const shuffleBtn = deckIsShuffled ? null : <button className={gameStyles.shuffleBtn} onClick={onShuffleClick}>Shuffle Deck</button>;
+
+  /**
+   * NOTE: This is logic for AI players
+   */
+  if(playerTurn !== 0) {
+    // TODO: Simulate player's turn
+    // For testing right now, I'm just playing the lowest single card until we write the logic for the AI
+    // TODO: Once we have a more comprehensive AI, we can update the combination type.
+    const currHand = hands[playerTurn].hand;
+    const lowestCard = currHand.reduce((lowest, curr) => {
+      if(curr.value < lowest) {
+        return curr.value;
+      }
+      return lowest;
+    }, 53);
+
+    // TODO: Remove when done testing. This is mocking a single card play
+    setTimeout(() => requestCombo([currHand.find((card) => card.value === lowestCard)], 'single'), 3000);
+  }
+
   return (
     <game>
       {introIsVisible
@@ -165,7 +203,10 @@ const Game = () => {
 
       {deckIsShuffled &&
         <div>
-          <h2 className={gameStyles.turnIndicator}>{playerTurn === 0 ? 'Your' : `Player ${playerTurn + 1}'s`} turn.</h2>
+          <h2 className={gameStyles.turnIndicator}>
+            <span>{playerTurn === 0 ? 'Your' : `Player ${playerTurn + 1}'s`} turn.</span>
+            {playerTurn !== 0 && <span> Thinking... <span className={gameStyles.loading}></span></span>}
+          </h2>
           <h2>{prompt}</h2>
           <h3>Your Hand:</h3>
           <Hand cards={hands[0].hand}
