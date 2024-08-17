@@ -65,7 +65,7 @@ const Game = () => {
       showIntro(false);
       shuffleDeck(true);
       comboChoiceLoop()
-    }, 10000);
+    }, 1000);
 
     // TODO: For testing purposes, set player 0 to be first player. Remove when done testing.
     setPlayerTurn(0);
@@ -95,7 +95,10 @@ const Game = () => {
       // For purposes of Dictionary of Combinations PR, commenting out passTurn and infinitely looping comboChoiceLoop
       // passTurn();
       comboChoiceLoop();
-      // TODO: Pass back updated hand to player
+      combo.forEach((card) => {
+        hands[playerTurn].hand = hands[playerTurn].hand.filter((handCard) => handCard.value !== card.value);
+      });
+      setHands(hands);
     } else {
       // Reject combo
       setComboStatus(false);
@@ -114,7 +117,8 @@ const Game = () => {
    * @description Simulates user selecting combos.
    */
   const comboChoiceLoop = () => {
-    const randomInt = Math.floor(Math.random() * (6 - 1 + 1) + 1);
+    // const randomInt = Math.floor(Math.random() * (6 - 1 + 1) + 1);
+    const randomInt = 2; // TODO: This is just for quick testing
 
     if (randomInt === 1) {
       setPrompt('Select a combo that fits SINGLE');

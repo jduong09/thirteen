@@ -16,6 +16,13 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
   const [hasReset, resetCombo] = useState(false);
   const isMyTurn = playerTurn === 0;
 
+  // Update hand after changes.
+  // NOTE: Apparently this might not be best practice, and some people suggest handling all
+  // state changes from the parent only. But that seems like too much managmement in one place imo.
+  if(cards.length !== hand.length) {
+    setHand(cards);
+  }
+
   // FIXME: I don't love that I had to use a dumb hasReset flag to get this to work...
   if(!isMyTurn && !hasReset) {
     // Reset selected cards
