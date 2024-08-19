@@ -15,6 +15,7 @@ const Game = () => {
 
   // Build Card Deck
   const suites = ['spades', 'clubs', 'diamonds', 'hearts'];
+  // 3-10 are normal cards, 11 is Jack, 12 is Queen, 13 is King, 14 is Ace, 15 is 2.
   const numbers = ['3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15'];
   let value = 1; // 3 of spades is the lowest card
   const deck = numbers.map((number, idx) => suites.map((suite, i) => ({ number, suite, value: value++ }))).flat();
@@ -87,13 +88,9 @@ const Game = () => {
    * @param {Object[]} combo - Array of card objects
    */
   const requestCombo = (combo, combination) => {
-    console.log(combination);
-    console.log(combo);
-    console.log(currentTurnCombo);
     // Check if combo is valid
     if(validateCombo(combo, combination)) {
       // Accept combo and set player turn
-      console.log('valid combo');
       setComboStatus(true);
 
       setTimeout(() => {
@@ -104,7 +101,6 @@ const Game = () => {
       // TODO: Pass back updated hand to player
     } else {
       // Reject combo
-      console.log('incorrect combo');
       setComboStatus(false);
     }
   }
@@ -121,7 +117,6 @@ const Game = () => {
    * @description Changes combo with updated user selected choice.
    */
   const changeCombo = (e) => {
-    console.log('E.target.value', e.target.value);
     setComboSelect(e.target.value);
     setCurrentTurnCombo(e.target.value);
   }
@@ -163,12 +158,12 @@ const Game = () => {
           <button className={gameStyles.shuffleBtn} onClick={reshuffleDeck}>Reshuffle Deck</button>
           <form>
             <label htmlFor='select-combo'>Combination: </label>
-            <select id='select-combo' name='select-combo' onChange={changeCombo}>
+            <select id='select-combo' name='select-combo' className={gameStyles.selectCombo} onChange={changeCombo}>
               <option value='single'>Single</option>
               <option value='pair'>Pair</option>
               <option value='triplet'>Triplet</option>
               <option value='quartet'>Quartet</option>
-              <option value='sequence'>Sequenece</option>
+              <option value='sequence'>Sequence</option>
               <option value='double sequence'>Double Sequence</option>
             </select>
           </form>
