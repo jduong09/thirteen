@@ -82,6 +82,11 @@ $primary-color: #2600ff;
   to { -webkit-transform: rotate(360deg); }
 }
 
+.selectCombo {
+  padding: .5rem;
+  border: 1px solid #2600ff;
+}
+
 .validCombo {
   margin-top: 1rem;
   font-size: large;

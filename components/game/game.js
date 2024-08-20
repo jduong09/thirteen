@@ -15,6 +15,7 @@ const Game = () => {
 
   // Build Card Deck
   const suites = ['spades', 'clubs', 'diamonds', 'hearts'];
+  // 3-10 are normal cards, 11 is Jack, 12 is Queen, 13 is King, 14 is Ace, 15 is 2.
   const numbers = ['3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15'];
   let value = 1; // 3 of spades is the lowest card
   const deck = numbers.map((number, idx) => suites.map((suite, i) => ({ number, suite, value: value++ }))).flat();
@@ -94,7 +95,6 @@ const Game = () => {
    */
   const validateCombo = (combo, combination) => {
     // TODO: A separate ticket to handle validating the combo move
-    console.log(combo, combination);
     return dictionaryCombinations[combination].isValid(combo);
   }
 
@@ -106,7 +106,6 @@ const Game = () => {
     // Check if combo is valid
     if(validateCombo(combo, combination)) {
       // Accept combo and set player turn
-      console.log('valid combo');
       setComboStatus(true);
 
       setTimeout(() => {
@@ -122,7 +121,6 @@ const Game = () => {
       setTimeout(() => changeTurn(), 3000);
     } else {
       // Reject combo
-      console.log('incorrect combo');
       setComboStatus(false);
     }
   }
@@ -136,7 +134,6 @@ const Game = () => {
   }
 
   const changeCombo = (e) => {
-    console.log('E.target.value', e.target.value);
     setComboSelect(e.target.value);
     setCurrentTurnCombo(e.target.value);
   }
@@ -188,7 +185,7 @@ const Game = () => {
             <span>{playerTurn === 0 ? 'Your' : `Player ${playerTurn + 1}'s`} turn.</span>
             {playerTurn !== 0 && <span> Thinking... <span className={gameStyles.loading}></span></span>}
           </h2>
-          <h2>{`Select a combo thats fits ${selectCombo}`}</h2>
+          <h2>Select a combo thats fits {selectCombo}</h2>
           <h3>Your Hand:</h3>
           <Hand cards={hands[0].hand}
             playerTurn={playerTurn}
@@ -200,12 +197,12 @@ const Game = () => {
           <button className={gameStyles.shuffleBtn} onClick={reshuffleDeck}>Reshuffle Deck</button>
           <form>
             <label htmlFor='select-combo'>Combination: </label>
-            <select id='select-combo' name='select-combo' onChange={changeCombo}>
+            <select id='select-combo' name='select-combo' className={gameStyles.selectCombo} onChange={changeCombo}>
               <option value='single'>Single</option>
               <option value='pair'>Pair</option>
               <option value='triplet'>Triplet</option>
               <option value='quartet'>Quartet</option>
-              <option value='sequence'>Sequenece</option>
+              <option value='sequence'>Sequence</option>
               <option value='double sequence'>Double Sequence</option>
             </select>
           </form>

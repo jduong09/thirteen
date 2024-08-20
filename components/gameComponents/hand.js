@@ -1,5 +1,6 @@
 import {  React, useState } from "react";
 import styles from "@/app/page.module.css";
+import { mapCard } from "../utilities/card";
 
 const icons = {
   'hearts': '♥',
@@ -106,16 +107,17 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
   } 
 
   const listOfCards = hand.map((card, idx) => {
+    const cardDisplay = mapCard(card.number);
     return (
       <li key={idx}>
         <div className={`${styles.card} ${card.selected && styles.selected}`} onClick={(e) => selectCard(card, e)}>
           <div className={styles.cardTopLeft}>
-            <span>{card.number}</span>
+            <span>{cardDisplay}</span>
             <span>{icons[card.suite]}</span>
           </div>
           <div className={styles.cardBottomRight}>
             <span>{icons[card.suite]}</span>
-            <span>{card.number}</span>
+            <span>{cardDisplay}</span>
           </div>
         </div>
       </li>
