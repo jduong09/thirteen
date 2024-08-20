@@ -79,7 +79,6 @@ const Game = () => {
    */
   const validateCombo = (combo, combination) => {
     // TODO: A separate ticket to handle validating the combo move
-    console.log(combo, combination);
     return dictionaryCombinations[combination].isValid(combo);
   }
 
@@ -146,7 +145,7 @@ const Game = () => {
       {deckIsShuffled &&
         <div>
           <h2 className={gameStyles.turnIndicator}>{playerTurn === 0 ? 'Your' : `Player ${playerTurn + 1}'s`} turn.</h2>
-          <h2>{`Select a combo thats fits ${selectCombo}`}</h2>
+          <h2>Select a combo thats fits {selectCombo}</h2>
           <h3>Your Hand:</h3>
           <Hand cards={hands[0].hand}
             playerTurn={playerTurn}
