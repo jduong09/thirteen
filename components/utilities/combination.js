@@ -1,68 +1,45 @@
 // Function validateCombo that takes in an array of cards which is the current players choice of cards, and matches it to the current cycles combination. 
 export const dictionaryCombinations = {
   'single': {
-    // Can't be more than 1 card.
     isValid: (cards) => cards.length === 1,
   },
   'pair': {
-    // Comprised of two cards, cards have the same number.
     isValid: (cards) => {
-      if (cards.length !== 2) {
-        return false;
-      }
-    
-      return cards[0].number === cards[1].number;
+      const [{ number: cardNumber }] = cards;
+      return cards.length === 2 && cards.every(({ number }) => number === cardNumber);
     },
   },
   'triplet': {
-    // Comprised of three cards, cards have the same number.
     isValid: (cards) => {
-      if (cards.length !== 3) {
-        return false;
-      }
-    
-      return cards[0].number === cards[1].number && cards[0].number === cards[2].number;
+      const [{ number: cardNumber }] = cards;
+      return cards.length === 3 && cards.every(({ number }) => number === cardNumber);
     }
   },
   'quartet': {
-    // Comprised of four cards, cards have the same number.
     isValid: (cards) => {
-      if (cards.length !== 4) {
-        return false;
-      }
-    
-      return cards[0].number === cards[1].number && cards[0].number === cards[2].number && cards[0].number === cards[3].number;
+      const [{ number: cardNumber }] = cards;
+      return cards.length === 4 && cards.every(({ number }) => number === cardNumber);    
     }
   },
   'sequence': {
-    // Two important conditions
-    // 1: length of 3 or more numbers
-    // 2: cards in order.
     isValid: (cards) => {
-
       if (cards.length < 3) {
         return false;
       }
-    
-      let containsDupe = false;
-      const uniqNumbers = {};
-      for (let i = 0; i < cards.length; i++) {
-        if (uniqNumbers[cards[i].number] === undefined) {
-          uniqNumbers[cards[i].number] = true;
+
+      const { uniqNumbers, containsDupe } = cards.reduce((acc, { number }) => {
+        if (acc.uniqNumbers.includes(number)) {
+          acc.containsDupe = true;
         } else {
-          containsDupe = true;
+          acc.uniqNumbers.push(number);
         }
-      }
+        return acc;
+      }, { uniqNumbers: [], containsDupe: false });
     
       if (containsDupe) {
         return false;
       } else {
-        const arrayUniq = [];
-        for (const key in uniqNumbers) {
-          arrayUniq.push(Number(key));
-        }
-    
-        const sortedArray = arrayUniq.sort((a, b) => {
+        const sortedArray = uniqNumbers.sort((a, b) => {
           return a - b;
         });
     
@@ -72,40 +49,24 @@ export const dictionaryCombinations = {
   },
   'double sequence': {
     isValid: (cards) => {
-      // double sequence fills two importants conditions
-      // 1: sequence of 3 or more numbers
-      // 2: each number in the sequence has two iterations of itself
-      // 3: cards in order
-    
       if (cards.length < 6) {
         return false;
       }
-    
-      let failsDoubleIterations = false;
-    
-      const obj = {};
-    
-      for (let i = 0; i < cards.length; i++) {
-        if (obj[cards[i].number] === undefined) {
-          obj[cards[i].number] = 1;
+
+      const mappedCards = cards.map((card) => card.number);
+      const { uniqNumbers, failsDoubleIterations } = cards.reduce((acc, { number }) => {
+        if (mappedCards.indexOf(number) === mappedCards.lastIndexOf(number)) {
+          acc.failsDoubleIterations = true;
         } else {
-          obj[cards[i].number]++;
+          acc.uniqNumbers.push(number)
         }
-      }
-    
-      const array = [];
-      for (const key in obj) {
-        if (obj[key] === 2) {
-          array.push(key);
-        } else {
-          failsDoubleIterations = true;
-        }
-      }
-    
+        return acc;
+      }, { uniqNumbers: [], failsDoubleIterations: false });
+
       if (failsDoubleIterations) {
         return false;
       } else {
-        const sortedArray = array.sort((a, b) => {
+        const sortedArray = uniqNumbers.sort((a, b) => {
           return a - b;
         });
     
@@ -115,8 +76,8 @@ export const dictionaryCombinations = {
   }
 }
 
-/* Console.log Tests */
 const validateCombo = (cards, combination) => dictionaryCombinations[combination].isValid(cards);
+/* Console.log Tests */
 
 console.log(' -- Testing One card for Single -- ');
 console.log(validateCombo([{number: 9, suite: 'clubs', value: 26}], 'single'));

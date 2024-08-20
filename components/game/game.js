@@ -9,8 +9,9 @@ const Game = () => {
   const [playerTurn, setPlayerTurn] = useState(0);
   const [hands, setHands] = useState(null);
   const [comboIsValid, setComboStatus] = useState(null);
-  const [prompt, setPrompt] = useState(null);
-  const [currentTurnCombo, setCurrentTurnCombo] = useState(null);
+  const [currentTurnCombo, setCurrentTurnCombo] = useState('single');
+
+  const [selectCombo, setComboSelect] = useState('single');
 
   // Build Card Deck
   const suites = ['spades', 'clubs', 'diamonds', 'hearts'];
@@ -94,6 +95,7 @@ const Game = () => {
    */
   const validateCombo = (combo, combination) => {
     // TODO: A separate ticket to handle validating the combo move
+    console.log(combo, combination);
     return dictionaryCombinations[combination].isValid(combo);
   }
 
@@ -102,13 +104,24 @@ const Game = () => {
    * @param {Object[]} combo - Array of card objects
    */
   const requestCombo = (combo, combination) => {
+<<<<<<< HEAD
+=======
+    console.log(combination);
+    console.log(combo);
+    console.log(currentTurnCombo);
+>>>>>>> utility/dictionaryOfCombinations
     // Check if combo is valid
     if(validateCombo(combo, combination)) {
       // Accept combo and set player turn
+      console.log('valid combo');
       setComboStatus(true);
 
+      setTimeout(() => {
+        setComboStatus(null);
+      }, 5000);
       // For purposes of Dictionary of Combinations PR, commenting out passTurn and infinitely looping comboChoiceLoop
       // passTurn();
+<<<<<<< HEAD
       // comboChoiceLoop();
 
       combo.forEach((card) => {
@@ -118,8 +131,12 @@ const Game = () => {
 
       // TODO: Remove when done testing. This is just to simulate a fake game.
       setTimeout(() => changeTurn(), 3000);
+=======
+      // TODO: Pass back updated hand to player
+>>>>>>> utility/dictionaryOfCombinations
     } else {
       // Reject combo
+      console.log('incorrect combo');
       setComboStatus(false);
     }
   }
@@ -133,8 +150,9 @@ const Game = () => {
   }
 
   /**
-   * @description Simulates user selecting combos.
+   * @description Changes combo with updated user selected choice.
    */
+<<<<<<< HEAD
   const comboChoiceLoop = () => {
     // const randomInt = Math.floor(Math.random() * (6 - 1 + 1) + 1);
     const randomInt = 1; // TODO: Clean this up later; this is just for quick testing
@@ -158,6 +176,12 @@ const Game = () => {
       setPrompt('Select a combo that fits DOUBLE SEQUENCE');
       setCurrentTurnCombo('double sequence')
     }
+=======
+  const changeCombo = (e) => {
+    console.log('E.target.value', e.target.value);
+    setComboSelect(e.target.value);
+    setCurrentTurnCombo(e.target.value);
+>>>>>>> utility/dictionaryOfCombinations
   }
 
   /**
@@ -203,11 +227,16 @@ const Game = () => {
 
       {deckIsShuffled &&
         <div>
+<<<<<<< HEAD
           <h2 className={gameStyles.turnIndicator}>
             <span>{playerTurn === 0 ? 'Your' : `Player ${playerTurn + 1}'s`} turn.</span>
             {playerTurn !== 0 && <span> Thinking... <span className={gameStyles.loading}></span></span>}
           </h2>
           <h2>{prompt}</h2>
+=======
+          <h2 className={gameStyles.turnIndicator}>{playerTurn === 0 ? 'Your' : `Player ${playerTurn + 1}'s`} turn.</h2>
+          <h2>{`Select a combo thats fits ${selectCombo}`}</h2>
+>>>>>>> utility/dictionaryOfCombinations
           <h3>Your Hand:</h3>
           <Hand cards={hands[0].hand}
             playerTurn={playerTurn}
@@ -216,8 +245,20 @@ const Game = () => {
             currentTurnCombo={currentTurnCombo}
             passTurn={passTurn}
           />
-          <button className={gameStyles.shuffleBtn} onClick={comboChoiceLoop}>Change Combo Type</button>
           <button className={gameStyles.shuffleBtn} onClick={reshuffleDeck}>Reshuffle Deck</button>
+          <form>
+            <label htmlFor='select-combo'>Combination: </label>
+            <select id='select-combo' name='select-combo' onChange={changeCombo}>
+              <option value='single'>Single</option>
+              <option value='pair'>Pair</option>
+              <option value='triplet'>Triplet</option>
+              <option value='quartet'>Quartet</option>
+              <option value='sequence'>Sequenece</option>
+              <option value='double sequence'>Double Sequence</option>
+            </select>
+          </form>
+
+          {comboIsValid && <h2 className={gameStyles.validCombo}>Combo Choice is correct. Try making another combo or reshuffling the deck for new cards.</h2>}
         </div>
         
       }

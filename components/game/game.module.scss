@@ -81,3 +81,11 @@ $primary-color: #2600ff;
 @-webkit-keyframes spin {
   to { -webkit-transform: rotate(360deg); }
 }
+
+.validCombo {
+  margin-top: 1rem;
+  font-size: large;
+  background-color: purple;
+  color: white;
+  padding: 1rem;
+}
