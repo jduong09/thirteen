@@ -16,7 +16,7 @@ const Game = () => {
   // Build Card Deck
   const suites = ['spades', 'clubs', 'diamonds', 'hearts'];
   // 3-10 are normal cards, 11 is Jack, 12 is Queen, 13 is King, 14 is Ace, 15 is 2.
-  const numbers = ['3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15'];
+  const numbers = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
   let value = 1; // 3 of spades is the lowest card
   const deck = numbers.map((number, idx) => suites.map((suite, i) => ({ number, suite, value: value++ }))).flat();
 
