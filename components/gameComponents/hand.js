@@ -1,5 +1,6 @@
 import {  React, useState } from "react";
 import styles from "@/app/page.module.css";
+import { mapCard } from "../utilities/card";
 
 const icons = {
   'hearts': '♥',
@@ -10,7 +11,7 @@ const icons = {
 
 // Prop
 // Need to check if allowed to shed a card or not.
-const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, passTurn }) => {
+const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo, passTurn }) => {
   const [hand, setHand] = useState(cards);
   const [combo, setCombo] = useState([]);
   const [hasReset, resetCombo] = useState(false);
@@ -95,30 +96,32 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, passTurn }) => {
       return;
     }
 
-    requestCombo(combo.map((card) => { return { number: card.number, suite: card.suite, value: card.value } }));
+    requestCombo(combo.map((card) => { return { number: card.number, suite: card.suite, value: card.value } }), currentTurnCombo);
   } 
 
   const listOfCards = hand.map((card, idx) => {
+    const cardDisplay = mapCard(card.number);
     return (
       <li key={idx}>
         <div className={`${styles.card} ${card.selected && styles.selected}`} onClick={(e) => selectCard(card, e)}>
           <div className={styles.cardTopLeft}>
-            <span>{card.number}</span>
+            <span>{cardDisplay}</span>
             <span>{icons[card.suite]}</span>
           </div>
           <div className={styles.cardBottomRight}>
             <span>{icons[card.suite]}</span>
-            <span>{card.number}</span>
+            <span>{cardDisplay}</span>
           </div>
         </div>
       </li>
     );
   });
-
+  // Line 122: Removed sentence 'Try a different combo or pass' and replaced with 'Try a different combo or press Change Combo Type' for this PR specifically.
   return (
     <div>
       <ul className={styles.hand}>{listOfCards}</ul>
-      {comboIsValid === false && <div>Invalid Combo. Try a different combo or pass.</div>}
+
+      {comboIsValid === false && <div>Invalid Combo. Try a different combo or press Change Combo Type.</div>}
       <div className={styles.handBtns}>
         <button disabled={!isMyTurn} onClick={finalizeTurn}>Finalize Turn</button>
         <button disabled={!isMyTurn} onClick={() => passTurn()}>Pass Turn</button>
