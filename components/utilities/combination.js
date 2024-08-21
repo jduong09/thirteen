@@ -1,4 +1,3 @@
-// Function validateCombo that takes in an array of cards which is the current players choice of cards, and matches it to the current cycles combination. 
 export const dictionaryCombinations = {
   'single': {
     isValid: (cards) => cards.length === 1,
@@ -75,3 +74,19 @@ export const dictionaryCombinations = {
     }
   }
 }
+
+/**
+ * @description Returns card object with highest value from array of card objects
+ * @param {Object[]} combo - Array of card objects 
+ */
+export const highestValue = (combo) => {
+  const result = combo.reduce((acc, cardObj) => {
+    if (cardObj.value > acc.value) {
+      return cardObj;
+    } else {
+      return acc;
+    }
+  });
+  return result;
+}
+

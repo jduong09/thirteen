@@ -1,7 +1,16 @@
 import gameStyles from './game.module.scss';
+import styles from "@/app/page.module.css";
 import { useState } from 'react';
 import Hand from "@/components/gameComponents/hand.js";
-import { dictionaryCombinations } from '@/components/utilities/combination.js';
+import { dictionaryCombinations, highestValue } from '@/components/utilities/combination.js';
+import { mapCard } from '../utilities/card';
+
+const icons = {
+  'hearts': '♥',
+  'diamonds': '♦',
+  'spades': '♠',
+  'clubs': '♣',
+}
 
 const Game = () => {
   const [deckIsShuffled, shuffleDeck] = useState(false);
@@ -10,6 +19,7 @@ const Game = () => {
   const [hands, setHands] = useState(null);
   const [comboIsValid, setComboStatus] = useState(null);
   const [currentTurnCombo, setCurrentTurnCombo] = useState('single');
+  const [previousPlayedCombo, setPreviousPlayedCombo] = useState([]);
 
   const [selectCombo, setComboSelect] = useState('single');
 
@@ -56,7 +66,7 @@ const Game = () => {
     shuffled.forEach((card, idx) => {
       const player = idx % 4;
       tempHands[player].hand.push(card);
-      if(card.number === '3' && card.suite === 'spades') {
+      if(card.number === 3 && card.suite === 'spades') {
         setPlayerTurn(player);
       };
     });
@@ -103,11 +113,15 @@ const Game = () => {
    * @param {Object[]} combo - Array of card objects
    */
   const requestCombo = (combo, combination) => {
+    console.log('Request Combo starting...');
+    console.log('Combination to play is: ', currentTurnCombo);
+    console.log('Player is playing: ', combo);
     // Check if combo is valid
-    if(validateCombo(combo, combination)) {
+    if(previousPlayedCombo.length === 0 || (validateCombo(combo, combination) && compareCombo(previousPlayedCombo[previousPlayedCombo.length - 1].value, combo))) {
+      console.log('Played higher combo, keep moving...');
       // Accept combo and set player turn
       setComboStatus(true);
-
+      setPreviousPlayedCombo(combo);
       setTimeout(() => {
         setComboStatus(null);
       }, 5000);
@@ -116,13 +130,22 @@ const Game = () => {
         hands[playerTurn].hand = hands[playerTurn].hand.filter((handCard) => handCard.value !== card.value);
       });
       setHands(hands);
-
       // TODO: Remove when done testing. This is just to simulate a fake game.
       setTimeout(() => changeTurn(), 3000);
     } else {
       // Reject combo
       setComboStatus(false);
     }
+  }
+
+  /**
+   * @description Compares players submitted combo with previous played combo.
+   * @param {integer} currentHighestValue - Highest integer of previous played combo
+   * @param {combo} combo - Array of card objects
+   */
+  const compareCombo = (currentHighestValue, combo) => {
+    const highestValueOfCombo = highestValue(combo);
+    return highestValueOfCombo > currentHighestValue;
   }
 
   /**
@@ -164,10 +187,29 @@ const Game = () => {
       }
       return lowest;
     }, 53);
+    console.log('Function in ai: ', currHand.find((card) => card.value === lowestCard));
 
     // TODO: Remove when done testing. This is mocking a single card play
-    setTimeout(() => requestCombo([currHand.find((card) => card.value === lowestCard)], 'single'), 3000);
+    setTimeout(() => requestCombo([currHand.find((card) => card.value === lowestCard)], 'single'), 5000);
   }
+
+  const listOfCards = previousPlayedCombo.map((card, idx) => {
+    const cardDisplay = mapCard(card.number);
+    return (
+      <li key={idx}>
+        <div className={`${styles.card} ${card.selected && styles.selected}`} onClick={(e) => selectCard(card, e)}>
+          <div className={styles.cardTopLeft}>
+            <span>{cardDisplay}</span>
+            <span>{icons[card.suite]}</span>
+          </div>
+          <div className={styles.cardBottomRight}>
+            <span>{icons[card.suite]}</span>
+            <span>{cardDisplay}</span>
+          </div>
+        </div>
+      </li>
+    );
+  });
 
   return (
     <game>
@@ -206,8 +248,9 @@ const Game = () => {
               <option value='double sequence'>Double Sequence</option>
             </select>
           </form>
-
           {comboIsValid && <h2 className={gameStyles.validCombo}>Combo Choice is correct. Try making another combo or reshuffling the deck for new cards.</h2>}
+
+          <h2>Previous Played Combo: {listOfCards}</h2>
         </div>
         
       }
