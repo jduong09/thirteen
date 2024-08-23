@@ -77,6 +77,7 @@ const Game = () => {
       showIntro(false);
       shuffleDeck(true);
     }, 1000);
+    gameLoop();
   };
 
   /**
@@ -113,12 +114,8 @@ const Game = () => {
    * @param {Object[]} combo - Array of card objects
    */
   const requestCombo = (combo, combination) => {
-    console.log('Request Combo starting...');
-    console.log('Combination to play is: ', currentTurnCombo);
-    console.log('Player is playing: ', combo);
     // Check if combo is valid
     if(previousPlayedCombo.length === 0 || (validateCombo(combo, combination) && compareCombo(previousPlayedCombo[previousPlayedCombo.length - 1].value, combo))) {
-      console.log('Played higher combo, keep moving...');
       // Accept combo and set player turn
       setComboStatus(true);
       setPreviousPlayedCombo(combo);
@@ -145,7 +142,7 @@ const Game = () => {
    */
   const compareCombo = (currentHighestValue, combo) => {
     const highestValueOfCombo = highestValue(combo);
-    return highestValueOfCombo > currentHighestValue;
+    return highestValueOfCombo.value > currentHighestValue;
   }
 
   /**
@@ -174,15 +171,22 @@ const Game = () => {
   const shuffleBtn = deckIsShuffled ? null : <button className={gameStyles.shuffleBtn} onClick={onShuffleClick}>Shuffle Deck</button>;
 
   /**
+   * @description Prompt ai logic
+   * @param {integer} playerTurn
    * NOTE: This is logic for AI players
    */
-  if(playerTurn !== 0) {
-    // TODO: Simulate player's turn
-    // For testing right now, I'm just playing the lowest single card until we write the logic for the AI
-    // TODO: Once we have a more comprehensive AI, we can update the combination type.
+  const promptAI = (playerTurn) => {
+    console.log(`Player ${playerTurn + 1}'s`);
+    let valueToBeat;
+    if (previousPlayedCombo.length === 0) {
+      valueToBeat = 0;
+    } else {
+      valueToBeat = previousPlayedCombo[previousPlayedCombo.length - 1].value;
+    }
+
     const currHand = hands[playerTurn].hand;
     const lowestCard = currHand.reduce((lowest, curr) => {
-      if(curr.value < lowest) {
+      if(curr.value < lowest && curr.value > valueToBeat) {
         return curr.value;
       }
       return lowest;
@@ -191,6 +195,22 @@ const Game = () => {
 
     // TODO: Remove when done testing. This is mocking a single card play
     setTimeout(() => requestCombo([currHand.find((card) => card.value === lowestCard)], 'single'), 5000);
+    return;
+  }
+
+  /**
+   * @description Simple Game loop: 4 turns
+   */
+  const gameLoop = () => {
+    console.log('Game Loop');
+    let turnCycle = 0;
+    while (turnCycle !== 4) {
+      console.log('Current Turn: ', playerTurn);
+      if (playerTurn !== 0) {
+        promptAI(playerTurn);
+      }
+      turnCycle++;
+    }
   }
 
   const listOfCards = previousPlayedCombo.map((card, idx) => {
@@ -210,6 +230,8 @@ const Game = () => {
       </li>
     );
   });
+
+  console.log(hands);
 
   return (
     <game>
@@ -250,7 +272,7 @@ const Game = () => {
           </form>
           {comboIsValid && <h2 className={gameStyles.validCombo}>Combo Choice is correct. Try making another combo or reshuffling the deck for new cards.</h2>}
 
-          <h2>Previous Played Combo: {listOfCards}</h2>
+          <h2>Previous Played Combo: <ul>{listOfCards}</ul></h2>
         </div>
         
       }
