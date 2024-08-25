@@ -11,7 +11,7 @@ const icons = {
 
 // Prop
 // Need to check if allowed to shed a card or not.
-const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo, passTurn }) => {
+const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo, passTurn, setUserInput }) => {
   const [hand, setHand] = useState(cards);
   const [combo, setCombo] = useState([]);
   const [hasReset, resetCombo] = useState(false);

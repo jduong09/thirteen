@@ -1,6 +1,6 @@
 import gameStyles from './game.module.scss';
 import styles from "@/app/page.module.css";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Hand from "@/components/gameComponents/hand.js";
 import { dictionaryCombinations, highestValue } from '@/components/utilities/combination.js';
 import { mapCard } from '../utilities/card';
@@ -22,6 +22,8 @@ const Game = () => {
   const [previousPlayedCombo, setPreviousPlayedCombo] = useState([]);
 
   const [selectCombo, setComboSelect] = useState('single');
+
+  const [userInput, setUserInput] = useState(false);
 
   // Build Card Deck
   const suites = ['spades', 'clubs', 'diamonds', 'hearts'];
@@ -48,6 +50,7 @@ const Game = () => {
     }
     return arrCopy;
   };
+
   const shuffled = shuffle(deck);
 
   /**
@@ -62,7 +65,6 @@ const Game = () => {
       {player: 2, hand: []},
       {player: 3, hand: []},
     ];
-
     shuffled.forEach((card, idx) => {
       const player = idx % 4;
       tempHands[player].hand.push(card);
@@ -77,13 +79,16 @@ const Game = () => {
       showIntro(false);
       shuffleDeck(true);
     }, 1000);
-    gameLoop();
   };
+
 
   /**
    * @description Changes the player turn to the next player.
    */
-  const changeTurn = () => setPlayerTurn(playerTurn === 3 ? 0 : playerTurn + 1);
+  const changeTurn = () => {
+    console.log('Changing Players Turn');
+    setPlayerTurn(playerTurn === 3 ? 0 : playerTurn + 1);
+  }
 
   /**
    * @description Determines the combination type for the current turn based on the cards submitted
@@ -127,11 +132,13 @@ const Game = () => {
         hands[playerTurn].hand = hands[playerTurn].hand.filter((handCard) => handCard.value !== card.value);
       });
       setHands(hands);
+      return true;
       // TODO: Remove when done testing. This is just to simulate a fake game.
-      setTimeout(() => changeTurn(), 3000);
+      // setTimeout(() => changeTurn(), 3000);
     } else {
       // Reject combo
       setComboStatus(false);
+      return false;
     }
   }
 
@@ -192,22 +199,38 @@ const Game = () => {
       return lowest;
     }, 53);
     console.log('Function in ai: ', currHand.find((card) => card.value === lowestCard));
-
+    return requestCombo([currHand.find((card) => card.value === lowestCard)], 'single');
     // TODO: Remove when done testing. This is mocking a single card play
-    setTimeout(() => requestCombo([currHand.find((card) => card.value === lowestCard)], 'single'), 5000);
-    return;
+    //setTimeout(() => requestCombo([currHand.find((card) => card.value === lowestCard)], 'single'), 5000);
+  }
+
+  const promptUser = () => {
+    let isValid = false;
+    while (isValid === false) {
+      console.log('Play a correct combo');
+    }
   }
 
   /**
    * @description Simple Game loop: 4 turns
    */
-  const gameLoop = () => {
+  const gameLoop = (e) => {
+    e.preventDefault();
     console.log('Game Loop');
     let turnCycle = 0;
+    console.log('Turn Cycle: ', turnCycle);
+    let firstTurn = playerTurn;
+    console.log('Current Turn: ', firstTurn);
     while (turnCycle !== 4) {
-      console.log('Current Turn: ', playerTurn);
-      if (playerTurn !== 0) {
-        promptAI(playerTurn);
+      let correctTurn = false;
+      while (correctTurn === false) {
+        if (firstTurn !== 0) {
+          correctTurn = promptAI(firstTurn);
+        } else {
+          correctTurn = promptUser();
+        }
+
+        firstTurn = firstTurn === 3 ? 0 : firstTurn + 1;
       }
       turnCycle++;
     }
@@ -230,8 +253,6 @@ const Game = () => {
       </li>
     );
   });
-
-  console.log(hands);
 
   return (
     <game>
@@ -257,8 +278,9 @@ const Game = () => {
             requestCombo={requestCombo}
             currentTurnCombo={currentTurnCombo}
             passTurn={passTurn}
+            setUserInput={setUserInput}
           />
-          <button className={gameStyles.shuffleBtn} onClick={reshuffleDeck}>Reshuffle Deck</button>
+          <button className={gameStyles.shuffleBtn} onClick={gameLoop}>Game Start</button>
           <form>
             <label htmlFor='select-combo'>Combination: </label>
             <select id='select-combo' name='select-combo' className={gameStyles.selectCombo} onChange={changeCombo}>
