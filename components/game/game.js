@@ -13,6 +13,7 @@ const icons = {
 }
 
 const Game = () => {
+  const [shuffledDeck, setDeck] = useState([]);
   const [deckIsShuffled, shuffleDeck] = useState(false);
   const [introIsVisible, showIntro] = useState(false);
   const [playerTurn, setPlayerTurn] = useState(0);
@@ -22,15 +23,42 @@ const Game = () => {
   const [previousPlayedCombo, setPreviousPlayedCombo] = useState([]);
 
   const [selectCombo, setComboSelect] = useState('single');
-
-  const [userInput, setUserInput] = useState(false);
-
   // Build Card Deck
   const suites = ['spades', 'clubs', 'diamonds', 'hearts'];
   // 3-10 are normal cards, 11 is Jack, 12 is Queen, 13 is King, 14 is Ace, 15 is 2.
   const numbers = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
   let value = 1; // 3 of spades is the lowest card
   const deck = numbers.map((number, idx) => suites.map((suite, i) => ({ number, suite, value: value++ }))).flat();
+
+  useEffect(() => {
+    setDeck(shuffle(deck));
+  }, []);
+
+  useEffect(() => {
+     /**
+     * @description Prompt ai logic
+     * NOTE: This is logic for AI players
+     */
+
+    if (playerTurn !== 0) {
+      let valueToBeat;
+      if (previousPlayedCombo.length === 0) {
+        valueToBeat = 0;
+      } else {
+        valueToBeat = previousPlayedCombo[previousPlayedCombo.length - 1].value;
+      }
+
+      const currHand = hands[playerTurn].hand;
+      const lowestCard = currHand.reduce((lowest, curr) => {
+        if(curr.value < lowest && curr.value > valueToBeat) {
+          return curr.value;
+        }
+        return lowest;
+      }, 53);
+      console.log(`Player ${playerTurn + 1} plays: ${currHand.find((card) => card.value === lowestCard).number} of ${currHand.find((card) => card.value === lowestCard).suite}`);
+      requestCombo([currHand.find((card) => card.value === lowestCard)], 'single');
+    }
+  }, [playerTurn]);
 
   /**
    * @description Randomly shuffles the card deck using the Fisher-Yates Shuffle algorithm.
@@ -51,8 +79,6 @@ const Game = () => {
     return arrCopy;
   };
 
-  const shuffled = shuffle(deck);
-
   /**
    * @description Randomly shuffles the card deck using the fisher-yates shuffle algorithm and deals 13 cards to each player. Established the first player.
    */
@@ -65,7 +91,7 @@ const Game = () => {
       {player: 2, hand: []},
       {player: 3, hand: []},
     ];
-    shuffled.forEach((card, idx) => {
+    shuffledDeck.forEach((card, idx) => {
       const player = idx % 4;
       tempHands[player].hand.push(card);
       if(card.number === 3 && card.suite === 'spades') {
@@ -124,21 +150,18 @@ const Game = () => {
       // Accept combo and set player turn
       setComboStatus(true);
       setPreviousPlayedCombo(combo);
-      setTimeout(() => {
-        setComboStatus(null);
-      }, 5000);
+      setComboStatus(null);
 
       combo.forEach((card) => {
         hands[playerTurn].hand = hands[playerTurn].hand.filter((handCard) => handCard.value !== card.value);
       });
       setHands(hands);
-      return true;
       // TODO: Remove when done testing. This is just to simulate a fake game.
-      // setTimeout(() => changeTurn(), 3000);
+      setTimeout(() => changeTurn(), 3000);
+
     } else {
       // Reject combo
       setComboStatus(false);
-      return false;
     }
   }
 
@@ -176,66 +199,7 @@ const Game = () => {
 
   // Only show shuffle button at start or end of game
   const shuffleBtn = deckIsShuffled ? null : <button className={gameStyles.shuffleBtn} onClick={onShuffleClick}>Shuffle Deck</button>;
-
-  /**
-   * @description Prompt ai logic
-   * @param {integer} playerTurn
-   * NOTE: This is logic for AI players
-   */
-  const promptAI = (playerTurn) => {
-    console.log(`Player ${playerTurn + 1}'s`);
-    let valueToBeat;
-    if (previousPlayedCombo.length === 0) {
-      valueToBeat = 0;
-    } else {
-      valueToBeat = previousPlayedCombo[previousPlayedCombo.length - 1].value;
-    }
-
-    const currHand = hands[playerTurn].hand;
-    const lowestCard = currHand.reduce((lowest, curr) => {
-      if(curr.value < lowest && curr.value > valueToBeat) {
-        return curr.value;
-      }
-      return lowest;
-    }, 53);
-    console.log('Function in ai: ', currHand.find((card) => card.value === lowestCard));
-    return requestCombo([currHand.find((card) => card.value === lowestCard)], 'single');
-    // TODO: Remove when done testing. This is mocking a single card play
-    //setTimeout(() => requestCombo([currHand.find((card) => card.value === lowestCard)], 'single'), 5000);
-  }
-
-  const promptUser = () => {
-    let isValid = false;
-    while (isValid === false) {
-      console.log('Play a correct combo');
-    }
-  }
-
-  /**
-   * @description Simple Game loop: 4 turns
-   */
-  const gameLoop = (e) => {
-    e.preventDefault();
-    console.log('Game Loop');
-    let turnCycle = 0;
-    console.log('Turn Cycle: ', turnCycle);
-    let firstTurn = playerTurn;
-    console.log('Current Turn: ', firstTurn);
-    while (turnCycle !== 4) {
-      let correctTurn = false;
-      while (correctTurn === false) {
-        if (firstTurn !== 0) {
-          correctTurn = promptAI(firstTurn);
-        } else {
-          correctTurn = promptUser();
-        }
-
-        firstTurn = firstTurn === 3 ? 0 : firstTurn + 1;
-      }
-      turnCycle++;
-    }
-  }
-
+ 
   const listOfCards = previousPlayedCombo.map((card, idx) => {
     const cardDisplay = mapCard(card.number);
     return (
@@ -278,9 +242,7 @@ const Game = () => {
             requestCombo={requestCombo}
             currentTurnCombo={currentTurnCombo}
             passTurn={passTurn}
-            setUserInput={setUserInput}
           />
-          <button className={gameStyles.shuffleBtn} onClick={gameLoop}>Game Start</button>
           <form>
             <label htmlFor='select-combo'>Combination: </label>
             <select id='select-combo' name='select-combo' className={gameStyles.selectCombo} onChange={changeCombo}>
