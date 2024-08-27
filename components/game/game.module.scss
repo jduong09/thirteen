@@ -94,3 +94,16 @@ $primary-color: #2600ff;
   color: white;
   padding: 1rem;
 }
+
+.middlePile {
+  margin: 1rem;
+  padding: 1rem;
+  border: 2px solid #2600ff;
+  text-align: center;
+  width: fit-content;
+}
+
+.middlePile > h2 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}

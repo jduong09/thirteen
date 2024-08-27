@@ -113,7 +113,12 @@ const Game = () => {
    */
   const changeTurn = () => {
     console.log('Changing Players Turn');
-    setPlayerTurn(playerTurn === 3 ? 0 : playerTurn + 1);
+    const nextTurn = playerTurn === 3 ? 0 : playerTurn + 1;
+    if (hands[nextTurn].hand.length === 0) {
+      setPlayerTurn(nextTurn + 1);
+    } else {
+      setPlayerTurn(nextTurn);
+    }
   }
 
   /**
@@ -130,6 +135,7 @@ const Game = () => {
       setComboStatus(false);
     }
   }
+
   /**
    * @description - Validates the submitted combo against the last combo played.
    * @param {Object[]} combo - Array of card objects
@@ -181,20 +187,13 @@ const Game = () => {
   const passTurn = () => {
     changeTurn();
     setComboStatus(true);
+    hands[0].hand = [];
+    setHands(hands);
   }
 
   const changeCombo = (e) => {
     setComboSelect(e.target.value);
     setCurrentTurnCombo(e.target.value);
-  }
-
-  /**
-   * @description Reshuffle deck to test combos.
-   */
-  const reshuffleDeck = () => {
-    shuffleDeck(false);
-    setComboStatus(null);
-    onShuffleClick();
   }
 
   // Only show shuffle button at start or end of game
@@ -256,7 +255,10 @@ const Game = () => {
           </form>
           {comboIsValid && <h2 className={gameStyles.validCombo}>Combo Choice is correct. Try making another combo or reshuffling the deck for new cards.</h2>}
 
-          <h2>Previous Played Combo: <ul>{listOfCards}</ul></h2>
+          <div className={gameStyles.middlePile}>
+            <h2>Middle Pile</h2>
+            <ul>{listOfCards}</ul>
+          </div>
         </div>
         
       }
