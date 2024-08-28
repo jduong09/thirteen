@@ -1,4 +1,4 @@
-import {  React, useState } from "react";
+import {  React, useState, useEffect } from "react";
 import styles from "@/app/page.module.css";
 import { mapCard } from "../utilities/card";
 
@@ -16,6 +16,11 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
   const [combo, setCombo] = useState([]);
   const [hasReset, resetCombo] = useState(false);
   const isMyTurn = playerTurn === 0;
+
+  // Update hand after changes.
+  useEffect(() => {
+    setHand(cards);
+  }, [cards])
 
   // FIXME: I don't love that I had to use a dumb hasReset flag to get this to work...
   if(!isMyTurn && !hasReset) {
