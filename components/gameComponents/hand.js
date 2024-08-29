@@ -1,16 +1,7 @@
 import {  React, useState, useEffect } from "react";
 import styles from "@/app/page.module.css";
-import { mapCard } from "../utilities/card";
+import { mapCard, icons } from "../utilities/card";
 
-const icons = {
-  'hearts': '♥',
-  'diamonds': '♦',
-  'spades': '♠',
-  'clubs': '♣',
-}
-
-// Prop
-// Need to check if allowed to shed a card or not.
 const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo, passTurn }) => {
   const [hand, setHand] = useState(cards);
   const [combo, setCombo] = useState([]);
@@ -117,6 +108,7 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
       </li>
     );
   });
+
   // Line 122: Removed sentence 'Try a different combo or pass' and replaced with 'Try a different combo or press Change Combo Type' for this PR specifically.
   return (
     <div>

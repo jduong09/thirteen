@@ -3,14 +3,7 @@ import styles from "@/app/page.module.css";
 import { useState, useEffect } from 'react';
 import Hand from "@/components/gameComponents/hand.js";
 import { dictionaryCombinations, highestValue } from '@/components/utilities/combination.js';
-import { mapCard } from '../utilities/card';
-
-const icons = {
-  'hearts': '♥',
-  'diamonds': '♦',
-  'spades': '♠',
-  'clubs': '♣',
-}
+import { mapCard, icons } from '../utilities/card';
 
 const Game = () => {
   const [shuffledDeck, setDeck] = useState([]);
@@ -41,12 +34,7 @@ const Game = () => {
      */
 
     if (playerTurn !== 0) {
-      let valueToBeat;
-      if (previousPlayedCombo.length === 0) {
-        valueToBeat = 0;
-      } else {
-        valueToBeat = previousPlayedCombo[previousPlayedCombo.length - 1].value;
-      }
+      let valueToBeat = previousPlayedCombo === 0 ? 0 : previousPlayedCombo[previousPlayedCombo.length - 1].value
 
       const currHand = hands[playerTurn].hand;
       const lowestCard = currHand.reduce((lowest, curr) => {
@@ -55,8 +43,15 @@ const Game = () => {
         }
         return lowest;
       }, 53);
-      console.log(`Player ${playerTurn + 1} plays: ${currHand.find((card) => card.value === lowestCard).number} of ${currHand.find((card) => card.value === lowestCard).suite}`);
-      requestCombo([currHand.find((card) => card.value === lowestCard)], 'single');
+
+      const cardToPlay = currHand.find((card) => card.value === lowestCard);
+      if (cardToPlay) {
+        requestCombo([cardToPlay], 'single'); 
+      } else {
+        // NOTE: Will cause endless cycle of passing until there is game logic to recognize next cycle.
+        console.log(`Player ${playerTurn + 1} passes.`);
+        passTurn();
+      }
     }
   }, [playerTurn]);
 
@@ -114,11 +109,8 @@ const Game = () => {
   const changeTurn = () => {
     console.log('Changing Players Turn');
     const nextTurn = playerTurn === 3 ? 0 : playerTurn + 1;
-    if (hands[nextTurn].hand.length === 0) {
-      setPlayerTurn(nextTurn + 1);
-    } else {
-      setPlayerTurn(nextTurn);
-    }
+    const nextTurnCanPlay = hands[nextTurn].hand.length > 0;
+    setPlayerTurn(nextTurnCanPlay ? nextTurn : nextTurn + 1);
   }
 
   /**
@@ -174,7 +166,7 @@ const Game = () => {
   /**
    * @description Compares players submitted combo with previous played combo.
    * @param {integer} currentHighestValue - Highest integer of previous played combo
-   * @param {combo} combo - Array of card objects
+   * @param {object[]} combo - Array of card objects
    */
   const compareCombo = (currentHighestValue, combo) => {
     const highestValueOfCombo = highestValue(combo);
@@ -203,7 +195,7 @@ const Game = () => {
     const cardDisplay = mapCard(card.number);
     return (
       <li key={idx}>
-        <div className={`${styles.card} ${card.selected && styles.selected}`} onClick={(e) => selectCard(card, e)}>
+        <div className={`${styles.card} ${card.selected && styles.selected}`}>
           <div className={styles.cardTopLeft}>
             <span>{cardDisplay}</span>
             <span>{icons[card.suite]}</span>

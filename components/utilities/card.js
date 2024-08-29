@@ -1,6 +1,3 @@
-// suit (string)
-// rank (string)
-
 export const mapCard = (number) => {
   if (number === 11) {
     return 'J';
@@ -16,6 +13,13 @@ export const mapCard = (number) => {
     return number;
   }
 }
+
+export const icons = {
+  'hearts': '♥',
+  'diamonds': '♦',
+  'spades': '♠',
+  'clubs': '♣',
+};
 
 export const makeCard = (suit, rank) => {
   return {
