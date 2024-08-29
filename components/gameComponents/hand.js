@@ -1,4 +1,4 @@
-import {  React, useState } from "react";
+import {  React, useState, useEffect } from "react";
 import styles from "@/app/page.module.css";
 import { mapCard, icons } from "../utilities/card";
 
@@ -15,11 +15,9 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
   }
 
   // Update hand after changes.
-  // NOTE: Apparently this might not be best practice, and some people suggest handling all
-  // state changes from the parent only. But that seems like too much managmement in one place imo.
-  if(cards.length !== hand.length) {
+  useEffect(() => {
     setHand(cards);
-  }
+  }, [cards])
 
   // FIXME: I don't love that I had to use a dumb hasReset flag to get this to work...
   if(!isMyTurn && !hasReset) {
