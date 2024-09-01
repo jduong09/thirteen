@@ -118,7 +118,7 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
       {isMyTurn &&
       <div className={styles.handBtns}>
         <button disabled={!isMyTurn} onClick={finalizeTurn}>Finalize Turn</button>
-        <button disabled={!isMyTurn} onClick={() => passTurn()}>Pass Turn</button>
+        <button disabled={!isMyTurn} onClick={() => passTurn(playerTurn)}>Pass Turn</button>
       </div>}
     </div>
   );
