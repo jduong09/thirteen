@@ -53,7 +53,7 @@ const Game = () => {
      * NOTE: This is logic for AI players
      */
     if (playerTurn !== 0) {
-      let valueToBeat = previousPlayedCombo.length === 0 ? 0 : previousPlayedCombo[previousPlayedCombo.length - 1].value
+      let valueToBeat = previousPlayedCombo.length === 0 ? 0 : previousPlayedCombo[previousPlayedCombo.length - 1].value;
 
       const currHand = hands[playerTurn].hand;
       const lowestCard = currHand.reduce((lowest, curr) => {
