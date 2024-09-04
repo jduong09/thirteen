@@ -219,7 +219,7 @@ const Game = () => {
 
   // Only show shuffle button at start or end of game
   const shuffleBtn = deckIsShuffled ? null : <button className={gameStyles.shuffleBtn} onClick={onShuffleClick}>Shuffle Deck</button>;
- 
+
   const listOfCards = previousPlayedCombo.map((card, idx) => {
     const cardDisplay = mapCard(card.number);
     return (
