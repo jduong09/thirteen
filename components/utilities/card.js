@@ -1,21 +1,25 @@
-// suit (string)
-// rank (string)
-
 export const mapCard = (number) => {
-  if (number === '11') {
+  if (number === 11) {
     return 'J';
-  } else if (number === '12') {
+  } else if (number === 12) {
     return 'Q';
-  } else if (number === '13') {
+  } else if (number === 13) {
     return 'K';
-  } else if (number === '14') {
+  } else if (number === 14) {
     return 'A';
-  } else if (number === '15') {
+  } else if (number === 15) {
     return '2';
   } else {
     return number;
   }
 }
+
+export const icons = {
+  'hearts': '♥',
+  'diamonds': '♦',
+  'spades': '♠',
+  'clubs': '♣',
+};
 
 export const makeCard = (suit, rank) => {
   return {

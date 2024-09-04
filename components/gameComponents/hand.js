@@ -1,21 +1,18 @@
 import {  React, useState, useEffect } from "react";
 import styles from "@/app/page.module.css";
-import { mapCard } from "../utilities/card";
+import { mapCard, icons } from "../utilities/card";
 
-const icons = {
-  'hearts': '♥',
-  'diamonds': '♦',
-  'spades': '♠',
-  'clubs': '♣',
-}
-
-// Prop
-// Need to check if allowed to shed a card or not.
 const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo, passTurn }) => {
   const [hand, setHand] = useState(cards);
   const [combo, setCombo] = useState([]);
   const [hasReset, resetCombo] = useState(false);
   const isMyTurn = playerTurn === 0;
+
+  const resetHand = () => {
+    hand.forEach(card => card.selected = false);
+    setCombo([]);
+    resetCombo(true);
+  }
 
   // Update hand after changes.
   useEffect(() => {
@@ -25,24 +22,14 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
   // FIXME: I don't love that I had to use a dumb hasReset flag to get this to work...
   if(!isMyTurn && !hasReset) {
     // Reset selected cards
-    hand.forEach(card => card.selected = false);
-    setCombo([]);
-    resetCombo(true);
+    resetHand();
   }
   
-  // Remove 1 card.
-  const removeCard = (removedCard, e) => {
-    e.preventDefault();
-    const newHand = hand.filter((card) => (card.value != removedCard.value) ? true : false);
-    setHand(newHand);
-  }
-
   // Use a flag to indicated selected/nonselected.
   // Dictionary for combo actions.
   // Need logic to handle the combo being accepted or denied.
   // Set up cypress
   // Logic to manipulate combo state.
-
   // Game send function to hand to ask for combo.
   const selectCard = (selectedCard, e) => {
     e.preventDefault();
@@ -100,8 +87,8 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
       console.log('Hand submitted nothing, combo not sent to game component.');
       return;
     }
-
     requestCombo(combo.map((card) => { return { number: card.number, suite: card.suite, value: card.value } }), currentTurnCombo);
+    resetHand();
   } 
 
   const listOfCards = hand.map((card, idx) => {
@@ -121,16 +108,18 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
       </li>
     );
   });
+
   // Line 122: Removed sentence 'Try a different combo or pass' and replaced with 'Try a different combo or press Change Combo Type' for this PR specifically.
   return (
     <div>
       <ul className={styles.hand}>{listOfCards}</ul>
 
       {comboIsValid === false && <div>Invalid Combo. Try a different combo or press Change Combo Type.</div>}
+      {isMyTurn &&
       <div className={styles.handBtns}>
         <button disabled={!isMyTurn} onClick={finalizeTurn}>Finalize Turn</button>
-        <button disabled={!isMyTurn} onClick={() => passTurn()}>Pass Turn</button>
-      </div>
+        <button disabled={!isMyTurn} onClick={() => passTurn(playerTurn)}>Pass Turn</button>
+      </div>}
     </div>
   );
 }
