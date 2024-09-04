@@ -39,7 +39,7 @@ const Game = () => {
       * NOTE: THIS IS STRICTLY FOR TESTING
       */
 
-    let checkEndCycle = hands.filter((hand) => hand.skipped !== true);
+    let checkEndCycle = hands.filter(hand => hand.skipped !== true);
 
     // if checkEndCycle is true after checking all hands for skipped property
     // do not run AI logic.
