@@ -77,7 +77,7 @@ export const dictionaryCombinations = {
 
 /**
  * @description Returns card object with highest value from array of card objects
- * @param {Object[]} combo - Array of card objects 
+ * @param {object[]} combo - Array of card objects 
  */
 export const highestValue = (combo) => {
   const result = combo.reduce((acc, cardObj) => {

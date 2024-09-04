@@ -1,16 +1,7 @@
-import {  React, useState } from "react";
+import {  React, useState, useEffect } from "react";
 import styles from "@/app/page.module.css";
-import { mapCard } from "../utilities/card";
+import { mapCard, icons } from "../utilities/card";
 
-const icons = {
-  'hearts': '♥',
-  'diamonds': '♦',
-  'spades': '♠',
-  'clubs': '♣',
-}
-
-// Prop
-// Need to check if allowed to shed a card or not.
 const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo, passTurn }) => {
   const [hand, setHand] = useState(cards);
   const [combo, setCombo] = useState([]);
@@ -25,11 +16,9 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
   }
 
   // Update hand after changes.
-  // NOTE: Apparently this might not be best practice, and some people suggest handling all
-  // state changes from the parent only. But that seems like too much managmement in one place imo.
-  if(cards.length !== hand.length) {
+  useEffect(() => {
     setHand(cards);
-  }
+  }, [cards])
 
   /**
    * @description Sorts the player's hand by groups (quadruplet, triplet, double) or by strength of card.
@@ -147,6 +136,7 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
       </li>
     );
   });
+
   // Line 122: Removed sentence 'Try a different combo or pass' and replaced with 'Try a different combo or press Change Combo Type' for this PR specifically.
   return (
     <div>
@@ -156,7 +146,7 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
       {isMyTurn &&
       <div className={styles.handBtns}>
         <button disabled={!isMyTurn} onClick={finalizeTurn}>Finalize Turn</button>
-        <button disabled={!isMyTurn} onClick={() => passTurn()}>Pass Turn</button>
+        <button disabled={!isMyTurn} onClick={() => passTurn(playerTurn)}>Pass Turn</button>
         <label>
           Sort Cards:
           <select disabled={!isMyTurn} onChange={(e) => {sortPlayerCards(e.target.value)}} className={styles.select} defaultValue={'default'}>

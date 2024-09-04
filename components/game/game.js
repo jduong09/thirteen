@@ -3,14 +3,7 @@ import styles from "@/app/page.module.css";
 import { useState, useEffect } from 'react';
 import Hand from "@/components/gameComponents/hand.js";
 import { dictionaryCombinations, highestValue } from '@/components/utilities/combination.js';
-import { mapCard } from '../utilities/card';
-
-const icons = {
-  'hearts': '♥',
-  'diamonds': '♦',
-  'spades': '♠',
-  'clubs': '♣',
-}
+import { mapCard, icons } from '../utilities/card';
 
 const Game = () => {
   const [shuffledDeck, setDeck] = useState([]);
@@ -21,8 +14,10 @@ const Game = () => {
   const [comboIsValid, setComboStatus] = useState(null);
   const [currentTurnCombo, setCurrentTurnCombo] = useState('single');
   const [previousPlayedCombo, setPreviousPlayedCombo] = useState([]);
-
   const [selectCombo, setComboSelect] = useState('single');
+
+  const [endCycleClause, setEndCycleClause] = useState(false);
+
   // Build Card Deck
   const suites = ['spades', 'clubs', 'diamonds', 'hearts'];
   // 3-10 are normal cards, 11 is Jack, 12 is Queen, 13 is King, 14 is Ace, 15 is 2.
@@ -35,18 +30,30 @@ const Game = () => {
   }, []);
 
   useEffect(() => {
+    if (!hands) {
+      return;
+    }
      /**
+      * @description End logic if all hands have passed
+      * NOTE: This logic is not complete and does not cater to all use cases.
+      * NOTE: THIS IS STRICTLY FOR TESTING
+      */
+
+    let checkEndCycle = hands.filter((hand) => hand.skipped !== true);
+
+    // if checkEndCycle is true after checking all hands for skipped property
+    // do not run AI logic.
+    if (checkEndCycle.length <= 1) {
+      setEndCycleClause(true);
+      return;
+    }
+
+    /**
      * @description Prompt ai logic
      * NOTE: This is logic for AI players
      */
-
     if (playerTurn !== 0) {
-      let valueToBeat;
-      if (previousPlayedCombo.length === 0) {
-        valueToBeat = 0;
-      } else {
-        valueToBeat = previousPlayedCombo[previousPlayedCombo.length - 1].value;
-      }
+      let valueToBeat = previousPlayedCombo.length === 0 ? 0 : previousPlayedCombo[previousPlayedCombo.length - 1].value
 
       const currHand = hands[playerTurn].hand;
       const lowestCard = currHand.reduce((lowest, curr) => {
@@ -55,8 +62,15 @@ const Game = () => {
         }
         return lowest;
       }, 53);
-      console.log(`Player ${playerTurn + 1} plays: ${currHand.find((card) => card.value === lowestCard).number} of ${currHand.find((card) => card.value === lowestCard).suite}`);
-      requestCombo([currHand.find((card) => card.value === lowestCard)], 'single');
+
+      const cardToPlay = currHand.find((card) => card.value === lowestCard);
+      if (cardToPlay) {
+        requestCombo([cardToPlay], 'single'); 
+      } else {
+        // NOTE: Will cause endless cycle of passing until there is game logic to recognize next cycle.
+        console.log(`Player ${playerTurn + 1} passes.`);
+        passTurn(playerTurn);
+      }
     }
   }, [playerTurn]);
 
@@ -107,18 +121,25 @@ const Game = () => {
     }, 1000);
   };
 
-
   /**
    * @description Changes the player turn to the next player.
+   * Goal is to find the player that has the key 'skipped' === false
    */
   const changeTurn = () => {
-    console.log('Changing Players Turn');
-    const nextTurn = playerTurn === 3 ? 0 : playerTurn + 1;
-    if (hands[nextTurn].hand.length === 0) {
-      setPlayerTurn(nextTurn + 1);
-    } else {
-      setPlayerTurn(nextTurn);
+    let nextTurn = false;
+    let markerTurn = playerTurn + 1;
+    while (!nextTurn) {
+      if (markerTurn > 3) {
+        markerTurn = 0;
+      }
+
+      if (hands[markerTurn].skipped) {
+        markerTurn++;
+      } else {
+        nextTurn = true;
+      }
     }
+    setPlayerTurn(markerTurn);
   }
 
   /**
@@ -174,7 +195,7 @@ const Game = () => {
   /**
    * @description Compares players submitted combo with previous played combo.
    * @param {integer} currentHighestValue - Highest integer of previous played combo
-   * @param {combo} combo - Array of card objects
+   * @param {object[]} combo - Array of card objects
    */
   const compareCombo = (currentHighestValue, combo) => {
     const highestValueOfCombo = highestValue(combo);
@@ -184,11 +205,11 @@ const Game = () => {
   /**
    * @description Updates the player turn to the next player.
    */
-  const passTurn = () => {
-    changeTurn();
-    setComboStatus(true);
-    hands[0].hand = [];
+  const passTurn = (playerTurn) => {
+    hands[playerTurn].skipped = true;
     setHands(hands);
+    setComboStatus(true);
+    changeTurn();
   }
 
   const changeCombo = (e) => {
@@ -203,7 +224,7 @@ const Game = () => {
     const cardDisplay = mapCard(card.number);
     return (
       <li key={idx}>
-        <div className={`${styles.card} ${card.selected && styles.selected}`} onClick={(e) => selectCard(card, e)}>
+        <div className={`${styles.card} ${card.selected && styles.selected}`}>
           <div className={styles.cardTopLeft}>
             <span>{cardDisplay}</span>
             <span>{icons[card.suite]}</span>
@@ -230,8 +251,12 @@ const Game = () => {
       {deckIsShuffled &&
         <div>
           <h2 className={gameStyles.turnIndicator}>
-            <span>{playerTurn === 0 ? 'Your' : `Player ${playerTurn + 1}'s`} turn.</span>
-            {playerTurn !== 0 && <span> Thinking... <span className={gameStyles.loading}></span></span>}
+            {endCycleClause ? 
+            <span>End of Turn Cycle...resetting...</span> : 
+            <div>
+              <span>{playerTurn === 0 ? 'Your' : `Player ${playerTurn + 1}'s`} turn.</span>
+              {playerTurn !== 0 && <span> Thinking... <span className={gameStyles.loading}></span></span>}
+            </div>}
           </h2>
           <h2>Select a combo thats fits {selectCombo}</h2>
           <h3>Your Hand:</h3>
@@ -253,8 +278,7 @@ const Game = () => {
               <option value='double sequence'>Double Sequence</option>
             </select>
           </form>
-          {comboIsValid && <h2 className={gameStyles.validCombo}>Combo Choice is correct. Try making another combo or reshuffling the deck for new cards.</h2>}
-
+          {comboIsValid && <h2 className={gameStyles.validCombo}>Combo Choice is correct.</h2>}
           <div className={gameStyles.middlePile}>
             <h2>Middle Pile</h2>
             <ul>{listOfCards}</ul>
