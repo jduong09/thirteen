@@ -114,11 +114,8 @@ const Game = () => {
     });
 
     setHands(tempHands);
-
-    setTimeout(() => {
-      showIntro(false);
-      shuffleDeck(true);
-    }, 1000);
+    showIntro(false);
+    shuffleDeck(true);
   };
 
   /**
@@ -248,7 +245,7 @@ const Game = () => {
         </div>
         : shuffleBtn}
 
-      {deckIsShuffled &&
+      {hands &&
         <div>
           <h2 className={gameStyles.turnIndicator}>
             {endCycleClause ? 
