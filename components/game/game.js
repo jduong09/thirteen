@@ -1,8 +1,9 @@
 import gameStyles from './game.module.scss';
 import styles from "@/app/page.module.css";
 import { useState, useEffect } from 'react';
-import Hand from "@/components/gameComponents/hand.js";
-import { dictionaryCombinations, highestValue } from '@/components/utilities/combination.js';
+import Hand from "@/components/gameComponents/hand";
+import Cards from "@/components/cards/cards";
+import { dictionaryCombinations, highestValue } from '@/components/utilities/combination';
 import { mapCard, icons } from '../utilities/card';
 
 const Game = () => {
@@ -220,24 +221,6 @@ const Game = () => {
   // Only show shuffle button at start or end of game
   const shuffleBtn = deckIsShuffled ? null : <button className={gameStyles.shuffleBtn} onClick={onShuffleClick}>Shuffle Deck</button>;
 
-  const listOfCards = previousPlayedCombo.map((card, idx) => {
-    const cardDisplay = mapCard(card.number);
-    return (
-      <li key={idx}>
-        <div className={`${styles.card} ${card.selected && styles.selected}`}>
-          <div className={styles.cardTopLeft}>
-            <span>{cardDisplay}</span>
-            <span>{icons[card.suite]}</span>
-          </div>
-          <div className={styles.cardBottomRight}>
-            <span>{icons[card.suite]}</span>
-            <span>{cardDisplay}</span>
-          </div>
-        </div>
-      </li>
-    );
-  });
-
   return (
     <game>
       {introIsVisible
@@ -281,7 +264,7 @@ const Game = () => {
           {comboIsValid && <h2 className={gameStyles.validCombo}>Combo Choice is correct.</h2>}
           <div className={gameStyles.middlePile}>
             <h2>Middle Pile</h2>
-            <ul>{listOfCards}</ul>
+            <Cards cards={previousPlayedCombo} />
           </div>
         </div>
         
