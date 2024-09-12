@@ -25,10 +25,10 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
    * @param {'groups'|'value'} sortType
    */
   const sortPlayerCards = (sortType) => {
-    if(sortType === 'groups') {
+    if (sortType === 'groups') {
       // Group by quadruplets, triplets, and double first
       const cardGrouping = hand.reduce((acc, card) => {
-        if(acc[card.number]) {
+        if (acc[card.number]) {
           acc[card.number].push(card);
         } else {
           acc[card.number] = [card];
@@ -39,7 +39,7 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
       Object.values(cardGrouping).forEach(group => group.forEach(card => card.group = group.length));
       // Secondary sort by value
       hand.sort((a, b) => a.group === b.group ? b.value - a.value : b.group - a.group);
-    } else if(sortType === 'value') {
+    } else if (sortType === 'value') {
       hand.sort((a, b) => b.value - a.value);
     }
     setSortType(sortType);
@@ -47,7 +47,7 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
   }
 
   // FIXME: I don't love that I had to use a dumb hasReset flag to get this to work...
-  if(!isMyTurn && !hasReset) {
+  if (!isMyTurn && !hasReset) {
     // Reset selected cards
     resetHand();
   }
