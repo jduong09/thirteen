@@ -10,7 +10,7 @@ const Game = () => {
   const [deckIsShuffled, shuffleDeck] = useState(false);
   const [introIsVisible, showIntro] = useState(false);
   const [playerTurn, setPlayerTurn] = useState(0);
-  const [hands, setHands] = useState(null);
+  const [hands, setHands] = useState([]);
   const [comboIsValid, setComboStatus] = useState(null);
   const [currentTurnCombo, setCurrentTurnCombo] = useState('single');
   const [previousPlayedCombo, setPreviousPlayedCombo] = useState([]);
@@ -30,7 +30,7 @@ const Game = () => {
   }, []);
 
   useEffect(() => {
-    if (!hands) {
+    if (hands.length === 0) {
       return;
     }
      /**
@@ -74,6 +74,15 @@ const Game = () => {
     }
   }, [playerTurn]);
 
+  useEffect(() => {
+    if (introIsVisible) {
+      setTimeout(() => {
+        showIntro(false);
+        shuffleDeck(true);
+      }, 3000)
+    }
+  }, [introIsVisible])
+
   /**
    * @description Randomly shuffles the card deck using the Fisher-Yates Shuffle algorithm.
    * @param {Object[]} array - Array of card objects
@@ -99,6 +108,8 @@ const Game = () => {
   const onShuffleClick = () => {
     showIntro(true);
 
+    let first;
+
     const tempHands = [
       {player: 0, hand: []},
       {player: 1, hand: []},
@@ -109,13 +120,11 @@ const Game = () => {
       const player = idx % 4;
       tempHands[player].hand.push(card);
       if(card.number === 3 && card.suite === 'spades') {
-        setPlayerTurn(player);
+        first = player;
       };
     });
-
+    
     setHands(tempHands);
-    showIntro(false);
-    shuffleDeck(true);
   };
 
   /**
@@ -245,7 +254,7 @@ const Game = () => {
         </div>
         : shuffleBtn}
 
-      {hands &&
+      {hands.length !== 0 &&
         <div>
           <h2 className={gameStyles.turnIndicator}>
             {endCycleClause ? 

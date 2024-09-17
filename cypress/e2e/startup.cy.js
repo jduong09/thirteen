@@ -8,8 +8,8 @@ describe('Navigation', () => {
   });
 
   it ('shuffles deck', () => {
-    cy.get('button', { timeout: 100000 }).contains('Shuffle Deck').click();
+    cy.get('button').contains('Shuffle Deck').click();
 
-    cy.get('ul').should('have.length', 13);
+    cy.get('ul', { timeout: 100000 }).should('have.length', 13);
   });
 });
