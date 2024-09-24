@@ -16,6 +16,7 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
 
   // Update hand after changes.
   useEffect(() => {
+    console.log('updating hand after changes: ', hand);
     setHand(cards);
   }, [cards])
 
