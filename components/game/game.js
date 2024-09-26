@@ -88,7 +88,7 @@ const Game = () => {
         const playerHasWonRound = hands.every((hand) => hand.skipped || hand.player === playerTurn);
         if (playerHasWonRound) {
           // FIXME: This is only reached when an AI wins.
-          console.log(`\n\nPLAYER ${playerTurn + 1} HAS WON ROUND!`);
+          console.log(`\n\nPLAYER ${playerTurn + 1} HAS WON ROUND!`, hands);
         } else {
           let valueToBeat = previousPlayedCombo.length === 0 ? 0 : previousPlayedCombo[previousPlayedCombo.length - 1].value;
           const currHand = hands[playerTurn].hand;
@@ -105,7 +105,6 @@ const Game = () => {
           } else {
             // NOTE: Will cause endless cycle of passing until there is game logic to recognize next cycle.
             // Check if every player but playerTurn has passed
-            console.log(`PLAYER ${playerTurn + 1} PASSES.`);
             passTurn(playerTurn);
           }
         }
@@ -174,7 +173,7 @@ const Game = () => {
       }
     }
 
-    console.log(`SETTING NEXT PLAYER TO: ${nextPlayer}`);
+    console.log(`SETTING NEXT PLAYER TO: ${nextPlayer + 1}`);
     setPlayerTurn(nextPlayer);
   }
 
@@ -244,6 +243,7 @@ const Game = () => {
    * @description Updates the player turn to the next player.
    */
   const passTurn = (playerTurn) => {
+    console.log(`***** PLAYER ${playerTurn + 1} PASSES. ******`);
     hands[playerTurn].skipped = true;
     setHands(hands);
     setComboStatus(true);
