@@ -53,7 +53,7 @@ const Game = () => {
     if (hands.length) {
       aiToPlay();
     }
-  }, [playerTurn, hands]);
+  }, [playerTurn, hands, newRound]);
 
   useEffect(() => {
     if (endCycleClause) {
@@ -74,6 +74,7 @@ const Game = () => {
     setNewRound(true);
     hands.forEach(hand => hand.skipped = false);
     setHands(hands);
+    console.log('SHOULD SET ROUND...?', newRound);
   }
 
   /**
@@ -82,13 +83,13 @@ const Game = () => {
    */
   const aiToPlay = () => {
     if (newRound) {
-      console.log('\n\n SHOULD START A NEW ROUND...', selectCombo, currentTurnCombo, cardToPlay, valueToBeat, currHand, lowestCard, previousPlayedCombo);
+      console.log('\n\n***** A NEW ROUND HAS STARTED *****');
     } else {
       if (playerTurn !== 0) {
         const playerHasWonRound = hands.every((hand) => hand.skipped || hand.player === playerTurn);
         if (playerHasWonRound) {
           // FIXME: This is only reached when an AI wins.
-          console.log(`\n\nPLAYER ${playerTurn + 1} HAS WON ROUND!`, hands);
+          console.log(`\n\nPLAYER ${playerTurn + 1} HAS WON ROUND! STARTING NEW ROUND IN 5 SECONDS...`);
         } else {
           let valueToBeat = previousPlayedCombo.length === 0 ? 0 : previousPlayedCombo[previousPlayedCombo.length - 1].value;
           const currHand = hands[playerTurn].hand;
