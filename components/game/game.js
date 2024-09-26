@@ -304,7 +304,6 @@ const Game = () => {
             <Cards cards={previousPlayedCombo} />
           </div>
         </div>
-        
       }
     </game>
   );
