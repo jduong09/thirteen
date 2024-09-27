@@ -14,6 +14,5 @@ describe('Game Cycle', () => {
     cy.get('#span-player-turn', { timeout: 3000 }).contains("Player 3's turn.");
     cy.get('#span-player-turn', { timeout: 3000 }).contains("Player 4's turn.");
     cy.get('#span-player-turn', { timeout: 3000 }).contains("Player 2's turn.");
-    cy.then(() => this.skip());
   });
 });
