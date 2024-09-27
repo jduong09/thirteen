@@ -26,13 +26,11 @@ const Game = () => {
   const deck = numbers.map((number, idx) => suites.map((suite, i) => ({ number, suite, value: value++ }))).flat();
 
   useEffect(() => {
-    const shuffledDeck = shuffle(deck);
-    console.log('Shuffled Deck: ', shuffledDeck);
-    setDeck(shuffledDeck);
+    setDeck(shuffle(deck));
   }, []);
 
   useEffect(() => {
-    if (!hands) {
+    if (!hands.length) {
       return;
     }
      /**
@@ -76,18 +74,6 @@ const Game = () => {
     }
   }, [playerTurn]);
 
-  useEffect(() => {
-    if (introIsVisible) {
-      setTimeout(() => {
-        showIntro(false);
-      }, 3000)
-    }
-  }, [introIsVisible])
-
-  useEffect(() => {
-    console.log(hands);
-  }, [hands]);
-
   /**
    * @description Randomly shuffles the card deck using the Fisher-Yates Shuffle algorithm.
    * @param {Object[]} array - Array of card objects
@@ -110,29 +96,28 @@ const Game = () => {
   /**
    * @description Randomly shuffles the card deck using the fisher-yates shuffle algorithm and deals 13 cards to each player. Established the first player.
    */
-  const onShuffleClick = (e) => {
-    e.stopPropagation();
-    console.log('pressed shuffle click button');
-    let first;
-
+  const onShuffleClick = () => {
     const tempHands = [
       {player: 0, hand: []},
       {player: 1, hand: []},
       {player: 2, hand: []},
       {player: 3, hand: []},
     ];
-    console.log('Temp Hands before array function:', tempHands);
     shuffledDeck.forEach((card, idx) => {
-      console.log('distributing cards');
       const player = idx % 4;
       tempHands[player].hand.push(card);
       if(card.number === 3 && card.suite === 'spades') {
-        first = player;
+        setPlayerTurn(player);
       };
     });
-    console.log('Temp hands after array function:', tempHands);
   
-    setHands(tempHands);
+    if (tempHands[0].hand.length) {
+      setHands(tempHands);
+    }
+
+    setTimeout(() => {
+      showIntro(false);
+    }, 3000);
   };
 
   /**
@@ -232,7 +217,7 @@ const Game = () => {
   }
 
   // Only show shuffle button at start or end of game
-  const shuffleBtn = deckIsShuffled ? null : <button className={gameStyles.shuffleBtn} onClick={(e) => onShuffleClick(e)}>Shuffle Deck</button>;
+  const shuffleBtn = deckIsShuffled ? null : <button className={gameStyles.shuffleBtn} onClick={onShuffleClick}>Shuffle Deck</button>;
  
   const listOfCards = previousPlayedCombo.map((card, idx) => {
     const cardDisplay = mapCard(card.number);
@@ -268,7 +253,7 @@ const Game = () => {
             {endCycleClause ? 
             <span>End of Turn Cycle...resetting...</span> : 
             <div>
-              <span>{playerTurn === 0 ? 'Your' : `Player ${playerTurn + 1}'s`} turn.</span>
+              <span id="span-player-turn">{playerTurn === 0 ? 'Your' : `Player ${playerTurn + 1}'s`} turn.</span>
               {playerTurn !== 0 && <span> Thinking... <span className={gameStyles.loading}></span></span>}
             </div>}
           </h2>

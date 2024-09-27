@@ -114,7 +114,7 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
   // Line 122: Removed sentence 'Try a different combo or pass' and replaced with 'Try a different combo or press Change Combo Type' for this PR specifically.
   return (
     <div>
-      <ul className={styles.hand}>{listOfCards}</ul>
+      <ul id='list-player-hand' className={styles.hand}>{listOfCards}</ul>
 
       {comboIsValid === false && <div>Invalid Combo. Try a different combo or press Change Combo Type.</div>}
       {isMyTurn &&
