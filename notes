@@ -1,0 +1,15 @@
+Heart : ♥
+Diamond: ♦
+Spade: ♠
+Club: ♣
+
+
+Core functionality for starting from turn 1, playing a valid combo, game validating it, game removing those cards from the players hand, updating the combination, moving to next turn, prompting next player to play a combo that fits, and then validating that players choice in terms of correct combination and better combination.
+
+
+- Functionality to start from turn 1 and prompt player 1 to play cards
+- Game validating what they played
+- Game removing the played cards from their hand, and setting the turns combination.
+- Moving to player 2, and prompting them to play cards that fit the combination
+- Validating player 2s choice for valid combo and higher value.
+- Pass removing user from current turns cycle.
