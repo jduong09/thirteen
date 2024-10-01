@@ -2,6 +2,7 @@ describe('Game Cycle', () => {
   beforeEach(() => {
     cy.visit('http://localhost:3000');
     cy.get('button').contains('Shuffle Deck').click();
+    cy.get('button').contains('Shuffle Deck').click();
   });
 
   it('Pressing pass removes player from turn cycle', { defaultCommandTimeout: 8000 }, () => {

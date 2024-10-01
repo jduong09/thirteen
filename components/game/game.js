@@ -97,7 +97,7 @@ const Game = () => {
    * @description Randomly shuffles the card deck using the fisher-yates shuffle algorithm and deals 13 cards to each player. Established the first player.
    */
   const onShuffleClick = () => {
-    showIntro(true);
+    // showIntro(true);
 
     const tempHands = [
       {player: 0, hand: []},
@@ -114,11 +114,14 @@ const Game = () => {
     });
 
     setHands(tempHands);
+    shuffleDeck(true);
 
+    /*
     setTimeout(() => {
       showIntro(false);
       shuffleDeck(true);
     }, 1000);
+    */
   };
 
   /**
