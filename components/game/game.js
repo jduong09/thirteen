@@ -10,7 +10,7 @@ const Game = () => {
   const [deckIsShuffled, shuffleDeck] = useState(false);
   const [introIsVisible, showIntro] = useState(false);
   const [playerTurn, setPlayerTurn] = useState(0);
-  const [hands, setHands] = useState(null);
+  const [hands, setHands] = useState([]);
   const [comboIsValid, setComboStatus] = useState(null);
   const [currentTurnCombo, setCurrentTurnCombo] = useState('single');
   const [previousPlayedCombo, setPreviousPlayedCombo] = useState([]);
@@ -30,7 +30,7 @@ const Game = () => {
   }, []);
 
   useEffect(() => {
-    if (!hands) {
+    if (!hands.length) {
       return;
     }
      /**
@@ -97,8 +97,6 @@ const Game = () => {
    * @description Randomly shuffles the card deck using the fisher-yates shuffle algorithm and deals 13 cards to each player. Established the first player.
    */
   const onShuffleClick = () => {
-    showIntro(true);
-
     const tempHands = [
       {player: 0, hand: []},
       {player: 1, hand: []},
@@ -112,13 +110,14 @@ const Game = () => {
         setPlayerTurn(player);
       };
     });
-
-    setHands(tempHands);
+  
+    if (tempHands[0].hand.length) {
+      setHands(tempHands);
+    }
 
     setTimeout(() => {
       showIntro(false);
-      shuffleDeck(true);
-    }, 1000);
+    }, 3000);
   };
 
   /**
@@ -248,13 +247,13 @@ const Game = () => {
         </div>
         : shuffleBtn}
 
-      {deckIsShuffled &&
+      {hands.length !== 0 &&
         <div>
           <h2 className={gameStyles.turnIndicator}>
             {endCycleClause ? 
             <span>End of Turn Cycle...resetting...</span> : 
             <div>
-              <span>{playerTurn === 0 ? 'Your' : `Player ${playerTurn + 1}'s`} turn.</span>
+              <span id="span-player-turn">{playerTurn === 0 ? 'Your' : `Player ${playerTurn + 1}'s`} turn.</span>
               {playerTurn !== 0 && <span> Thinking... <span className={gameStyles.loading}></span></span>}
             </div>}
           </h2>
@@ -284,8 +283,7 @@ const Game = () => {
             <ul>{listOfCards}</ul>
           </div>
         </div>
-        
-      }
+    } 
     </game>
   );
 };
