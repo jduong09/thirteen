@@ -182,7 +182,7 @@ const Game = () => {
       {deckIsShuffled &&
         <div>
           <h2 className={gameStyles.turnIndicator}>
-            <span>{playerTurn === 0 ? 'Your' : `Player ${playerTurn + 1}'s`} turn.</span>
+            <span id='span-player-turn'>{playerTurn === 0 ? 'Your' : `Player ${playerTurn + 1}'s`} turn.</span>
             {playerTurn !== 0 && <span> Thinking... <span className={gameStyles.loading}></span></span>}
           </h2>
           <h2>Select a combo thats fits {selectCombo}</h2>
@@ -194,7 +194,6 @@ const Game = () => {
             currentTurnCombo={currentTurnCombo}
             passTurn={passTurn}
           />
-          <button className={gameStyles.shuffleBtn} onClick={reshuffleDeck}>Reshuffle Deck</button>
           <form>
             <label htmlFor='select-combo'>Combination: </label>
             <select id='select-combo' name='select-combo' className={gameStyles.selectCombo} onChange={changeCombo}>
