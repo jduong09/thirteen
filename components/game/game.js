@@ -238,6 +238,7 @@ const Game = () => {
     );
   });
 
+  console.log(hands);
   return (
     <game>
       {introIsVisible
