@@ -177,6 +177,28 @@ const sequence = (hand) => {
   return totalSequences;
 }
 
+// Example: 3 3 4 4 5 5 6 6
+const doubleSequence = (hand) => {
+  const dupesObject = createDuplicatesObject(hand);
+  const sortedHand = mergeSort(hand);
+  const totalSequences = [];
+
+  for (let i = 0; i < sortedHand.length; i++) {
+    let startingNumber = sortedHand[i].number;
+
+    if (dupesObject[startingNumber].length < 2) {
+      continue;
+    }
+
+    for (let j = i + 1; j < sortedHand.length; j++) {
+      const currentNumber = startingNumber + 1;
+      if (!dupesObject[currentNumber]) {
+        break;
+      }
+    }
+  }
+}
+
 //const hand = [ { number: 11, suite: 'hearts', value: 36, selected: false }, { number: 6, suite: 'hearts', value: 16, selected: false },  { number: 14, suite: 'hearts', value: 48, selected: false }, { number: 12, suite: 'hearts', value: 40, selected: false, copy: 1 }, { number: 8, suite: 'diamonds', value: 23, selected: false }, { number: 9, suite: 'hearts', value: 28, selected: false }, { number: 15, suite: 'clubs', value: 50, selected: false, copy: 1 }, { number: 13, suite: 'hearts', value: 44, selected: false }, { number: 15, suite: 'diamonds', value: 51, selected: false, copy: 2 }, { number: 12, suite: 'diamonds', value: 39, selected: false, copy: 2 } ];
 const hand = [ { number: 12, suite: 'hearts', value: 36, selected: false, copy: 3 }, { number: 12, suite: 'hearts', value: 36, selected: false, copy: 4 }, { number: 6, suite: 'hearts', value: 16, selected: false },  { number: 14, suite: 'hearts', value: 48, selected: false }, { number: 12, suite: 'hearts', value: 40, selected: false, copy: 1 }, { number: 8, suite: 'diamonds', value: 23, selected: false }, { number: 9, suite: 'hearts', value: 28, selected: false }, { number: 15, suite: 'clubs', value: 50, selected: false, copy: 1 }, { number: 13, suite: 'hearts', value: 44, selected: false }, { number: 15, suite: 'diamonds', value: 51, selected: false, copy: 2 }, { number: 12, suite: 'diamonds', value: 39, selected: false, copy: 2 } ];
 // const hand = [ { number: 11, suite: 'hearts', value: 36, selected: false }, { number: 6, suite: 'hearts', value: 16, selected: false },  { number: 14, suite: 'hearts', value: 48, selected: false }, { number: 12, suite: 'hearts', value: 40, selected: false }, { number: 8, suite: 'diamonds', value: 23, selected: false }, { number: 9, suite: 'hearts', value: 28, selected: false }, { number: 15, suite: 'clubs', value: 50, selected: false }, { number: 13, suite: 'hearts', value: 44, selected: false }];
