@@ -3,53 +3,59 @@
 // This leads to different combinations of doubles.
 const double = (hand) => {
   const dupesObject = createDuplicatesObject(hand);
-  const doubleArrays = [];
+  const combinations = [];
 
   for (const value in dupesObject) {
     if (dupesObject[value].length === 2) {
-      doubleArrays.push(value);
+      combinations.push(dupesObject[value]);
+    } else if (dupesObject[value].length > 2) {
+      for (let i = 0; i < dupesObject[value].length; i++) {
+        for (let j = i + 1; j < dupesObject[value].length; j++) {
+          combinations.push([dupesObject[value][i], dupesObject[value][j]]);
+        }
+      }
     }
   }
-
-  if (doubleArrays.length) {
-    return hand.filter((card) => card.number === Number(doubleArrays[0]));
-  } else {
-    return [];
-  }
+  return combinations;
 }
 /* AI logic to play a triple */
+/** 
+ * NOTE: This solution for if the number of duplicates is four seems severely need of refactoring.
+*/
 const triple = (hand) => {
   const dupesObject = createDuplicatesObject(hand);
-  const tripleArrays = [];
+  const combinations = [];
 
   for (const value in dupesObject) {
-    if (dupesObject[value] === 3) {
-      tripleArrays.push(value);
+    if (dupesObject[value].length === 3) {
+      combinations.push(dupesObject[value]);
+    } else if (dupesObject[value].length === 4) {
+      for (let i = 0; i < dupesObject[value].length; i++) {
+        for (let j = i + 1; j < dupesObject[value].length; j++) {
+          if (dupesObject[value][j + 1]) {
+            combinations.push([dupesObject[value][i], dupesObject[value][j], dupesObject[value][j + 1]]);
+          }
+
+          if (dupesObject[value][j + 2]) {
+            combinations.push([dupesObject[value][i], dupesObject[value][j], dupesObject[value][j + 2]]);
+          }
+        }
+      }
     }
   }
-
-  if (tripleArrays.length) {
-    return hand.filter((card) => card.number === Number(tripleArrays[0]));
-  } else {
-    return [];
-  }
+  return combinations;
 }
 /* AI logic to play a quartet */
 const quartet = (hand) => {
   const dupesObject = createDuplicatesObject(hand);
-  const quartetArrays = [];
+  const combinations = [];
 
   for (const value in dupesObject) {
-    if (dupesObject[value] === 4) {
-      quartetArrays.push(value);
+    if (dupesObject[value].length === 4) {
+      combinations.push(dupesObject[value]);
     }
   }
-
-  if (quartetArrays.length) {
-    return hand.filter((card) => card.number === Number(quartetArrays[0]));
-  } else {
-    return [];
-  }
+  return combinations;
 }
 
 /* AI logic to play double sequence */
@@ -170,8 +176,9 @@ const sequence = (hand) => {
   }
   return totalSequences;
 }
-// 
-const hand = [ { number: 11, suite: 'hearts', value: 36, selected: false }, { number: 6, suite: 'hearts', value: 16, selected: false },  { number: 14, suite: 'hearts', value: 48, selected: false }, { number: 12, suite: 'hearts', value: 40, selected: false, copy: 1 }, { number: 8, suite: 'diamonds', value: 23, selected: false }, { number: 9, suite: 'hearts', value: 28, selected: false }, { number: 15, suite: 'clubs', value: 50, selected: false, copy: 1 }, { number: 13, suite: 'hearts', value: 44, selected: false }, { number: 15, suite: 'diamonds', value: 51, selected: false, copy: 2 }, { number: 12, suite: 'diamonds', value: 39, selected: false, copy: 2 } ];
+
+//const hand = [ { number: 11, suite: 'hearts', value: 36, selected: false }, { number: 6, suite: 'hearts', value: 16, selected: false },  { number: 14, suite: 'hearts', value: 48, selected: false }, { number: 12, suite: 'hearts', value: 40, selected: false, copy: 1 }, { number: 8, suite: 'diamonds', value: 23, selected: false }, { number: 9, suite: 'hearts', value: 28, selected: false }, { number: 15, suite: 'clubs', value: 50, selected: false, copy: 1 }, { number: 13, suite: 'hearts', value: 44, selected: false }, { number: 15, suite: 'diamonds', value: 51, selected: false, copy: 2 }, { number: 12, suite: 'diamonds', value: 39, selected: false, copy: 2 } ];
+const hand = [ { number: 12, suite: 'hearts', value: 36, selected: false, copy: 3 }, { number: 12, suite: 'hearts', value: 36, selected: false, copy: 4 }, { number: 6, suite: 'hearts', value: 16, selected: false },  { number: 14, suite: 'hearts', value: 48, selected: false }, { number: 12, suite: 'hearts', value: 40, selected: false, copy: 1 }, { number: 8, suite: 'diamonds', value: 23, selected: false }, { number: 9, suite: 'hearts', value: 28, selected: false }, { number: 15, suite: 'clubs', value: 50, selected: false, copy: 1 }, { number: 13, suite: 'hearts', value: 44, selected: false }, { number: 15, suite: 'diamonds', value: 51, selected: false, copy: 2 }, { number: 12, suite: 'diamonds', value: 39, selected: false, copy: 2 } ];
 // const hand = [ { number: 11, suite: 'hearts', value: 36, selected: false }, { number: 6, suite: 'hearts', value: 16, selected: false },  { number: 14, suite: 'hearts', value: 48, selected: false }, { number: 12, suite: 'hearts', value: 40, selected: false }, { number: 8, suite: 'diamonds', value: 23, selected: false }, { number: 9, suite: 'hearts', value: 28, selected: false }, { number: 15, suite: 'clubs', value: 50, selected: false }, { number: 13, suite: 'hearts', value: 44, selected: false }];
 
-console.log(double(hand));
+console.log(quartet(hand));
