@@ -1,66 +1,3 @@
-/* AI logic to play a double */
-// Need to handle logic if there are 3/4 of a kind
-// This leads to different combinations of doubles.
-const double = (hand) => {
-  const dupesObject = createDuplicatesObject(hand);
-  const combinations = [];
-
-  for (const value in dupesObject) {
-    if (dupesObject[value].length === 2) {
-      combinations.push(dupesObject[value]);
-    } else if (dupesObject[value].length > 2) {
-      for (let i = 0; i < dupesObject[value].length; i++) {
-        for (let j = i + 1; j < dupesObject[value].length; j++) {
-          combinations.push([dupesObject[value][i], dupesObject[value][j]]);
-        }
-      }
-    }
-  }
-  return combinations;
-}
-/* AI logic to play a triple */
-/** 
- * NOTE: This solution for if the number of duplicates is four seems severely need of refactoring.
-*/
-const triple = (hand) => {
-  const dupesObject = createDuplicatesObject(hand);
-  const combinations = [];
-
-  for (const value in dupesObject) {
-    if (dupesObject[value].length === 3) {
-      combinations.push(dupesObject[value]);
-    } else if (dupesObject[value].length === 4) {
-      for (let i = 0; i < dupesObject[value].length; i++) {
-        for (let j = i + 1; j < dupesObject[value].length; j++) {
-          if (dupesObject[value][j + 1]) {
-            combinations.push([dupesObject[value][i], dupesObject[value][j], dupesObject[value][j + 1]]);
-          }
-
-          if (dupesObject[value][j + 2]) {
-            combinations.push([dupesObject[value][i], dupesObject[value][j], dupesObject[value][j + 2]]);
-          }
-        }
-      }
-    }
-  }
-  return combinations;
-}
-/* AI logic to play a quartet */
-const quartet = (hand) => {
-  const dupesObject = createDuplicatesObject(hand);
-  const combinations = [];
-
-  for (const value in dupesObject) {
-    if (dupesObject[value].length === 4) {
-      combinations.push(dupesObject[value]);
-    }
-  }
-  return combinations;
-}
-
-/* AI logic to play double sequence */
-
-
 const merge = (left, right) => {
   let sortedArr = [];
 
@@ -123,13 +60,6 @@ const mergeSortNoDupe = (arr) => {
   return mergeUniqNoDupe(left, right);
 }
 
-/*
-'hearts': '♥',
-'diamonds': '♦',
-'spades': '♠',
-'clubs': '♣',
-*/
-
 const createDuplicatesObject = (array) => {
   const values = {};
 
@@ -144,21 +74,61 @@ const createDuplicatesObject = (array) => {
   return values;
 }
 
-// Duplicates Object example
-/*
- {
-'6': [ 'hearts' ],
-'7': [ 'clubs' ],
-'8': [ 'diamonds' ],
-'9': [ 'hearts', 'clubs' ],
-'10': [ 'hearts' ],
-'11': [ 'hearts' ],
-'12': [ 'hearts' ],
-'13': [ 'hearts' ],
-'14': [ 'hearts' ],
-'15': [ 'clubs', 'diamonds' ]
+/* AI logic to play a double */
+const pair = (hand) => {
+  const dupesObject = createDuplicatesObject(hand);
+  const combinations = [];
+
+  for (const value in dupesObject) {
+    if (dupesObject[value].length === 2) {
+      combinations.push(dupesObject[value]);
+    } else if (dupesObject[value].length > 2) {
+      for (let i = 0; i < dupesObject[value].length; i++) {
+        for (let j = i + 1; j < dupesObject[value].length; j++) {
+          combinations.push([dupesObject[value][i], dupesObject[value][j]]);
+        }
+      }
+    }
+  }
+  return combinations;
 }
-*/
+/* AI logic to play a triple */
+const triplet = (hand) => {
+  const dupesObject = createDuplicatesObject(hand);
+  const combinations = [];
+
+  for (const value in dupesObject) {
+    if (dupesObject[value].length === 3) {
+      combinations.push(dupesObject[value]);
+    } else if (dupesObject[value].length === 4) {
+      for (let i = 0; i < dupesObject[value].length; i++) {
+        for (let j = i + 1; j < dupesObject[value].length; j++) {
+          if (dupesObject[value][j + 1]) {
+            combinations.push([dupesObject[value][i], dupesObject[value][j], dupesObject[value][j + 1]]);
+          }
+
+          if (dupesObject[value][j + 2]) {
+            combinations.push([dupesObject[value][i], dupesObject[value][j], dupesObject[value][j + 2]]);
+          }
+        }
+      }
+    }
+  }
+  return combinations;
+}
+/* AI logic to play a quartet */
+const quartet = (hand) => {
+  const dupesObject = createDuplicatesObject(hand);
+  const combinations = [];
+
+  for (const value in dupesObject) {
+    if (dupesObject[value].length === 4) {
+      combinations.push(dupesObject[value]);
+    }
+  }
+  return combinations;
+}
+
 /* AI logic to play a sequence */
 const sequence = (hand) => {
   const dupesObject = createDuplicatesObject(hand);
@@ -212,8 +182,7 @@ const sequence = (hand) => {
   return totalSequences;
 }
 
-// Example: 3 3 4 4 5 5 6 6
-// straight with doubles.
+/* AI logic to play double sequence */
 const doubleSequence = (hand) => {
   const dupesObject = createDuplicatesObject(hand);
   const sortedHand = mergeSortNoDupe(hand);
@@ -284,9 +253,23 @@ const doubleSequence = (hand) => {
   }
   return totalSequences;
 }
+
+export const aiMoves = (combinationType, hand) => {
+  if (combinationType === 'single') {
+    return hand;
+  } else if (combinationType === 'pair') {
+    return pair(hand);
+  } else if (combinationType === 'triplet') {
+    return triplet(hand);
+  } else if (combinationType === 'quartet') {
+    return quartet(hand);
+  } else if (combinationType === 'sequence') {
+    return sequence(hand);
+  } else if (combinationType === 'double sequence') {
+    return doubleSequence(hand);
+  }
+}
 //const hand = [ { number: 11, suite: 'hearts', value: 36, selected: false }, { number: 6, suite: 'hearts', value: 16, selected: false },  { number: 14, suite: 'hearts', value: 48, selected: false }, { number: 12, suite: 'hearts', value: 40, selected: false, copy: 1 }, { number: 8, suite: 'diamonds', value: 23, selected: false }, { number: 9, suite: 'hearts', value: 28, selected: false }, { number: 15, suite: 'clubs', value: 50, selected: false, copy: 1 }, { number: 13, suite: 'hearts', value: 44, selected: false }, { number: 15, suite: 'diamonds', value: 51, selected: false, copy: 2 }, { number: 12, suite: 'diamonds', value: 39, selected: false, copy: 2 } ];
 //const hand = [ { number: 12, suite: 'hearts', value: 36, selected: false, copy: 3 }, { number: 12, suite: 'hearts', value: 36, selected: false, copy: 4 }, { number: 6, suite: 'hearts', value: 16, selected: false },  { number: 14, suite: 'hearts', value: 48, selected: false }, { number: 12, suite: 'hearts', value: 40, selected: false, copy: 1 }, { number: 8, suite: 'diamonds', value: 23, selected: false }, { number: 9, suite: 'hearts', value: 28, selected: false }, { number: 15, suite: 'clubs', value: 50, selected: false, copy: 1 }, { number: 13, suite: 'hearts', value: 44, selected: false }, { number: 15, suite: 'diamonds', value: 51, selected: false, copy: 2 }, { number: 12, suite: 'diamonds', value: 39, selected: false, copy: 2 } ];
 //const hand = [ { number: 11, suite: 'hearts', value: 36, selected: false }, { number: 6, suite: 'hearts', value: 16, selected: false },  { number: 14, suite: 'hearts', value: 48, selected: false }, { number: 12, suite: 'hearts', value: 40, selected: false }, { number: 8, suite: 'diamonds', value: 23, selected: false }, { number: 9, suite: 'hearts', value: 28, selected: false }, { number: 15, suite: 'clubs', value: 50, selected: false }, { number: 13, suite: 'hearts', value: 44, selected: false }];
 const hand = [{ number: 6, suite: 'hearts', value: 16, selected: false }, { number: 14, suite: 'clubs', value: 46, selected: false, copy: 1 }, { number: 14, suite: 'diamonds', value: 47, selected: false, copy: 2 }, { number: 12, suite: 'hearts', value: 40, selected: false, copy: 1 }, { number: 8, suite: 'diamonds', value: 23, selected: false }, { number: 9, suite: 'hearts', value: 28, selected: false }, { number: 15, suite: 'clubs', value: 50, selected: false, copy: 1 }, { number: 13, suite: 'hearts', value: 44, selected: false, copy: 2 }, { number: 13, suite: 'diamonds', value: 43, selected: false, copy: 1 }, { number: 15, suite: 'diamonds', value: 51, selected: false, copy: 2 }, { number: 12, suite: 'diamonds', value: 39, selected: false, copy: 2 }, { number: 12, suite: 'spades', value: 37, selected: false, copy: 3 }];
-
-console.log(doubleSequence(hand));

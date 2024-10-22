@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Hand from "@/components/gameComponents/hand.js";
 import { dictionaryCombinations, highestValue } from '@/components/utilities/combination.js';
 import { mapCard, icons } from '../utilities/card';
+import { aiMoves } from '../utilities/ai';
 
 const Game = () => {
   const [shuffledDeck, setDeck] = useState([]);
@@ -56,16 +57,29 @@ const Game = () => {
       let valueToBeat = previousPlayedCombo.length === 0 ? 0 : previousPlayedCombo[previousPlayedCombo.length - 1].value;
 
       const currHand = hands[playerTurn].hand;
-      const lowestCard = currHand.reduce((lowest, curr) => {
-        if(curr.value < lowest && curr.value > valueToBeat) {
-          return curr.value;
+  
+      const possibleCombinations = aiMoves(currentTurnCombo, currHand);
+      if (possibleCombinations.length) {
+        if (currentTurnCombo === 'single') {
+          const lowestCard = currHand.reduce((lowest, curr) => {
+            if(curr.value < lowest && curr.value > valueToBeat) {
+              return curr.value;
+            }
+            return lowest;  
+          }, 53);
+    
+          const cardToPlay = currHand.find((card) => card.value === lowestCard);
+          requestCombo([cardToPlay], 'single'); 
+        } else {
+          const lowestPlay = possibleCombinations.reduce((lowest, curr) => {
+            if (curr[curr.length - 1].value < lowest[lowest.length - 1].value && curr[curr.length - 1].value > valueToBeat) {
+              return curr
+            }
+            return lowest;
+          }, [{ number: 15, suite: 'hearts', value: 53 }]);
+          // Fix this.
+          // requestCombo([lowestPlay], currentTurnCombo);
         }
-        return lowest;
-      }, 53);
-
-      const cardToPlay = currHand.find((card) => card.value === lowestCard);
-      if (cardToPlay) {
-        requestCombo([cardToPlay], 'single'); 
       } else {
         // NOTE: Will cause endless cycle of passing until there is game logic to recognize next cycle.
         console.log(`Player ${playerTurn + 1} passes.`);
@@ -108,11 +122,13 @@ const Game = () => {
     shuffledDeck.forEach((card, idx) => {
       const player = idx % 4;
       tempHands[player].hand.push(card);
+      /*
       if(card.number === 3 && card.suite === 'spades') {
         setPlayerTurn(player);
       };
+      */
     });
-
+    setPlayerTurn(0)
     setHands(tempHands);
 
     setTimeout(() => {
@@ -238,7 +254,6 @@ const Game = () => {
     );
   });
 
-  console.log(hands);
   return (
     <game>
       {introIsVisible
