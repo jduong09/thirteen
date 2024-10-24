@@ -14,6 +14,7 @@ const Game = () => {
   const [hands, setHands] = useState(null);
   const [comboIsValid, setComboStatus] = useState(null);
   const [currentTurnCombo, setCurrentTurnCombo] = useState('single');
+  const [currentTurnLength, setCurrentTurnLength] = useState(1);
   const [previousPlayedCombo, setPreviousPlayedCombo] = useState([]);
   const [selectCombo, setComboSelect] = useState('single');
 
@@ -58,32 +59,20 @@ const Game = () => {
 
       const currHand = hands[playerTurn].hand;
   
-      const possibleCombinations = aiMoves(currentTurnCombo, currHand);
-      if (possibleCombinations.length) {
-        if (currentTurnCombo === 'single') {
-          const lowestCard = currHand.reduce((lowest, curr) => {
-            if(curr.value < lowest && curr.value > valueToBeat) {
-              return curr.value;
-            }
-            return lowest;  
-          }, 53);
-    
-          const cardToPlay = currHand.find((card) => card.value === lowestCard);
-          requestCombo([cardToPlay], 'single'); 
+      const possibleCombinations = aiMoves(currentTurnCombo, currHand, currentTurnLength);
+      const lowestPlay = possibleCombinations.reduce((lowest, curr) => {
+        if (curr[curr.length - 1].value < lowest[lowest.length - 1].value && curr[curr.length - 1].value > valueToBeat) {
+          return curr;
         } else {
-          const lowestPlay = possibleCombinations.reduce((lowest, curr) => {
-            if (curr[curr.length - 1].value < lowest[lowest.length - 1].value && curr[curr.length - 1].value > valueToBeat) {
-              return curr
-            }
-            return lowest;
-          }, [{ number: 15, suite: 'hearts', value: 53 }]);
-          // Fix this.
-          // requestCombo([lowestPlay], currentTurnCombo);
+          return lowest;
         }
-      } else {
-        // NOTE: Will cause endless cycle of passing until there is game logic to recognize next cycle.
+      }, [{ fake: true, value: 53}]);
+
+      if (lowestPlay.length === 1 && lowestPlay[0].fake) {
         console.log(`Player ${playerTurn + 1} passes.`);
         passTurn(playerTurn);
+      } else {
+        requestCombo(lowestPlay, currentTurnCombo);
       }
     }
   }, [playerTurn]);
@@ -188,11 +177,15 @@ const Game = () => {
    * @param {Object[]} combo - Array of card objects
    */
   const requestCombo = (combo, combination) => {
+    console.log('Combo: ', combo);
+    console.log('Combination: ', combination);
     // Check if combo is valid
     if(previousPlayedCombo.length === 0 || (validateCombo(combo, combination) && compareCombo(previousPlayedCombo[previousPlayedCombo.length - 1].value, combo))) {
+      console.log('Valid Combo');
       // Accept combo and set player turn
       setComboStatus(true);
       setPreviousPlayedCombo(combo);
+      setCurrentTurnLength(combo.length);
       setComboStatus(null);
 
       combo.forEach((card) => {

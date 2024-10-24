@@ -130,7 +130,7 @@ const quartet = (hand) => {
 }
 
 /* AI logic to play a sequence */
-const sequence = (hand) => {
+const sequence = (hand, validLength) => {
   const dupesObject = createDuplicatesObject(hand);
   const sortedHand = mergeSort(hand);
   const totalSequences = [];
@@ -155,7 +155,7 @@ const sequence = (hand) => {
             sequences.forEach((sequence) => {
               const appendedSequence = [...sequence, card];
               // When card is appended to previous sequence, if it fits the condition of 3 or more cards, add it to our final total sequences array.
-              if (appendedSequence.length >= 3) {
+              if (appendedSequence.length === validLength) {
                 totalSequences.push(appendedSequence);
               }
               newSequences.push(appendedSequence);
@@ -168,7 +168,7 @@ const sequence = (hand) => {
           const newSequences = [];
           sequences.forEach((sequence) => {
             const appendedSequence = [...sequence, dupesObject[currentNumber][0]];
-            if (appendedSequence.length >= 3) {
+            if (appendedSequence.length == validLength) {
               totalSequences.push(appendedSequence);
             }
             newSequences.push(appendedSequence);
@@ -183,7 +183,7 @@ const sequence = (hand) => {
 }
 
 /* AI logic to play double sequence */
-const doubleSequence = (hand) => {
+const doubleSequence = (hand, validLength) => {
   const dupesObject = createDuplicatesObject(hand);
   const sortedHand = mergeSortNoDupe(hand);
   const totalSequences = [];
@@ -227,7 +227,7 @@ const doubleSequence = (hand) => {
               for (let b = a + 1; b < dupesObject[currentNumber].length; b++) {
                 const newSequence = [...sequence, dupesObject[currentNumber][a], dupesObject[currentNumber][b]];
                 
-                if (newSequence.length >= 6) {
+                if (newSequence.length === validLength) {
                   totalSequences.push(newSequence);
                 }
                 newSequences.push(newSequence);
@@ -240,7 +240,7 @@ const doubleSequence = (hand) => {
           const newSequences = [];
           sequences.forEach((sequence) => {
             const newSequence = [...sequence, dupesObject[currentNumber][0], dupesObject[currentNumber][1]];
-            if (newSequence.length >= 6) {
+            if (newSequence.length ===validLength) {
               totalSequences.push(newSequence);
             }
             newSequences.push(newSequence);
@@ -254,9 +254,9 @@ const doubleSequence = (hand) => {
   return totalSequences;
 }
 
-export const aiMoves = (combinationType, hand) => {
+export const aiMoves = (combinationType, hand, validLength) => {
   if (combinationType === 'single') {
-    return hand;
+    return hand.map((card) => { return [card]});
   } else if (combinationType === 'pair') {
     return pair(hand);
   } else if (combinationType === 'triplet') {
@@ -264,9 +264,9 @@ export const aiMoves = (combinationType, hand) => {
   } else if (combinationType === 'quartet') {
     return quartet(hand);
   } else if (combinationType === 'sequence') {
-    return sequence(hand);
+    return sequence(hand, validLength);
   } else if (combinationType === 'double sequence') {
-    return doubleSequence(hand);
+    return doubleSequence(hand, validLength);
   }
 }
 //const hand = [ { number: 11, suite: 'hearts', value: 36, selected: false }, { number: 6, suite: 'hearts', value: 16, selected: false },  { number: 14, suite: 'hearts', value: 48, selected: false }, { number: 12, suite: 'hearts', value: 40, selected: false, copy: 1 }, { number: 8, suite: 'diamonds', value: 23, selected: false }, { number: 9, suite: 'hearts', value: 28, selected: false }, { number: 15, suite: 'clubs', value: 50, selected: false, copy: 1 }, { number: 13, suite: 'hearts', value: 44, selected: false }, { number: 15, suite: 'diamonds', value: 51, selected: false, copy: 2 }, { number: 12, suite: 'diamonds', value: 39, selected: false, copy: 2 } ];
