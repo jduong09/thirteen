@@ -10,7 +10,7 @@ const merge = (left, right) => {
   }
 
   return [...sortedArr, ...left, ...right];
-}
+};
 
 const mergeUniqNoDupe = (left, right) => {
   let sortedArr = [];
@@ -32,7 +32,7 @@ const mergeUniqNoDupe = (left, right) => {
   }
 
   return [...sortedArr];
-}
+};
 
 const mergeSort = (arr) => {
   if (arr.length <= 1) {
@@ -45,7 +45,7 @@ const mergeSort = (arr) => {
   const right = mergeSort(arr.slice(mid));
 
   return merge(left, right);
-}
+};
 
 const mergeSortNoDupe = (arr) => {
   if (arr.length <= 1) {
@@ -58,7 +58,7 @@ const mergeSortNoDupe = (arr) => {
   const right = mergeSort(arr.slice(mid));
 
   return mergeUniqNoDupe(left, right);
-}
+};
 
 const createDuplicatesObject = (array) => {
   const values = {};
@@ -72,7 +72,7 @@ const createDuplicatesObject = (array) => {
     }
   }
   return values;
-}
+};
 
 /* AI logic to play a double */
 const pair = (hand) => {
@@ -91,7 +91,8 @@ const pair = (hand) => {
     }
   }
   return combinations;
-}
+};
+
 /* AI logic to play a triple */
 const triplet = (hand) => {
   const dupesObject = createDuplicatesObject(hand);
@@ -115,7 +116,8 @@ const triplet = (hand) => {
     }
   }
   return combinations;
-}
+};
+
 /* AI logic to play a quartet */
 const quartet = (hand) => {
   const dupesObject = createDuplicatesObject(hand);
@@ -127,7 +129,7 @@ const quartet = (hand) => {
     }
   }
   return combinations;
-}
+};
 
 /* AI logic to play a sequence */
 const sequence = (hand, validLength) => {
@@ -180,7 +182,7 @@ const sequence = (hand, validLength) => {
     }
   }
   return totalSequences;
-}
+};
 
 /* AI logic to play double sequence */
 const doubleSequence = (hand, validLength) => {
@@ -252,7 +254,7 @@ const doubleSequence = (hand, validLength) => {
     }
   }
   return totalSequences;
-}
+};
 
 export const aiMoves = (combinationType, hand, validLength) => {
   if (combinationType === 'single') {
@@ -268,8 +270,4 @@ export const aiMoves = (combinationType, hand, validLength) => {
   } else if (combinationType === 'double sequence') {
     return doubleSequence(hand, validLength);
   }
-}
-//const hand = [ { number: 11, suite: 'hearts', value: 36, selected: false }, { number: 6, suite: 'hearts', value: 16, selected: false },  { number: 14, suite: 'hearts', value: 48, selected: false }, { number: 12, suite: 'hearts', value: 40, selected: false, copy: 1 }, { number: 8, suite: 'diamonds', value: 23, selected: false }, { number: 9, suite: 'hearts', value: 28, selected: false }, { number: 15, suite: 'clubs', value: 50, selected: false, copy: 1 }, { number: 13, suite: 'hearts', value: 44, selected: false }, { number: 15, suite: 'diamonds', value: 51, selected: false, copy: 2 }, { number: 12, suite: 'diamonds', value: 39, selected: false, copy: 2 } ];
-//const hand = [ { number: 12, suite: 'hearts', value: 36, selected: false, copy: 3 }, { number: 12, suite: 'hearts', value: 36, selected: false, copy: 4 }, { number: 6, suite: 'hearts', value: 16, selected: false },  { number: 14, suite: 'hearts', value: 48, selected: false }, { number: 12, suite: 'hearts', value: 40, selected: false, copy: 1 }, { number: 8, suite: 'diamonds', value: 23, selected: false }, { number: 9, suite: 'hearts', value: 28, selected: false }, { number: 15, suite: 'clubs', value: 50, selected: false, copy: 1 }, { number: 13, suite: 'hearts', value: 44, selected: false }, { number: 15, suite: 'diamonds', value: 51, selected: false, copy: 2 }, { number: 12, suite: 'diamonds', value: 39, selected: false, copy: 2 } ];
-//const hand = [ { number: 11, suite: 'hearts', value: 36, selected: false }, { number: 6, suite: 'hearts', value: 16, selected: false },  { number: 14, suite: 'hearts', value: 48, selected: false }, { number: 12, suite: 'hearts', value: 40, selected: false }, { number: 8, suite: 'diamonds', value: 23, selected: false }, { number: 9, suite: 'hearts', value: 28, selected: false }, { number: 15, suite: 'clubs', value: 50, selected: false }, { number: 13, suite: 'hearts', value: 44, selected: false }];
-const hand = [{ number: 6, suite: 'hearts', value: 16, selected: false }, { number: 14, suite: 'clubs', value: 46, selected: false, copy: 1 }, { number: 14, suite: 'diamonds', value: 47, selected: false, copy: 2 }, { number: 12, suite: 'hearts', value: 40, selected: false, copy: 1 }, { number: 8, suite: 'diamonds', value: 23, selected: false }, { number: 9, suite: 'hearts', value: 28, selected: false }, { number: 15, suite: 'clubs', value: 50, selected: false, copy: 1 }, { number: 13, suite: 'hearts', value: 44, selected: false, copy: 2 }, { number: 13, suite: 'diamonds', value: 43, selected: false, copy: 1 }, { number: 15, suite: 'diamonds', value: 51, selected: false, copy: 2 }, { number: 12, suite: 'diamonds', value: 39, selected: false, copy: 2 }, { number: 12, suite: 'spades', value: 37, selected: false, copy: 3 }];
+};

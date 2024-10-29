@@ -69,7 +69,7 @@ const Game = () => {
       }, [{ fake: true, value: 53}]);
 
       if (lowestPlay.length === 1 && lowestPlay[0].fake) {
-        console.log(`Player ${playerTurn + 1} passes.`);
+        console.log(`PLAYER ${playerTurn + 1} passes.`);
         passTurn(playerTurn);
       } else {
         requestCombo(lowestPlay, currentTurnCombo);
@@ -117,7 +117,7 @@ const Game = () => {
       };
       */
     });
-    setPlayerTurn(0)
+    setPlayerTurn(0);
     setHands(tempHands);
 
     setTimeout(() => {
@@ -177,13 +177,15 @@ const Game = () => {
    * @param {Object[]} combo - Array of card objects
    */
   const requestCombo = (combo, combination) => {
-    console.log('Combo: ', combo);
-    console.log('Combination: ', combination);
     // Check if combo is valid
     if(previousPlayedCombo.length === 0 || (validateCombo(combo, combination) && compareCombo(previousPlayedCombo[previousPlayedCombo.length - 1].value, combo))) {
-      console.log('Valid Combo');
+
+      if (previousPlayedCombo.length === 0) {
+        console.log(`Current Turn Combo set: ${currentTurnCombo.toUpperCase()}.\n\n`);
+      }
       // Accept combo and set player turn
       setComboStatus(true);
+      console.log(`PLAYER ${playerTurn + 1} plays: ${combo.map((card) => `${card.number} of ${card.suite}`).join(", ")}\n\n`);
       setPreviousPlayedCombo(combo);
       setCurrentTurnLength(combo.length);
       setComboStatus(null);
