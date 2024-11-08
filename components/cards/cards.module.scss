@@ -1,0 +1,44 @@
+.hand {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.card {
+  position: relative;
+  width: 75px;
+  height: 105px;
+  border: 2px solid black;
+  border-radius: 4px;
+  margin: 2px;
+}
+
+.card.selected {
+  background-color: beige;
+}
+
+.cardTopLeft {
+  position: absolute;
+  top: 8%;
+  left: 4%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.cardBottomRight {
+  position: absolute;
+  bottom: 8%;
+  right: 4%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.cardTopLeft.red, .cardBottomRight.red {
+  color: red;
+}
+
+.cardBottomRight > span {
+  transform: rotate(180deg);
+}
