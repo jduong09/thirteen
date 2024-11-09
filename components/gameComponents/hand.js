@@ -1,6 +1,6 @@
 import {  React, useState, useEffect } from "react";
 import styles from "@/app/page.module.css";
-import { mapCard, icons } from "../utilities/card";
+import Cards from "@/components/cards/cards";
 
 const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo, passTurn }) => {
   const [hand, setHand] = useState(cards);
@@ -25,10 +25,10 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
    * @param {'groups'|'value'} sortType
    */
   const sortPlayerCards = (sortType) => {
-    if(sortType === 'groups') {
+    if (sortType === 'groups') {
       // Group by quadruplets, triplets, and double first
       const cardGrouping = hand.reduce((acc, card) => {
-        if(acc[card.number]) {
+        if (acc[card.number]) {
           acc[card.number].push(card);
         } else {
           acc[card.number] = [card];
@@ -39,7 +39,7 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
       Object.values(cardGrouping).forEach(group => group.forEach(card => card.group = group.length));
       // Secondary sort by value
       hand.sort((a, b) => a.group === b.group ? b.value - a.value : b.group - a.group);
-    } else if(sortType === 'value') {
+    } else if (sortType === 'value') {
       hand.sort((a, b) => b.value - a.value);
     }
     setSortType(sortType);
@@ -47,7 +47,7 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
   }
 
   // FIXME: I don't love that I had to use a dumb hasReset flag to get this to work...
-  if(!isMyTurn && !hasReset) {
+  if (!isMyTurn && !hasReset) {
     // Reset selected cards
     resetHand();
   }
@@ -116,32 +116,12 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
     }
     requestCombo(combo.map((card) => { return { number: card.number, suite: card.suite, value: card.value } }), currentTurnCombo);
     resetHand();
-  } 
-
-  const listOfCards = hand.map((card, idx) => {
-    const cardDisplay = mapCard(card.number);
-    const isRed = ['hearts', 'diamonds'].includes(card.suite); // NOTE: This is just temporary for now to visually distinguish red cards.
-    return (
-      <li key={idx}>
-        <div className={`${styles.card} ${card.selected && styles.selected}`} onClick={(e) => selectCard(card, e)}>
-          <div className={`${styles.cardTopLeft} ${isRed && styles.red}`}>
-            <span>{cardDisplay}</span>
-            <span>{icons[card.suite]}</span>
-          </div>
-          <div className={`${styles.cardBottomRight} ${isRed && styles.red}`}>
-            <span>{icons[card.suite]}</span>
-            <span>{cardDisplay}</span>
-          </div>
-        </div>
-      </li>
-    );
-  });
+  }
 
   // Line 122: Removed sentence 'Try a different combo or pass' and replaced with 'Try a different combo or press Change Combo Type' for this PR specifically.
   return (
     <div>
-      <ul className={styles.hand}>{listOfCards}</ul>
-
+      <Cards cards={hand} selectCard={selectCard} />
       {comboIsValid === false && <div>Invalid Combo. Try a different combo or press Change Combo Type.</div>}
       {isMyTurn &&
       <div className={styles.handBtns}>
