@@ -106,10 +106,13 @@ const Game = () => {
     shuffledDeck.forEach((card, idx) => {
       const player = idx % 4;
       tempHands[player].hand.push(card);
+      /*
       if(card.number === 3 && card.suite === 'spades') {
         setPlayerTurn(player);
       };
+      */
     });
+    setPlayerTurn(0);
   
     if (tempHands[0].hand.length) {
       setHands(tempHands);
