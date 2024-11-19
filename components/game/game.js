@@ -211,7 +211,7 @@ const Game = () => {
    */
   const requestCombo = (combo, combination) => {
     // Check if combo is valid
-    if (previousPlayedCombo.length === 0 || (validateCombo(combo, combination) && compareCombo(previousPlayedCombo[previousPlayedCombo.length - 1].value, combo))) {
+    if ((previousPlayedCombo.length === 0 && validateCombo(combo, combination))|| (validateCombo(combo, combination) && compareCombo(previousPlayedCombo[previousPlayedCombo.length - 1].value, combo))) {
       // Accept combo and set player turn
       console.log(`PLAYER ${playerTurn + 1} SUCCESSFULLY PLAYED: `, combo[0].number, 'of', combo[0].suite);
       setComboStatus(true);
@@ -261,6 +261,7 @@ const Game = () => {
   // Only show shuffle button at start or end of game
   const shuffleBtn = deckIsShuffled ? null : <button className={gameStyles.shuffleBtn} onClick={onShuffleClick}>Shuffle Deck</button>;
 
+  console.log(hands);
   return (
     <game>
       {introIsVisible

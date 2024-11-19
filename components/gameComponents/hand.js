@@ -126,8 +126,8 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
       {comboIsValid === false && <div>Invalid Combo. Try a different combo or press Change Combo Type.</div>}
       {isMyTurn &&
       <div className={styles.handBtns}>
-        <button disabled={!isMyTurn} onClick={finalizeTurn}>Finalize Turn</button>
-        <button disabled={!isMyTurn} onClick={() => passTurn(playerTurn)}>Pass Turn</button>
+        <button disabled={!isMyTurn} id='btn-finalizeTurn' onClick={finalizeTurn}>Finalize Turn</button>
+        <button disabled={!isMyTurn} id='btn-passTurn' onClick={() => passTurn(playerTurn)}>Pass Turn</button>
         <label>
           Sort Cards:
           <select disabled={!isMyTurn} onChange={(e) => {sortPlayerCards(e.target.value)}} className={styles.select} defaultValue={'default'}>
