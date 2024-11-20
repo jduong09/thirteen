@@ -2,7 +2,7 @@ import {  React, useState, useEffect } from "react";
 import styles from "@/app/page.module.css";
 import Cards from "@/components/cards/cards";
 
-const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo, passTurn }) => {
+const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo, passTurn, player }) => {
   const [hand, setHand] = useState(cards);
   const [combo, setCombo] = useState([]);
   const [hasReset, resetCombo] = useState(false);
@@ -17,7 +17,6 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
 
   // Update hand after changes.
   useEffect(() => {
-    console.log('updating hand after changes: ', hand);
     setHand(cards);
   }, [cards])
 
@@ -121,7 +120,7 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
 
   // Line 122: Removed sentence 'Try a different combo or pass' and replaced with 'Try a different combo or press Change Combo Type' for this PR specifically.
   return (
-    <div>
+    <div data-player-turn={player}>
       <Cards cards={hand} selectCard={selectCard} />
       {comboIsValid === false && <div>Invalid Combo. Try a different combo or press Change Combo Type.</div>}
       {isMyTurn &&

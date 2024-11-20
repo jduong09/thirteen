@@ -261,7 +261,17 @@ const Game = () => {
   // Only show shuffle button at start or end of game
   const shuffleBtn = deckIsShuffled ? null : <button className={gameStyles.shuffleBtn} onClick={onShuffleClick}>Shuffle Deck</button>;
 
-  console.log(hands);
+  const listAiHands = hands.reduce((result, hand) => {
+    if (hand.player !== 0) {
+      result.push(hand);
+    }
+    return result;
+  }, []).map((playerObj, idx) => {
+    return (<li key={idx}>
+      <h3>{`Player ${playerObj.player + 1} Hand:`}</h3>
+      <Hand cards={playerObj.hand} player={playerObj.player} />
+    </li>)
+  });
   return (
     <game>
       {introIsVisible
@@ -282,6 +292,7 @@ const Game = () => {
               {playerTurn !== 0 && <span> Thinking... <span className={gameStyles.loading}></span></span>}
             </div>}
           </h2>
+          <ul data-cy='hands-ai'>{listAiHands}</ul>
           <h2>Select a combo thats fits {selectCombo}</h2>
           <h3>Your Hand:</h3>
           <Hand cards={hands[0].hand}
@@ -290,6 +301,7 @@ const Game = () => {
             requestCombo={requestCombo}
             currentTurnCombo={currentTurnCombo}
             passTurn={passTurn}
+            player={0}
           />
           <form>
             <label htmlFor='select-combo'>Combination: </label>
