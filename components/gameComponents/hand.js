@@ -2,7 +2,7 @@ import {  React, useState, useEffect } from "react";
 import styles from "@/app/page.module.css";
 import Cards from "@/components/cards/cards";
 
-const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo, passTurn }) => {
+const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo, passTurn, player }) => {
   const [hand, setHand] = useState(cards);
   const [combo, setCombo] = useState([]);
   const [hasReset, resetCombo] = useState(false);
@@ -120,13 +120,13 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
 
   // Line 122: Removed sentence 'Try a different combo or pass' and replaced with 'Try a different combo or press Change Combo Type' for this PR specifically.
   return (
-    <div>
+    <div data-player-turn={player}>
       <Cards cards={hand} selectCard={selectCard} />
-      {comboIsValid === false && <div>Invalid Combo. Try a different combo or press Change Combo Type.</div>}
+      {comboIsValid === false && <div data-cy='div-invalid'>Invalid Combo. Try a different combo or press Change Combo Type.</div>}
       {isMyTurn &&
       <div className={styles.handBtns}>
-        <button disabled={!isMyTurn} onClick={finalizeTurn}>Finalize Turn</button>
-        <button disabled={!isMyTurn} onClick={() => passTurn(playerTurn)}>Pass Turn</button>
+        <button disabled={!isMyTurn} id='btn-finalizeTurn' onClick={finalizeTurn}>Finalize Turn</button>
+        <button disabled={!isMyTurn} id='btn-passTurn' onClick={() => passTurn(playerTurn)}>Pass Turn</button>
         <label>
           Sort Cards:
           <select disabled={!isMyTurn} onChange={(e) => {sortPlayerCards(e.target.value)}} className={styles.select} defaultValue={'default'}>
