@@ -122,7 +122,7 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
   return (
     <div data-player-turn={player}>
       <Cards cards={hand} selectCard={selectCard} />
-      {comboIsValid === false && <div>Invalid Combo. Try a different combo or press Change Combo Type.</div>}
+      {comboIsValid === false && <div data-cy='div-invalid'>Invalid Combo. Try a different combo or press Change Combo Type.</div>}
       {isMyTurn &&
       <div className={styles.handBtns}>
         <button disabled={!isMyTurn} id='btn-finalizeTurn' onClick={finalizeTurn}>Finalize Turn</button>
