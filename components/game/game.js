@@ -14,12 +14,13 @@ const Game = () => {
   const [playerTurn, setPlayerTurn] = useState(0);
   const [hands, setHands] = useState([]);
   const [comboIsValid, setComboStatus] = useState(null);
-  const [currentTurnCombo, setCurrentTurnCombo] = useState('single');
+  const [currentTurnCombo, setCurrentTurnCombo] = useState('');
   const [currentTurnLength, setCurrentTurnLength] = useState(1);
   const [previousPlayedCombo, setPreviousPlayedCombo] = useState([]);
-  const [selectCombo, setComboSelect] = useState('single');
+  const [selectCombo, setComboSelect] = useState('');
   const [endCycleClause, setEndCycleClause] = useState(null);
   const [newRound, setNewRound] = useState(false);
+  const [turnMessage, setTurnMessage] = useState('');
 
   // Build Card Deck
   const suites = ['spades', 'clubs', 'diamonds', 'hearts'];
@@ -98,6 +99,7 @@ const Game = () => {
       setTimeout(() => restartRound(), 5000);
       // TODO: Logic for choosing next turn
       setPlayerTurn(0);
+      setTurnMessage('Your Turn.');
     }
   }, [endCycleClause, previousPlayedCombo, currentTurnCombo, selectCombo, newRound, hands]);
 
@@ -156,6 +158,7 @@ const Game = () => {
       */
     });
     setPlayerTurn(0);
+    setTurnMessage('Your Turn.');
     setHands(tempHands);
 
     setTimeout(() => {
@@ -178,6 +181,7 @@ const Game = () => {
       }
     }
 
+    setTurnMessage(nextPlayer === 0 ? 'Your Turn.' : `Player ${nextPlayer + 1}'s Turn.`);
     console.log(`SETTING NEXT PLAYER TO: ${nextPlayer + 1}`);
     setPlayerTurn(nextPlayer);
   }
@@ -203,7 +207,10 @@ const Game = () => {
    * @returns {Boolean}
    */
   const validateCombo = (combo, combination) => {
-    // TODO: A separate ticket to handle validating the combo move
+    if (combination === '') {
+      setTurnMessage('Your Turn: Set combination type before playing.');
+      return;
+    }
     return dictionaryCombinations[combination].isValid(combo);
   }
 
@@ -280,15 +287,8 @@ const Game = () => {
 
       {deckIsShuffled &&
         <div>
-          <h2 className={gameStyles.turnIndicator}>
-            {endCycleClause
-              || <div>
-                  <span>{playerTurn === 0 ? 'Your' : `Player ${playerTurn + 1}'s`} turn.</span>
-                  {playerTurn !== 0 && <span> Thinking... <span className={gameStyles.loading}></span></span>}
-                </div>
-            }
-          </h2>
-          <h2>Select a combo thats fits {selectCombo}</h2>
+          <h2 className={gameStyles.turnIndicator}>{endCycleClause || <div><span>{turnMessage}</span></div>}</h2>
+          <h2>{selectCombo ? `Select a combo that fits ${selectCombo}.` : 'Choose Combination Type'}</h2>
           <h3>Your Hand:</h3>
           <Hand cards={hands[0].hand}
             playerTurn={playerTurn}
@@ -300,7 +300,7 @@ const Game = () => {
           <form>
             <label htmlFor='select-combo'>Combination: </label>
             <select id='select-combo' name='select-combo' className={gameStyles.selectCombo} onChange={changeCombo} value={currentTurnCombo}>
-              <option value=''></option>
+              <option value=''>--Please choose an option--</option>
               <option value='single'>Single</option>
               <option value='pair'>Pair</option>
               <option value='triplet'>Triplet</option>
@@ -309,7 +309,6 @@ const Game = () => {
               <option value='double sequence'>Double Sequence</option>
             </select>
           </form>
-          {comboIsValid && <h2 className={gameStyles.validCombo}>Combo Choice is correct.</h2>}
           <div className={gameStyles.middlePile}>
             <h2>Middle Pile</h2>
             <Cards cards={previousPlayedCombo} />

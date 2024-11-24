@@ -194,7 +194,7 @@ const doubleSequence = (hand, validLength) => {
     let startingNumber = sortedHand[i].number;
     let sequences = [];
 
-    // if starting iteration does not containn two of its number, continue to next iteration.
+    // if starting iteration does not contain two of its number, continue to next iteration.
     if (dupesObject[startingNumber].length < 2) {
       continue;
     }
