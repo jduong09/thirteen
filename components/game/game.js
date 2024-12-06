@@ -90,6 +90,8 @@ const Game = () => {
         if (playerHasWonRound) {
           // FIXME: This is only reached when an AI wins.
           console.log(`\n\nPLAYER ${playerTurn + 1} HAS WON ROUND! STARTING NEW ROUND IN 5 SECONDS...`);
+
+          // 
         } else {
           let valueToBeat = previousPlayedCombo.length === 0 ? 0 : previousPlayedCombo[previousPlayedCombo.length - 1].value;
           const currHand = hands[playerTurn].hand;
@@ -258,7 +260,7 @@ const Game = () => {
 
   // Only show shuffle button at start or end of game
   const shuffleBtn = deckIsShuffled ? null : <button className={gameStyles.shuffleBtn} onClick={onShuffleClick}>Shuffle Deck</button>;
-
+  console.log(hands);
   return (
     <game>
       {introIsVisible
