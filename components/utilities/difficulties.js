@@ -2,6 +2,15 @@
 // Need to
 // At start of turn, play hardest combo to beat
 // When following up, play highest value combo.
+// double sequence (6 cards)
+// 6 Sequence and above
+// quartet
+// three of a kind
+// 5 sequeence straight
+// 4 sequence straight
+// pair
+// 3 sequence straight
+// high card
 const difficulties = {
   "hard": {
     1: {

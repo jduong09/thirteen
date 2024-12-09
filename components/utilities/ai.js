@@ -271,3 +271,110 @@ export const aiMoves = (combinationType, hand, validLength) => {
     return doubleSequence(hand, validLength);
   }
 };
+
+// Build Object of available plays categorized by combination type.
+// Get probabilities of hardest to play
+// Play highest value.
+// sequence of 13 cards
+// sequence of 12 cards
+// sequence of 11 cards
+// sequence of 10 cards
+// sequence of 9 cards
+// sequence of 8 cards
+// sequence of 7 cards
+// sequence of 6 cards
+// sequence of 5 cards
+// sequence of 4 cards
+// sequence of 3 cards
+// double sequence of 12 cards
+// double sequence of 10 cards
+// double sequence of 8 cards
+// double sequence of 6 cards
+// quartet
+// triplet
+// pair
+
+const findDoubleSequences = (hand) => {
+  const args = [6, 8, 10, 12];
+  const res = [];
+  for (let i = 0; i < args.length; i++) {
+    if (doubleSequence(hand, args[i]).length) {
+      res.push(doubleSequence(hand, args[i]));
+    }
+  }
+  return res.flat();
+}
+
+const findSequences = (hand) => {
+  const res = [];
+  for (let i = 3; i < 14; i++) {
+    if (sequence(hand, i).length) {
+      res.push(sequence(hand, i));
+    }
+  }
+  return res.flat();
+}
+
+const aiPossibleCombinations =  (hand) => {
+  const possibleCombinations = {};
+  possibleCombinations['DS'] = findDoubleSequences(hand);
+  possibleCombinations['S'] = findSequences(hand);
+  possibleCombinations['Q'] = quartet(hand);
+  possibleCombinations['T'] = triplet(hand);
+  possibleCombinations['P'] = pair(hand);
+  return possibleCombinations;
+};
+ 
+const hand = [{number: 12, suite: 'clubs', value: 38, selected: false},  {number: 12, suite: 'diamonds', value: 39, selected: false}, {number: 15, suite: 'hearts', value: 52, selected: false}, {number: 3, suite: 'hearts', value: 4, selected: false}, {number: 5, suite: 'diamonds', value: 11, selected: false}, {number: 5, suite: 'hearts', value: 12, selected: false},  {number: 7, suite: 'clubs', value: 18, selected: false}, {number: 4, suite: 'hearts', value: 8, selected: false}, {number: 8, suite: 'spades', value: 21, selected: false}, {number: 3, suite: 'clubs', value: 2, selected: false}, {number: 4, suite: 'diamonds', value: 7, selected: false}, {number: 4, suite: 'clubs', value: 6, selected: false}, {number: 9, suite: 'spades', value: 25, selected: false}];
+aiPossibleCombinations(hand);
+
+
+// double sequence (6 cards)
+// 6 Sequence and above
+// quartet
+// three of a kind
+// 5 sequeence straight
+// 4 sequence straight
+// pair
+// 3 sequence straight
+// high card
+const determineHardestMove = (possibleCombinations) => {
+  if (possibleCombinations['DS'].length) {
+    // Either combination that has lowest value for highest card
+    const hardest = possibleCombinations['DS'].reduce((combination, curr) => {
+      if (curr[curr.length-1].value < combination[combination.length - 1].value) {
+        return curr;
+      } else if (curr[curr.length - 1].value === combination[combination.length - 1].value) {
+        const totalValueCurr = curr.reduce((value, curr) => {
+          return value + curr.value;
+        }, 0);
+
+        const totalValueComb = combination.reduce((value, curr) => {
+          return value + curr.value;
+        }, 0);
+
+        return totalValueCurr < totalValueComb ? curr : combination;
+      }
+    }, possibleCombinations['DS'][0]);
+    // or if there is more one combination that share lowest value for highest card, then we need lowest combination value.
+  } else if (possibleCombinations['S'].length && possibleCombinations['S'].filter((arr) => arr.length >= 6).length) {
+    console.log(possibleCombinations['S'].filter((arr) => arr.length >= 6).length)
+  } else if (possibleCombinations['Q'].length) {
+    console.log(possibleCombinations['Q']);
+  } else if (possibleCombinations['T'].length) {
+    console.log(possibleCombinations['T']);
+  } else if (possibleCombinations['S'].length && possibleCombinations['S'].filter((arr) => arr.length === 5).length) {
+    console.log(possibleCombinations['S'].filter((arr) => arr.length >= 5).length)    
+  } else if (possibleCombinations['S'].length && possibleCombinations['S'].filter((arr) => arr.length === 4).length) {
+    console.log(possibleCombinations['S'].filter((arr) => arr.length >= 4).length)
+  } else if (possibleCombinations['P'].length) {
+    console.log('P');
+  } else if (possibleCombinations['S'].length && possibleCombinations['S'].filter((arr) => arr.length === 3).length) {
+    console.log(possibleCombinations['S'].filter((arr) => arr.length >= 3).length)
+  } else {
+    console.log('hi');
+  }
+}
+
+const combs = aiPossibleCombinations(hand);
+determineHardestMove(combs);
