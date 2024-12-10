@@ -325,9 +325,31 @@ const aiPossibleCombinations =  (hand) => {
   return possibleCombinations;
 };
  
-const hand = [{number: 12, suite: 'clubs', value: 38, selected: false},  {number: 12, suite: 'diamonds', value: 39, selected: false}, {number: 15, suite: 'hearts', value: 52, selected: false}, {number: 3, suite: 'hearts', value: 4, selected: false}, {number: 5, suite: 'diamonds', value: 11, selected: false}, {number: 5, suite: 'hearts', value: 12, selected: false},  {number: 7, suite: 'clubs', value: 18, selected: false}, {number: 4, suite: 'hearts', value: 8, selected: false}, {number: 8, suite: 'spades', value: 21, selected: false}, {number: 3, suite: 'clubs', value: 2, selected: false}, {number: 4, suite: 'diamonds', value: 7, selected: false}, {number: 4, suite: 'clubs', value: 6, selected: false}, {number: 9, suite: 'spades', value: 25, selected: false}];
+// const hand = [{number: 12, suite: 'clubs', value: 38, selected: false},  {number: 12, suite: 'diamonds', value: 39, selected: false}, {number: 15, suite: 'hearts', value: 52, selected: false}, {number: 3, suite: 'hearts', value: 4, selected: false}, {number: 5, suite: 'diamonds', value: 11, selected: false}, {number: 5, suite: 'hearts', value: 12, selected: false},  {number: 7, suite: 'clubs', value: 18, selected: false}, {number: 4, suite: 'hearts', value: 8, selected: false}, {number: 8, suite: 'spades', value: 21, selected: false}, {number: 3, suite: 'clubs', value: 2, selected: false}, {number: 4, suite: 'diamonds', value: 7, selected: false}, {number: 4, suite: 'clubs', value: 6, selected: false}, {number: 9, suite: 'spades', value: 25, selected: false}];
+// const hand = [{number: 12, suite: 'clubs', value: 38, selected: false},  {number: 11, suite: 'diamonds', value: 39, selected: false}, {number: 10, suite: 'hearts', value: 52, selected: false}, {number: 9, suite: 'hearts', value: 4, selected: false}, {number: 8, suite: 'diamonds', value: 11, selected: false}, {number: 7, suite: 'hearts', value: 12, selected: false},  {number: 6, suite: 'clubs', value: 18, selected: false}, {number: 4, suite: 'hearts', value: 8, selected: false}, {number: 8, suite: 'spades', value: 21, selected: false}, {number: 3, suite: 'clubs', value: 2, selected: false}, {number: 4, suite: 'diamonds', value: 7, selected: false}, {number: 4, suite: 'clubs', value: 6, selected: false}, {number: 9, suite: 'spades', value: 25, selected: false}];
+const hand = [{number: 12, suite: 'clubs', value: 38, selected: false},  {number: 12, suite: 'diamonds', value: 39, selected: false}, {number: 12, suite: 'hearts', value: 52, selected: false}, {number: 4, suite: 'hearts', value: 4, selected: false}, {number: 4, suite: 'diamonds', value: 11, selected: false}, {number: 4, suite: 'hearts', value: 12, selected: false},  {number: 7, suite: 'clubs', value: 18, selected: false}, {number: 12, suite: 'hearts', value: 8, selected: false}, {number: 8, suite: 'spades', value: 21, selected: false}, {number: 3, suite: 'clubs', value: 2, selected: false}, {number: 4, suite: 'diamonds', value: 7, selected: false}, {number: 5, suite: 'clubs', value: 6, selected: false}, {number: 9, suite: 'spades', value: 25, selected: false}];
+
 aiPossibleCombinations(hand);
 
+
+const getLowestCombination = (possibleCombinations) => {
+  return possibleCombinations.reduce((combination, curr) => {
+    if (curr[curr.length-1].value < combination[combination.length - 1].value) {
+      return curr;
+    } else if (curr[curr.length - 1].value === combination[combination.length - 1].value) {
+      // or if there is more one combination that share lowest value for highest card, then we need lowest combination value.
+      const totalValueCurr = curr.reduce((value, curr) => {
+        return value + curr.value;
+      }, 0);
+
+      const totalValueComb = combination.reduce((value, curr) => {
+        return value + curr.value;
+      }, 0);
+      return totalValueCurr < totalValueComb ? curr : combination;
+    }
+    return combination;
+  }, possibleCombinations[0]);
+}
 
 // double sequence (6 cards)
 // 6 Sequence and above
@@ -340,38 +362,28 @@ aiPossibleCombinations(hand);
 // high card
 const determineHardestMove = (possibleCombinations) => {
   if (possibleCombinations['DS'].length) {
-    // Either combination that has lowest value for highest card
-    const hardest = possibleCombinations['DS'].reduce((combination, curr) => {
-      if (curr[curr.length-1].value < combination[combination.length - 1].value) {
-        return curr;
-      } else if (curr[curr.length - 1].value === combination[combination.length - 1].value) {
-        const totalValueCurr = curr.reduce((value, curr) => {
-          return value + curr.value;
-        }, 0);
-
-        const totalValueComb = combination.reduce((value, curr) => {
-          return value + curr.value;
-        }, 0);
-
-        return totalValueCurr < totalValueComb ? curr : combination;
-      }
-    }, possibleCombinations['DS'][0]);
-    // or if there is more one combination that share lowest value for highest card, then we need lowest combination value.
+    console.log(getLowestCombination(possibleCombinations['DS']));
   } else if (possibleCombinations['S'].length && possibleCombinations['S'].filter((arr) => arr.length >= 6).length) {
-    console.log(possibleCombinations['S'].filter((arr) => arr.length >= 6).length)
+    const sequence = possibleCombinations['S'].filter((arr) => arr.length >= 6);
+    console.log(getLowestCombination(sequence));
   } else if (possibleCombinations['Q'].length) {
-    console.log(possibleCombinations['Q']);
+    console.log('hit quartet');
+    console.log(getLowestCombination(possibleCombinations['Q']));
   } else if (possibleCombinations['T'].length) {
-    console.log(possibleCombinations['T']);
+    console.log(getLowestCombination(possibleCombinations['T']));
   } else if (possibleCombinations['S'].length && possibleCombinations['S'].filter((arr) => arr.length === 5).length) {
-    console.log(possibleCombinations['S'].filter((arr) => arr.length >= 5).length)    
+    const sequence = possibleCombinations['S'].filter((arr) => arr.length >= 5);
+    console.log(getLowestCombination(sequence));
   } else if (possibleCombinations['S'].length && possibleCombinations['S'].filter((arr) => arr.length === 4).length) {
-    console.log(possibleCombinations['S'].filter((arr) => arr.length >= 4).length)
+    const sequence = possibleCombinations['S'].filter((arr) => arr.length >= 4);
+    console.log(getLowestCombination(sequence));
   } else if (possibleCombinations['P'].length) {
-    console.log('P');
+    console.log(getLowestCombination(possibleCombinations['P']));
   } else if (possibleCombinations['S'].length && possibleCombinations['S'].filter((arr) => arr.length === 3).length) {
-    console.log(possibleCombinations['S'].filter((arr) => arr.length >= 3).length)
+    const sequence = possibleCombinations['S'].filter((arr) => arr.length >= 3);
+    console.log(getLowestCombination(sequence));
   } else {
+    // lowest card to beat current hand.
     console.log('hi');
   }
 }
