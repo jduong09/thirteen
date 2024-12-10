@@ -118,6 +118,44 @@ const Game = () => {
   }
 
   /**
+   * @description Prompt ai logic
+   * NOTE: This is logic for AI players
+   */
+  const aiToPlay = () => {
+    if (newRound) {
+      console.log('\n\n***** A NEW ROUND HAS STARTED *****');
+    } else {
+      if (playerTurn !== 0) {
+        const playerHasWonRound = hands.every((hand) => hand.skipped || hand.player === playerTurn);
+        if (playerHasWonRound) {
+          // FIXME: This is only reached when an AI wins.
+          console.log(`\n\nPLAYER ${playerTurn + 1} HAS WON ROUND! STARTING NEW ROUND IN 5 SECONDS...`);
+
+          // 
+        } else {
+          let valueToBeat = previousPlayedCombo.length === 0 ? 0 : previousPlayedCombo[previousPlayedCombo.length - 1].value;
+          const currHand = hands[playerTurn].hand;
+          const lowestCard = currHand.reduce((lowest, curr) => {
+            if (curr.value < lowest && curr.value > valueToBeat) {
+              return curr.value;
+            }
+            return lowest;
+          }, 53);
+
+          const cardToPlay = currHand.find((card) => card.value === lowestCard);
+          if (cardToPlay) {
+            requestCombo([cardToPlay], 'single');
+          } else {
+            // NOTE: Will cause endless cycle of passing until there is game logic to recognize next cycle.
+            // Check if every player but playerTurn has passed
+            passTurn(playerTurn);
+          }
+        }
+      }
+    }
+  }
+
+  /**
    * @description Randomly shuffles the card deck using the Fisher-Yates Shuffle algorithm.
    * @param {Object[]} array - Array of card objects
    * @returns {Object[]} - Shuffled array of card objects
@@ -274,7 +312,7 @@ const Game = () => {
 
   // Only show shuffle button at start or end of game
   const shuffleBtn = deckIsShuffled ? null : <button className={gameStyles.shuffleBtn} onClick={onShuffleClick}>Shuffle Deck</button>;
-
+  console.log(hands);
   return (
     <game>
       {introIsVisible
