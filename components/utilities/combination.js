@@ -73,7 +73,7 @@ export const dictionaryCombinations = {
       }
     }
   }
-}
+};
 
 /**
  * @description Returns card object with highest value from array of card objects
@@ -88,5 +88,5 @@ export const highestValue = (combo) => {
     }
   });
   return result;
-}
+};
 

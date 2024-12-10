@@ -12,7 +12,7 @@ export const mapCard = (number) => {
   } else {
     return number;
   }
-}
+};
 
 export const icons = {
   'hearts': '♥',
@@ -26,4 +26,4 @@ export const makeCard = (suit, rank) => {
     suit,
     rank
   }
-}
+};
