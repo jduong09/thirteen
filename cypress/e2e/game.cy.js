@@ -6,7 +6,7 @@ describe('Game Cycle', () => {
   });
 
   it('Pressing pass removes player from turn cycle', { defaultCommandTimeout: 8000 }, () => {
-    cy.get('#span-player-turn').contains('Your turn.');
+    cy.get('#span-player-turn').contains('Your Turn.');
 
     cy.get('button:last').click();
 

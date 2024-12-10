@@ -291,8 +291,9 @@ const Game = () => {
 
       {hands.length !== 0 &&
         <div>
-          <h2 className={gameStyles.turnIndicator}>{endCycleClause || <div><span>{turnMessage}</span></div>}</h2>
+          <h2 className={gameStyles.turnIndicator}>{endCycleClause || <div id='span-player-turn'><span>{turnMessage}</span></div>}</h2>
           <h2>{selectCombo ? `Select a combo that fits ${selectCombo}.` : 'Choose Combination Type'}</h2>
+          {listAiHands}
           <h3>Your Hand:</h3>
           <Hand cards={hands[0].hand}
             playerTurn={playerTurn}

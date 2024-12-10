@@ -12,9 +12,9 @@ describe('<Game />', () => {
   });
 
   it('Player passing turn changes game turn to next player', () => {
-    cy.get('#span-player-turn').should('have.text', 'Your turn.');
+    cy.get('#span-player-turn').should('have.text', 'Your Turn.');
     cy.get('#btn-passTurn').click();
-    cy.get('#span-player-turn').should('not.have.text', 'Your turn.');
+    cy.get('#span-player-turn').should('not.have.text', 'Your Turn.');
   });
 
   it('Playing lowest card causes AI to play single cards subsequently', () => {
