@@ -5,6 +5,7 @@ import Hand from "@/components/gameComponents/hand";
 import Cards from "@/components/cards/cards";
 import { dictionaryCombinations, highestValue } from '@/components/utilities/combination';
 import { mapCard, icons } from '../utilities/card';
+import { aiMoves } from '../utilities/ai';
 
 const Game = () => {
   const [shuffledDeck, setDeck] = useState([]);
@@ -13,11 +14,13 @@ const Game = () => {
   const [playerTurn, setPlayerTurn] = useState(0);
   const [hands, setHands] = useState([]);
   const [comboIsValid, setComboStatus] = useState(null);
-  const [currentTurnCombo, setCurrentTurnCombo] = useState('single');
+  const [currentTurnCombo, setCurrentTurnCombo] = useState('');
+  const [currentTurnLength, setCurrentTurnLength] = useState(1);
   const [previousPlayedCombo, setPreviousPlayedCombo] = useState([]);
-  const [selectCombo, setComboSelect] = useState('single');
+  const [selectCombo, setComboSelect] = useState('');
   const [endCycleClause, setEndCycleClause] = useState(null);
   const [newRound, setNewRound] = useState(false);
+  const [turnMessage, setTurnMessage] = useState('');
 
   // Build Card Deck
   const suites = ['spades', 'clubs', 'diamonds', 'hearts'];
@@ -47,19 +50,56 @@ const Game = () => {
       setEndCycleClause(`Player ${checkEndCycle[0].player + 1} wins the round.`);
       return;
     }
-  }, [playerTurn]);
 
+     /**
+     * @description Prompt ai logic
+     * NOTE: This is logic for AI players
+     */
+     if (playerTurn !== 0) {
+      let valueToBeat = previousPlayedCombo.length === 0 ? 0 : previousPlayedCombo[previousPlayedCombo.length - 1].value;
+
+      const currHand = hands[playerTurn].hand;
+  
+      const possibleCombinations = aiMoves(currentTurnCombo, currHand, currentTurnLength);
+
+      if (!possibleCombinations.length) {
+        console.log(`PLAYER ${playerTurn + 1} passes.`);
+        passTurn(playerTurn);
+      }
+
+      console.log(possibleCombinations);
+      const lowestPlay = possibleCombinations.reduce((lowest, curr) => {
+        if (curr[curr.length - 1].value < lowest[lowest.length - 1].value && curr[curr.length - 1].value > valueToBeat) {
+          return curr;
+        } else {
+          return lowest;
+        }
+      }, [{ fake: true, value: 53}]);
+
+      if (lowestPlay.length === 1 && lowestPlay[0].fake) {
+        console.log(`PLAYER ${playerTurn + 1} passes.`);
+        passTurn(playerTurn);
+      } else {
+        requestCombo(lowestPlay, currentTurnCombo);
+      }
+    }
+  }, [playerTurn, newRound]);
+
+  /*
   useEffect(() => {
     if (hands.length) {
       aiToPlay();
     }
   }, [playerTurn, hands, newRound]);
+  */
 
   useEffect(() => {
     if (endCycleClause) {
       // Wait 5 seconds before starting new round
       setTimeout(() => restartRound(), 5000);
       // TODO: Logic for choosing next turn
+      setPlayerTurn(0);
+      setTurnMessage('Your Turn.');
     }
   }, [endCycleClause, previousPlayedCombo, currentTurnCombo, selectCombo, newRound, hands]);
 
@@ -75,42 +115,6 @@ const Game = () => {
     hands.forEach(hand => hand.skipped = false);
     setHands(hands);
     console.log('SHOULD SET ROUND...?', newRound);
-  }
-
-  /**
-   * @description Prompt ai logic
-   * NOTE: This is logic for AI players
-   */
-  const aiToPlay = () => {
-    if (newRound) {
-      console.log('\n\n***** A NEW ROUND HAS STARTED *****');
-    } else {
-      if (playerTurn !== 0) {
-        const playerHasWonRound = hands.every((hand) => hand.skipped || hand.player === playerTurn);
-        if (playerHasWonRound) {
-          // FIXME: This is only reached when an AI wins.
-          console.log(`\n\nPLAYER ${playerTurn + 1} HAS WON ROUND! STARTING NEW ROUND IN 5 SECONDS...`);
-        } else {
-          let valueToBeat = previousPlayedCombo.length === 0 ? 0 : previousPlayedCombo[previousPlayedCombo.length - 1].value;
-          const currHand = hands[playerTurn].hand;
-          const lowestCard = currHand.reduce((lowest, curr) => {
-            if (curr.value < lowest && curr.value > valueToBeat) {
-              return curr.value;
-            }
-            return lowest;
-          }, 53);
-
-          const cardToPlay = currHand.find((card) => card.value === lowestCard);
-          if (cardToPlay) {
-            requestCombo([cardToPlay], 'single');
-          } else {
-            // NOTE: Will cause endless cycle of passing until there is game logic to recognize next cycle.
-            // Check if every player but playerTurn has passed
-            passTurn(playerTurn);
-          }
-        }
-      }
-    }
   }
 
   /**
@@ -152,10 +156,8 @@ const Game = () => {
       */
     });
     setPlayerTurn(0);
-  
-    if (tempHands[0].hand.length) {
-      setHands(tempHands);
-    }
+    setTurnMessage('Your Turn.');
+    setHands(tempHands);
 
     setTimeout(() => {
       showIntro(false);
@@ -176,6 +178,7 @@ const Game = () => {
       }
     }
 
+    setTurnMessage(nextPlayer === 0 ? 'Your Turn.' : `Player ${nextPlayer + 1}'s Turn.`);
     console.log(`SETTING NEXT PLAYER TO: ${nextPlayer + 1}`);
     setPlayerTurn(nextPlayer);
   }
@@ -201,7 +204,10 @@ const Game = () => {
    * @returns {Boolean}
    */
   const validateCombo = (combo, combination) => {
-    // TODO: A separate ticket to handle validating the combo move
+    if (combination === '') {
+      setTurnMessage('Your Turn: Set combination type before playing.');
+      return;
+    }
     return dictionaryCombinations[combination].isValid(combo);
   }
 
@@ -213,9 +219,10 @@ const Game = () => {
     // Check if combo is valid
     if ((previousPlayedCombo.length === 0 && validateCombo(combo, combination))|| (validateCombo(combo, combination) && compareCombo(previousPlayedCombo[previousPlayedCombo.length - 1].value, combo))) {
       // Accept combo and set player turn
-      console.log(`PLAYER ${playerTurn + 1} SUCCESSFULLY PLAYED: `, combo[0].number, 'of', combo[0].suite);
       setComboStatus(true);
+      console.log(`PLAYER ${playerTurn + 1} plays: ${combo.map((card) => `${card.number} of ${card.suite}`).join(", ")}\n\n`);
       setPreviousPlayedCombo(combo);
+      setCurrentTurnLength(combo.length);
       setComboStatus(null);
 
       combo.forEach((card) => {
@@ -227,7 +234,7 @@ const Game = () => {
 
     } else {
       // Reject combo
-      console.log(`PLAYER ${playerTurn + 1} ATTEMPTED TO PLAY: `, combo[0].number, 'of', combo[0].suite);
+      console.log(`PLAYER ${playerTurn + 1} ATTEMPTED TO PLAY: ${combo.map((card) => `${card.number} of ${card.suite}`).join(", ")}`);
       setComboStatus(false);
     }
   }
@@ -284,16 +291,8 @@ const Game = () => {
 
       {hands.length !== 0 &&
         <div>
-          <h2 className={gameStyles.turnIndicator}>
-            {endCycleClause ? 
-            <span>End of Turn Cycle...resetting...</span> : 
-            <div>
-              <span id="span-player-turn">{playerTurn === 0 ? 'Your' : `Player ${playerTurn + 1}'s`} turn.</span>
-              {playerTurn !== 0 && <span> Thinking... <span className={gameStyles.loading}></span></span>}
-            </div>}
-          </h2>
-          <ul data-cy='hands-ai'>{listAiHands}</ul>
-          <h2>Select a combo thats fits {selectCombo}</h2>
+          <h2 className={gameStyles.turnIndicator}>{endCycleClause || <div><span>{turnMessage}</span></div>}</h2>
+          <h2>{selectCombo ? `Select a combo that fits ${selectCombo}.` : 'Choose Combination Type'}</h2>
           <h3>Your Hand:</h3>
           <Hand cards={hands[0].hand}
             playerTurn={playerTurn}
@@ -305,7 +304,8 @@ const Game = () => {
           />
           <form>
             <label htmlFor='select-combo'>Combination: </label>
-            <select id='select-combo' name='select-combo' className={gameStyles.selectCombo} onChange={changeCombo}>
+            <select id='select-combo' name='select-combo' className={gameStyles.selectCombo} onChange={changeCombo} value={currentTurnCombo}>
+              <option value=''>--Please choose an option--</option>
               <option value='single'>Single</option>
               <option value='pair'>Pair</option>
               <option value='triplet'>Triplet</option>
@@ -314,7 +314,6 @@ const Game = () => {
               <option value='double sequence'>Double Sequence</option>
             </select>
           </form>
-          {comboIsValid && <h2 className={gameStyles.validCombo}>Combo Choice is correct.</h2>}
           <div className={gameStyles.middlePile}>
             <h2>Middle Pile</h2>
             <Cards cards={previousPlayedCombo} />
