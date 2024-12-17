@@ -5,7 +5,7 @@ import Hand from "@/components/gameComponents/hand";
 import Cards from "@/components/cards/cards";
 import { dictionaryCombinations, highestValue } from '@/components/utilities/combination';
 import { mapCard, icons } from '../utilities/card';
-import { aiMoves } from '../utilities/ai';
+import { aiMoves, aiPossibleCombinations, determineHardestMove } from '../utilities/ai';
 
 const Game = () => {
   const [shuffledDeck, setDeck] = useState([]);
@@ -50,11 +50,12 @@ const Game = () => {
       setEndCycleClause(`Player ${checkEndCycle[0].player + 1} wins the round.`);
       return;
     }
-
-     /**
-     * @description Prompt ai logic
-     * NOTE: This is logic for AI players
-     */
+    /**
+    * @description Prompt ai logic
+    * NOTE: This is logic for AI players
+    */
+    aiToPlay();
+    /*
      if (playerTurn !== 0) {
       let valueToBeat = previousPlayedCombo.length === 0 ? 0 : previousPlayedCombo[previousPlayedCombo.length - 1].value;
 
@@ -66,8 +67,6 @@ const Game = () => {
         console.log(`PLAYER ${playerTurn + 1} passes.`);
         passTurn(playerTurn);
       }
-
-      console.log(possibleCombinations);
       const lowestPlay = possibleCombinations.reduce((lowest, curr) => {
         if (curr[curr.length - 1].value < lowest[lowest.length - 1].value && curr[curr.length - 1].value > valueToBeat) {
           return curr;
@@ -83,15 +82,14 @@ const Game = () => {
         requestCombo(lowestPlay, currentTurnCombo);
       }
     }
+    */
   }, [playerTurn, newRound]);
 
-  /*
   useEffect(() => {
     if (hands.length) {
       aiToPlay();
     }
   }, [playerTurn, hands, newRound]);
-  */
 
   useEffect(() => {
     if (endCycleClause) {
@@ -130,8 +128,12 @@ const Game = () => {
         if (playerHasWonRound) {
           // FIXME: This is only reached when an AI wins.
           console.log(`\n\nPLAYER ${playerTurn + 1} HAS WON ROUND! STARTING NEW ROUND IN 5 SECONDS...`);
-
-          // 
+          console.log(hands[playerTurn]);
+          const aiMoves = aiPossibleCombinations(hands[playerTurn].hand);
+          // returns [combinationType, arrayCombination]
+          const [combinationType, combination] = determineHardestMove(aiMoves);
+          console.log(combinationType, combination);
+          requestCombo(combination, combinationType);
         } else {
           let valueToBeat = previousPlayedCombo.length === 0 ? 0 : previousPlayedCombo[previousPlayedCombo.length - 1].value;
           const currHand = hands[playerTurn].hand;
@@ -189,14 +191,14 @@ const Game = () => {
     shuffledDeck.forEach((card, idx) => {
       const player = idx % 4;
       tempHands[player].hand.push(card);
-      /*
+      
       if(card.number === 3 && card.suite === 'spades') {
         setPlayerTurn(player);
       };
-      */
+      
     });
-    setPlayerTurn(0);
-    setTurnMessage('Your Turn.');
+    // setPlayerTurn(0);
+    // setTurnMessage('Your Turn.');
     setHands(tempHands);
 
     setTimeout(() => {
@@ -257,6 +259,7 @@ const Game = () => {
    * @param {Object[]} combo - Array of card objects
    */
   const requestCombo = (combo, combination) => {
+    console.log(combo, combination);
     // Check if combo is valid
     if((previousPlayedCombo.length === 0 && validateCombo(combo, combination)) || (validateCombo(combo, combination) && compareCombo(previousPlayedCombo[previousPlayedCombo.length - 1].value, combo))) {
 
