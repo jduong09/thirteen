@@ -34,6 +34,7 @@ const Game = () => {
   }, [hands]);
 
   useEffect(() => {
+    console.log('Inside use effect');
     if (!hands.length) {
       return;
     }
@@ -54,8 +55,9 @@ const Game = () => {
     * @description Prompt ai logic
     * NOTE: This is logic for AI players
     */
+   if (playerTurn !== 0) {
     aiToPlay();
-    /*
+   }    /*
      if (playerTurn !== 0) {
       let valueToBeat = previousPlayedCombo.length === 0 ? 0 : previousPlayedCombo[previousPlayedCombo.length - 1].value;
 
@@ -83,21 +85,24 @@ const Game = () => {
       }
     }
     */
-  }, [playerTurn, newRound]);
+  }, [playerTurn, hands, newRound]);
 
+  /*
   useEffect(() => {
     if (hands.length) {
       aiToPlay();
     }
   }, [playerTurn, hands, newRound]);
+  */
 
   useEffect(() => {
     if (endCycleClause) {
       // Wait 5 seconds before starting new round
       setTimeout(() => restartRound(), 5000);
       // TODO: Logic for choosing next turn
-      setPlayerTurn(0);
-      setTurnMessage('Your Turn.');
+      // setPlayerTurn(0);
+      console.log(`\n\nPLAYER ${playerTurn + 1} HAS WON ROUND! STARTING NEW ROUND IN 5 SECONDS...`);
+      // setTurnMessage('Your Turn.');
     }
   }, [endCycleClause, previousPlayedCombo, currentTurnCombo, selectCombo, newRound, hands]);
 
@@ -120,23 +125,83 @@ const Game = () => {
    * NOTE: This is logic for AI players
    */
   const aiToPlay = () => {
-    if (newRound) {
+    if (newRound && playerTurn !== 0) {
       console.log('\n\n***** A NEW ROUND HAS STARTED *****');
+      const aiMoves = aiPossibleCombinations(hands[playerTurn].hand);
+
+      const [combinationType, combination] = determineHardestMove(aiMoves);
+      console.log(combinationType, combination);
+      setCurrentTurnCombo(combinationType);
+      setComboSelect(combinationType);
+      requestCombo(combination, combinationType);
+      setNewRound(false);
     } else {
+      let valueToBeat = previousPlayedCombo.length === 0 ? 0 : previousPlayedCombo[previousPlayedCombo.length - 1].value;
+
+      const currHand = hands[playerTurn].hand;
+  
+      const possibleCombinations = aiMoves(currentTurnCombo, currHand, currentTurnLength);
+
+      if (!possibleCombinations.length) {
+        console.log(`PLAYER ${playerTurn + 1} passes.`);
+        passTurn(playerTurn);
+      }
+      const lowestPlay = possibleCombinations.reduce((lowest, curr) => {
+        if (curr[curr.length - 1].value < lowest[lowest.length - 1].value && curr[curr.length - 1].value > valueToBeat) {
+          return curr;
+        } else {
+          return lowest;
+        }
+      }, [{ fake: true, value: 53}]);
+
+      if (lowestPlay.length === 1 && lowestPlay[0].fake) {
+        console.log(`PLAYER ${playerTurn + 1} passes.`);
+        passTurn(playerTurn);
+      } else {
+        requestCombo(lowestPlay, currentTurnCombo);
+      }
+    }
+  }
+      /*
       if (playerTurn !== 0) {
         const playerHasWonRound = hands.every((hand) => hand.skipped || hand.player === playerTurn);
         if (playerHasWonRound) {
           // FIXME: This is only reached when an AI wins.
           console.log(`\n\nPLAYER ${playerTurn + 1} HAS WON ROUND! STARTING NEW ROUND IN 5 SECONDS...`);
-          console.log(hands[playerTurn]);
-          const aiMoves = aiPossibleCombinations(hands[playerTurn].hand);
           // returns [combinationType, arrayCombination]
+          const aiMoves = aiPossibleCombinations(hands[playerTurn].hand);
+
           const [combinationType, combination] = determineHardestMove(aiMoves);
           console.log(combinationType, combination);
           requestCombo(combination, combinationType);
+          setComboSelect(combinationType);
+          setCurrentTurnCombo(combinationType);
         } else {
           let valueToBeat = previousPlayedCombo.length === 0 ? 0 : previousPlayedCombo[previousPlayedCombo.length - 1].value;
+
           const currHand = hands[playerTurn].hand;
+      
+          const possibleCombinations = aiMoves(currentTurnCombo, currHand, currentTurnLength);
+    
+          if (!possibleCombinations.length) {
+            console.log(`PLAYER ${playerTurn + 1} passes.`);
+            passTurn(playerTurn);
+          }
+          const lowestPlay = possibleCombinations.reduce((lowest, curr) => {
+            if (curr[curr.length - 1].value < lowest[lowest.length - 1].value && curr[curr.length - 1].value > valueToBeat) {
+              return curr;
+            } else {
+              return lowest;
+            }
+          }, [{ fake: true, value: 53}]);
+    
+          if (lowestPlay.length === 1 && lowestPlay[0].fake) {
+            console.log(`PLAYER ${playerTurn + 1} passes.`);
+            passTurn(playerTurn);
+          } else {
+            requestCombo(lowestPlay, currentTurnCombo);
+          }
+          /*
           const lowestCard = currHand.reduce((lowest, curr) => {
             if (curr.value < lowest && curr.value > valueToBeat) {
               return curr.value;
@@ -152,10 +217,10 @@ const Game = () => {
             // Check if every player but playerTurn has passed
             passTurn(playerTurn);
           }
+
         }
       }
-    }
-  }
+        */
 
   /**
    * @description Randomly shuffles the card deck using the Fisher-Yates Shuffle algorithm.
@@ -200,6 +265,7 @@ const Game = () => {
     // setPlayerTurn(0);
     // setTurnMessage('Your Turn.');
     setHands(tempHands);
+    setNewRound(true);
 
     setTimeout(() => {
       showIntro(false);
@@ -259,7 +325,9 @@ const Game = () => {
    * @param {Object[]} combo - Array of card objects
    */
   const requestCombo = (combo, combination) => {
-    console.log(combo, combination);
+    console.log('Current Turn Combo:', currentTurnCombo);
+    console.log('Combo: ', combo);
+    console.log('Combination: ', combination);
     // Check if combo is valid
     if((previousPlayedCombo.length === 0 && validateCombo(combo, combination)) || (validateCombo(combo, combination) && compareCombo(previousPlayedCombo[previousPlayedCombo.length - 1].value, combo))) {
 
@@ -278,7 +346,7 @@ const Game = () => {
       });
       setHands(hands);
       // TODO: Remove when done testing. This is just to simulate a fake game.
-      setTimeout(() => changeTurn(), 3000);
+      setTimeout(() => changeTurn(), 10000);
 
     } else {
       // Reject combo
@@ -315,7 +383,6 @@ const Game = () => {
 
   // Only show shuffle button at start or end of game
   const shuffleBtn = deckIsShuffled ? null : <button className={gameStyles.shuffleBtn} onClick={onShuffleClick}>Shuffle Deck</button>;
-  console.log(hands);
   return (
     <game>
       {introIsVisible
