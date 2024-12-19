@@ -323,6 +323,7 @@ export const aiPossibleCombinations =  (hand) => {
   possibleCombinations['T'] = triplet(hand);
   possibleCombinations['P'] = pair(hand);
   possibleCombinations['H'] = hand;
+  console.log(possibleCombinations);
   return possibleCombinations;
 };
  
@@ -410,7 +411,7 @@ export const determineHardestMove = (possibleCombinations, valueToBeat) => {
     return ['sequence', getLowestCombination(sequence, valueToBeat)];
   } else {
     // lowest card to beat current hand.
-    return ['single', possibleCombinations['H'][0]];
+    return ['single', [possibleCombinations['H'][0]]];
   }
 }
 
