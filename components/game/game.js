@@ -43,10 +43,6 @@ const Game = () => {
      * NOTE: THIS IS STRICTLY FOR TESTING
      */
     let checkEndCycle = hands.filter(hand => hand.skipped !== true);
-    console.log('Check End Cycle: ', checkEndCycle);
-    console.log('Hands inside useEffect', hands);
-    console.log(checkEndCycle[0].player === playerTurn);
-
     // if checkEndCycle is true after checking all hands for skipped property
     // do not run AI logic.
     if (checkEndCycle.length === 1 && checkEndCycle[0].player === playerTurn) {
@@ -58,7 +54,6 @@ const Game = () => {
     * NOTE: This is logic for AI players
     */
    if (playerTurn !== 0) {
-    console.log('AI turn inside useEffect')
     console.log(`Starting Logic for Player ${playerTurn + 1}`);
     aiToPlay();
    }    /*
@@ -163,7 +158,6 @@ const Game = () => {
       } else {
         requestCombo(lowestPlay, currentTurnCombo);
       }
-      console.log(`\n\n***** Player ${playerTurn + 1} is following previous turn *****`);
     }
   }
 
