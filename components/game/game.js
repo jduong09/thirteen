@@ -54,53 +54,14 @@ const Game = () => {
     * NOTE: This is logic for AI players
     */
    if (playerTurn !== 0) {
-    console.log(`Starting Logic for Player ${playerTurn + 1}`);
     aiToPlay();
-   }    /*
-     if (playerTurn !== 0) {
-      let valueToBeat = previousPlayedCombo.length === 0 ? 0 : previousPlayedCombo[previousPlayedCombo.length - 1].value;
-
-      const currHand = hands[playerTurn].hand;
-  
-      const possibleCombinations = aiMoves(currentTurnCombo, currHand, currentTurnLength);
-
-      if (!possibleCombinations.length) {
-        console.log(`PLAYER ${playerTurn + 1} passes.`);
-        passTurn(playerTurn);
-      }
-      const lowestPlay = possibleCombinations.reduce((lowest, curr) => {
-        if (curr[curr.length - 1].value < lowest[lowest.length - 1].value && curr[curr.length - 1].value > valueToBeat) {
-          return curr;
-        } else {
-          return lowest;
-        }
-      }, [{ fake: true, value: 53}]);
-
-      if (lowestPlay.length === 1 && lowestPlay[0].fake) {
-        console.log(`PLAYER ${playerTurn + 1} passes.`);
-        passTurn(playerTurn);
-      } else {
-        requestCombo(lowestPlay, currentTurnCombo);
-      }
-    }
-    */
+   }
   }, [playerTurn, hands]);
-  /*
-  useEffect(() => {
-    if (hands.length) {
-      aiToPlay();
-    }
-  }, [playerTurn, hands, newRound]);
-  */
 
   useEffect(() => {
     if (endCycleClause) {
-      // Wait 5 seconds before starting new round
       setTimeout(() => restartRound(), 5000);
-      // TODO: Logic for choosing next turn
-      // setPlayerTurn(0);
       console.log(`\n\nPLAYER ${playerTurn + 1} HAS WON ROUND! STARTING NEW ROUND IN 5 SECONDS...`);
-      // setTurnMessage('Your Turn.');
     }
   }, [endCycleClause, previousPlayedCombo, currentTurnCombo, selectCombo, newRound, hands]);
 
@@ -114,7 +75,6 @@ const Game = () => {
     setComboSelect('');
     setHands(hands.map(playerHand => ({ skipped: false, player: playerHand.player, hand: playerHand.hand })));
     setNewRound(true);
-    console.log('SHOULD SET ROUND...?', newRound);
   }
 
   /**
@@ -124,17 +84,19 @@ const Game = () => {
   const aiToPlay = () => {
     if (newRound && playerTurn !== 0) {
       console.log('\n\n***** A NEW ROUND HAS STARTED *****');
-      console.log(`\n\n***** Player ${playerTurn + 1} is taking first turn *****`);
+      
       const aiMoves = aiPossibleCombinations(hands[playerTurn].hand);
 
       const [combinationType, combination] = determineHardestMove(aiMoves);
-      setCurrentTurnCombo(combinationType);
-      setComboSelect(combinationType);
-      requestCombo(combination, combinationType);
-      console.log(`\n\n***** Player ${playerTurn + 1} is ending turn *****`);
-      // setNewRound(false);
+
+      // Slow down turn phase logic, simulate decision making from AI
+      setTimeout(() => {
+        setTurnMessage(`Player ${playerTurn + 1} is thinking...`);
+        setCurrentTurnCombo(combinationType);
+        setComboSelect(combinationType);
+        requestCombo(combination, combinationType);
+      }, 2500);
     } else {
-      console.log(`\n\n***** Player ${playerTurn + 1} is following previous turn *****`);
       let valueToBeat = previousPlayedCombo.length === 0 ? 0 : previousPlayedCombo[previousPlayedCombo.length - 1].value;
 
       const currHand = hands[playerTurn].hand;
@@ -156,7 +118,10 @@ const Game = () => {
       if (lowestPlay.length === 1 && lowestPlay[0].fake) {
         passTurn(playerTurn);
       } else {
-        requestCombo(lowestPlay, currentTurnCombo);
+        setTimeout(() => {
+          setTurnMessage(`Player ${playerTurn + 1} is thinking...`);
+          requestCombo(lowestPlay, currentTurnCombo);
+        }, 2500);
       }
     }
   }
@@ -184,7 +149,6 @@ const Game = () => {
    * @description Randomly shuffles the card deck using the fisher-yates shuffle algorithm and deals 13 cards to each player. Established the first player.
    */
   const onShuffleClick = () => {
-    console.log('Beginning of Shuffle Click event');
     showIntro(true);
 
     const tempHands = [
@@ -199,11 +163,10 @@ const Game = () => {
       
       if(card.number === 3 && card.suite === 'spades') {
         setPlayerTurn(player);
+        setTurnMessage(player === 0 ? 'Your Turn.' : `Player ${player + 1}'s Turn.`);
       };
       
     });
-    // setPlayerTurn(0);
-    // setTurnMessage('Your Turn.');
     setHands(tempHands);
     setNewRound(true);
 
@@ -211,7 +174,6 @@ const Game = () => {
       showIntro(false);
       shuffleDeck(true);
     }, 1000);
-    console.log('End of Shuffle Click Event');
   };
 
   /**
@@ -288,7 +250,6 @@ const Game = () => {
       setTimeout(() => changeTurn(), 5000);
 
     } else {
-      // Reject combo
       console.log(`PLAYER ${playerTurn + 1} ATTEMPTED TO PLAY: ${combo.map((card) => `${card.number} of ${card.suite}`).join(", ")}`);
       setComboStatus(false);
     }
@@ -322,7 +283,6 @@ const Game = () => {
     setCurrentTurnCombo(e.target.value);
   }
 
-  // Only show shuffle button at start or end of game
   const shuffleBtn = deckIsShuffled ? null : <button className={gameStyles.shuffleBtn} onClick={onShuffleClick}>Shuffle Deck</button>;
   return (
     <game>
@@ -369,6 +329,3 @@ const Game = () => {
 };
 
 export default Game;
-
-
-// Issue: After user plays first turn, new round starts and AI starts with completely as if previous turn did not occur. 
