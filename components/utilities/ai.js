@@ -271,3 +271,124 @@ export const aiMoves = (combinationType, hand, validLength) => {
     return doubleSequence(hand, validLength);
   }
 };
+
+// Build Object of available plays categorized by combination type.
+// Get probabilities of hardest to play
+// Play highest value.
+const findDoubleSequences = (hand) => {
+  const args = [6, 8, 10, 12];
+  const res = [];
+  for (let i = 0; i < args.length; i++) {
+    if (doubleSequence(hand, args[i]).length) {
+      res.push(doubleSequence(hand, args[i]));
+    }
+  }
+  return res.flat();
+}
+
+const findSequences = (hand) => {
+  const res = [];
+  for (let i = 3; i < 14; i++) {
+    if (sequence(hand, i).length) {
+      res.push(sequence(hand, i));
+    }
+  }
+  return res.flat();
+}
+
+export const aiPossibleCombinations =  (hand) => {
+  const possibleCombinations = {};
+  possibleCombinations['DS'] = findDoubleSequences(hand);
+  possibleCombinations['S'] = findSequences(hand);
+  possibleCombinations['Q'] = quartet(hand);
+  possibleCombinations['T'] = triplet(hand);
+  possibleCombinations['P'] = pair(hand);
+  possibleCombinations['H'] = hand;
+  return possibleCombinations;
+};
+ 
+const getLowestCombination = (possibleCombinations, valueToBeat) => {
+  return possibleCombinations.reduce((combination, curr) => {
+    if (curr[curr.length-1].value < combination[combination.length - 1].value && curr[curr.length-1].value > valueToBeat) {
+      return curr;
+    } else if (curr[curr.length - 1].value === combination[combination.length - 1].value && curr[curr.length-1].value > valueToBeat) {
+      // or if there is more one combination that share lowest value for highest card, then we need lowest combination value.
+      const totalValueCurr = curr.reduce((value, curr) => {
+        return value + curr.value;
+      }, 0);
+
+      const totalValueComb = combination.reduce((value, curr) => {
+        return value + curr.value;
+      }, 0);
+      return totalValueCurr < totalValueComb ? curr : combination;
+    }
+    return combination;
+  }, possibleCombinations[0]);
+}
+
+// Hierachy of function logic
+// 13 sequence
+// 12 sequence
+// double sequence (12 cards)
+// 11 sequence
+// 10 sequence
+// double sequence (10 cards)
+// 9 sequence
+// 8 sequence
+// double sequence (8 cards)
+// 7 sequence
+// 6 sequence
+// double sequence (6 cards)
+// quartet
+// three of a kind
+// 5 sequeence straight
+// 4 sequence straight
+// pair
+// 3 sequence straight
+// high card
+export const determineHardestMove = (possibleCombinations, valueToBeat) => {
+  if (possibleCombinations['S'].length && possibleCombinations['S'].filter((arr) => arr.length >= 12).length) {
+    const sequence = possibleCombinations['S'].filter((arr) => arr.length >= 13);
+    return ['sequence', getLowestCombination(sequence, valueToBeat)];
+  } else if (possibleCombinations['DS'].length && possibleCombinations['DS'].filter((arr) => arr.length === 12).length) {
+    const sequence = possibleCombinations['DS'].filter((arr) => arr.length === 12);
+    return ['double sequence', getLowestCombination(sequence, valueToBeat)];
+  } else if (possibleCombinations['S'].length && possibleCombinations['S'].filter((arr) => arr.length >= 10).length) {
+    const sequence = possibleCombinations['S'].filter((arr) => arr.length >= 10);
+    return ['sequence', getLowestCombination(sequence, valueToBeat)];
+  } else if (possibleCombinations['DS'].length && possibleCombinations['DS'].filter((arr) => arr.length === 10).length) {
+    const sequence = possibleCombinations['DS'].filter((arr) => arr.length === 10);
+    return ['double sequence', getLowestCombination(sequence, valueToBeat)];
+  } else if (possibleCombinations['S'].length && possibleCombinations['S'].filter((arr) => arr.length >= 8).length) {
+    const sequence = possibleCombinations['S'].filter((arr) => arr.length >= 8);
+    return ['sequence', getLowestCombination(sequence, valueToBeat)];
+  } else if (possibleCombinations['DS'].length && possibleCombinations['DS'].filter((arr) => arr.length === 8).length) {
+    const sequence = possibleCombinations['DS'].filter((arr) => arr.length === 8);
+    return ['double sequence', getLowestCombination(sequence, valueToBeat)];
+  } else if (possibleCombinations['S'].length && possibleCombinations['S'].filter((arr) => arr.length >= 6).length) {
+    const sequence = possibleCombinations['S'].filter((arr) => arr.length >= 6);
+    return ['sequence', getLowestCombination(sequence, valueToBeat)];
+  } else if (possibleCombinations['DS'].length && possibleCombinations['DS'].filter((arr) => arr.length === 6).length) {
+    const sequence = possibleCombinations['DS'].filter((arr) => arr.length === 6);
+    return ['double sequence', getLowestCombination(sequence, valueToBeat)];
+  } else if (possibleCombinations['Q'].length) {
+    console.log('hit quartet');
+    return ['quartet', getLowestCombination(possibleCombinations['Q'], valueToBeat)];
+  } else if (possibleCombinations['T'].length) {
+    return ['triplet', getLowestCombination(possibleCombinations['T'], valueToBeat)];
+  } else if (possibleCombinations['S'].length && possibleCombinations['S'].filter((arr) => arr.length === 5).length) {
+    const sequence = possibleCombinations['S'].filter((arr) => arr.length >= 5);
+    return ['sequence', getLowestCombination(sequence, valueToBeat)];
+  } else if (possibleCombinations['S'].length && possibleCombinations['S'].filter((arr) => arr.length === 4).length) {
+    const sequence = possibleCombinations['S'].filter((arr) => arr.length >= 4);
+    return ['sequence', getLowestCombination(sequence, valueToBeat)];
+  } else if (possibleCombinations['P'].length) {
+    return ['pair', getLowestCombination(possibleCombinations['P'], valueToBeat)];
+  } else if (possibleCombinations['S'].length && possibleCombinations['S'].filter((arr) => arr.length === 3).length) {
+    const sequence = possibleCombinations['S'].filter((arr) => arr.length >= 3);
+    return ['sequence', getLowestCombination(sequence, valueToBeat)];
+  } else {
+    // lowest card to beat current hand.
+    return ['single', [possibleCombinations['H'][0]]];
+  }
+}
