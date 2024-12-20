@@ -1,6 +1,6 @@
 import gameStyles from './game.module.scss';
 import styles from "@/app/page.module.css";
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Hand from "@/components/gameComponents/hand";
 import Cards from "@/components/cards/cards";
 import { dictionaryCombinations, highestValue } from '@/components/utilities/combination';

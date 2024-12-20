@@ -1,3 +1,5 @@
+import React from 'react';
+import PropTypes from 'prop-types';
 import cardStyles from './cards.module.scss';
 import { mapCard, icons } from '../utilities/card';
 
@@ -29,3 +31,14 @@ const Cards = ({ cards, selectCard }) => {
 };
 
 export default Cards;
+
+Cards.propTypes = {
+  cards: PropTypes.arrayOf(
+    PropTypes.shape({
+      selected: PropTypes.bool,
+      suite: PropTypes.string,
+      rank: PropTypes.number,
+    })
+  ),
+  selectCard: PropTypes.func
+}
