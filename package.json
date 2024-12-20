@@ -15,8 +15,10 @@
     "react-dom": "^18"
   },
   "devDependencies": {
-    "eslint": "^8",
+    "eslint": "^8.57.1",
     "eslint-config-next": "14.2.4",
+    "eslint-plugin-react": "^7.37.2",
+    "globals": "^15.14.0",
     "sass": "^1.77.8"
   }
 }
