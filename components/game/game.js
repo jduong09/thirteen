@@ -67,7 +67,6 @@ const Game = () => {
         passTurn(playerTurn);
       }
 
-      console.log(possibleCombinations);
       const lowestPlay = possibleCombinations.reduce((lowest, curr) => {
         if (curr[curr.length - 1].value < lowest[lowest.length - 1].value && curr[curr.length - 1].value > valueToBeat) {
           return curr;
@@ -149,14 +148,15 @@ const Game = () => {
     shuffledDeck.forEach((card, idx) => {
       const player = idx % 4;
       tempHands[player].hand.push(card);
-      /*
       if(card.number === 3 && card.suite === 'spades') {
         setPlayerTurn(player);
       };
-      */
+
     });
+    /*
     setPlayerTurn(0);
     setTurnMessage('Your Turn.');
+    */
     setHands(tempHands);
 
     setTimeout(() => {

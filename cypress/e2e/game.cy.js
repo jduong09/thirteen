@@ -1,6 +1,7 @@
 describe('Game Cycle', () => {
   beforeEach(() => {
     cy.visit('http://localhost:3000');
+    cy.waitForReact(1000, '#root');
     cy.get('button').contains('Shuffle Deck').click();
     cy.get('button').contains('Shuffle Deck').click();
   });
@@ -15,4 +16,8 @@ describe('Game Cycle', () => {
     cy.get('#span-player-turn', { timeout: 3000 }).contains("Player 4's turn.");
     cy.get('#span-player-turn', { timeout: 3000 }).contains("Player 2's turn.");
   });
+
+  it('Returns props', () => {
+    cy.getReact('Game');
+  })
 });
