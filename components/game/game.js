@@ -67,7 +67,6 @@ const Game = () => {
         passTurn(playerTurn);
       }
 
-      console.log(possibleCombinations);
       const lowestPlay = possibleCombinations.reduce((lowest, curr) => {
         if (curr[curr.length - 1].value < lowest[lowest.length - 1].value && curr[curr.length - 1].value > valueToBeat) {
           return curr;
@@ -140,8 +139,6 @@ const Game = () => {
    * @description Randomly shuffles the card deck using the fisher-yates shuffle algorithm and deals 13 cards to each player. Established the first player.
    */
   const onShuffleClick = () => {
-    showIntro(true);
-
     const tempHands = [
       {player: 0, hand: [], skipped: false},
       {player: 1, hand: [], skipped: false},
@@ -156,15 +153,17 @@ const Game = () => {
         setPlayerTurn(player);
       };
       */
+
     });
+    
     setPlayerTurn(0);
     setTurnMessage('Your Turn.');
+  
     setHands(tempHands);
 
     setTimeout(() => {
       showIntro(false);
-      shuffleDeck(true);
-    }, 1000);
+    }, 3000);
   };
 
   /**
@@ -220,11 +219,7 @@ const Game = () => {
    */
   const requestCombo = (combo, combination) => {
     // Check if combo is valid
-    if((previousPlayedCombo.length === 0 && validateCombo(combo, combination)) || (validateCombo(combo, combination) && compareCombo(previousPlayedCombo[previousPlayedCombo.length - 1].value, combo))) {
-
-      if (previousPlayedCombo.length === 0) {
-        console.log(`Current Turn Combo set: ${currentTurnCombo.toUpperCase()}.\n\n`);
-      }
+    if ((previousPlayedCombo.length === 0 && validateCombo(combo, combination))|| (validateCombo(combo, combination) && compareCombo(previousPlayedCombo[previousPlayedCombo.length - 1].value, combo))) {
       // Accept combo and set player turn
       setComboStatus(true);
       console.log(`PLAYER ${playerTurn + 1} plays: ${combo.map((card) => `${card.number} of ${card.suite}`).join(", ")}\n\n`);
@@ -275,8 +270,19 @@ const Game = () => {
   // Only show shuffle button at start or end of game
   const shuffleBtn = deckIsShuffled ? null : <button className={gameStyles.shuffleBtn} onClick={onShuffleClick}>Shuffle Deck</button>;
 
+  const listAiHands = hands.reduce((result, hand) => {
+    if (hand.player !== 0) {
+      result.push(hand);
+    }
+    return result;
+  }, []).map((playerObj, idx) => {
+    return (<li key={idx}>
+      <h3>{`Player ${playerObj.player + 1} Hand:`}</h3>
+      <Hand cards={playerObj.hand} player={playerObj.player} />
+    </li>)
+  });
   return (
-    <game>
+    <div>
       {introIsVisible
         ? <div className={gameStyles.intro}>
           <p className={gameStyles.fade5}>Starting game.</p>
@@ -285,10 +291,11 @@ const Game = () => {
         </div>
         : shuffleBtn}
 
-      {deckIsShuffled &&
+      {hands.length !== 0 &&
         <div>
-          <h2 className={gameStyles.turnIndicator}>{endCycleClause || <div><span>{turnMessage}</span></div>}</h2>
+          <h2 className={gameStyles.turnIndicator}>{endCycleClause || <div id='span-player-turn'><span>{turnMessage}</span></div>}</h2>
           <h2>{selectCombo ? `Select a combo that fits ${selectCombo}.` : 'Choose Combination Type'}</h2>
+          {listAiHands}
           <h3>Your Hand:</h3>
           <Hand cards={hands[0].hand}
             playerTurn={playerTurn}
@@ -296,6 +303,7 @@ const Game = () => {
             requestCombo={requestCombo}
             currentTurnCombo={currentTurnCombo}
             passTurn={passTurn}
+            player={0}
           />
           <form>
             <label htmlFor='select-combo'>Combination: </label>
@@ -314,8 +322,8 @@ const Game = () => {
             <Cards cards={previousPlayedCombo} />
           </div>
         </div>
-      }
-    </game>
+    } 
+    </div>
   );
 };
 
