@@ -5,8 +5,8 @@ import Game from '../components/game/game.js';
 
 export default function Home() {
   return (
-    <main id='root' className={styles.main}>
-      <Game></Game>
+    <main className={styles.main}>
+      <Game />
     </main>
   );
 }

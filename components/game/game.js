@@ -148,15 +148,17 @@ const Game = () => {
     shuffledDeck.forEach((card, idx) => {
       const player = idx % 4;
       tempHands[player].hand.push(card);
+      /*
       if(card.number === 3 && card.suite === 'spades') {
         setPlayerTurn(player);
       };
+      */
 
     });
-    /*
+    
     setPlayerTurn(0);
     setTurnMessage('Your Turn.');
-    */
+  
     setHands(tempHands);
 
     setTimeout(() => {
@@ -280,7 +282,7 @@ const Game = () => {
     </li>)
   });
   return (
-    <game>
+    <div>
       {introIsVisible
         ? <div className={gameStyles.intro}>
           <p className={gameStyles.fade5}>Starting game.</p>
@@ -321,7 +323,7 @@ const Game = () => {
           </div>
         </div>
     } 
-    </game>
+    </div>
   );
 };
 

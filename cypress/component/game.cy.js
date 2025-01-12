@@ -5,6 +5,7 @@ describe('<Game />', () => {
   beforeEach(() => { 
     cy.mount(<Game />);
     cy.get('button').contains('Shuffle Deck').click();
+    cy.waitForReact();
   });
 
   it ('Shuffle button deals 13 cards to all players', () => {
@@ -40,6 +41,7 @@ describe('<Game />', () => {
 
 describe('Game function validateCombo', () => {
   beforeEach(() => {
+    cy.waitForReact();
     cy.mount(<Game />);
     cy.get('button').contains('Shuffle Deck').click();
   });
@@ -59,7 +61,7 @@ describe('Game function validateCombo', () => {
     cy.get('#span-player-turn').should('not.have.text', 'Your turn.');
   });
 
-  it ('Playing more than one card when combination type is single causes game to invalidate choice', () => {
+  it('Playing more than one card when combination type is single causes game to invalidate choice', () => {
     cy.get('[data-player-turn=0]').find('select').select('Strength of Card');
     cy.get('[data-player-turn=0]').within(() => {
       cy.get('[data-cy=cards]').find('li').first().click();
@@ -74,5 +76,18 @@ describe('Game function validateCombo', () => {
     });;
 
     cy.get('#span-player-turn').should('have.text', 'Your turn.');
+  });
+
+
+  it.only('Returns props', () => {
+    cy.react('Card').should('have.length', 1);
+
+    cy.getReact('Game')
+      .getCurrentState() 
+      .then((data) => cy.log(JSON.stringify(data)));
+
+    cy.getReact('Hand')
+      .getCurrentState() 
+      .then((data) => cy.log(JSON.stringify(data)));
   });
 });

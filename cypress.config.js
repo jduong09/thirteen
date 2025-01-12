@@ -4,7 +4,7 @@ export default defineConfig({
   video: false,
   env: {
     'cypress-react-selector': {
-      root: '#__cy_root',
+      root: '#__next_css__DO_NOT_USE__',
     },
   },
   e2e: {
