@@ -19,6 +19,7 @@ const Game = () => {
   const [previousPlayedCombo, setPreviousPlayedCombo] = useState([]);
   const [selectCombo, setComboSelect] = useState('');
   const [endCycleClause, setEndCycleClause] = useState(null);
+  const [winnerClause, setWinnerClause] = useState(null);
   const [newRound, setNewRound] = useState(false);
   const [turnMessage, setTurnMessage] = useState('');
 
@@ -37,6 +38,20 @@ const Game = () => {
     if (!hands.length) {
       return;
     }
+
+    /**
+     * @description End logic if hand has won 
+     * 
+     */
+    const checkWinner = hands.filter(player => player.hand.length === 0);
+
+    if (checkWinner.length === 1) {
+      setWinnerClause(checkWinner.player);
+      console.log(`Player ${checkWinner[0].player + 1} wins!`);
+      return;
+    }
+
+
     /**
      * @description End logic if all hands have passed
      * NOTE: This logic is not complete and does not cater to all use cases.
@@ -64,6 +79,17 @@ const Game = () => {
       console.log(`\n\nPLAYER ${playerTurn + 1} HAS WON ROUND! STARTING NEW ROUND IN 5 SECONDS...`);
     }
   }, [endCycleClause, previousPlayedCombo, currentTurnCombo, selectCombo, newRound, hands]);
+
+  useEffect(() => {
+    const checkWinner = hands.filter(player => player.hand.length === 0);
+
+    if (checkWinner.length === 1) {
+      setHands(hands.filter(hands => hands.player !== checkWinner[0].player));
+      changeTurn();
+      restartRound();
+      setWinnerClause(null);
+    }
+  }, [winnerClause])
 
   /**
    * @description Starts a new round
@@ -182,8 +208,10 @@ const Game = () => {
    */
   const changeTurn = () => {
     let nextPlayer = playerTurn === 3 ? 0 : playerTurn + 1;
+
+    
     while (nextPlayer !== playerTurn) {
-      if (hands[nextPlayer]?.skipped) {
+      if (hands[nextPlayer]?.skipped || !hands[nextPlayer]) {
         nextPlayer = nextPlayer === 3 ? 0 : nextPlayer + 1;
       } else {
         break;
