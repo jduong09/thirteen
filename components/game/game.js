@@ -44,10 +44,10 @@ const Game = () => {
      * 
      */
     const checkWinner = hands.filter(player => player.hand.length === 0);
-
-    if (checkWinner.length === 1) {
-      setWinnerClause(checkWinner.player);
-      console.log(`Player ${checkWinner[0].player + 1} wins!`);
+    console.log(hands);
+    if (playerTurn === 0) {
+      setWinnerClause(true);
+      console.log(`Player ${0} wins!`);
       return;
     }
 
@@ -64,7 +64,7 @@ const Game = () => {
       setEndCycleClause(`Player ${checkEndCycle[0].player + 1} wins the round.`);
       return;
     }
-    /**
+    /** 
     * @description Prompt ai logic
     * NOTE: This is logic for AI players
     */
@@ -81,25 +81,29 @@ const Game = () => {
   }, [endCycleClause, previousPlayedCombo, currentTurnCombo, selectCombo, newRound, hands]);
 
   useEffect(() => {
-    const checkWinner = hands.filter(player => player.hand.length === 0);
-
-    if (checkWinner.length === 1) {
-      setHands(hands.filter(hands => hands.player !== checkWinner[0].player));
-      changeTurn();
-      restartRound();
-      setWinnerClause(null);
+    console.log('hit win use effect');
+    console.log(hands.filter(hands => hands.player !== 0));
+    if (winnerClause) {
+      setHands(hands.filter(hands => hands.player !== 0));
     }
+
+    //restartRound();
+    changeTurn();
   }, [winnerClause])
 
   /**
    * @description Starts a new round
    */
   const restartRound = () => {
+    console.log('restarting round');
+    console.log(hands);
     setEndCycleClause(null);
     setPreviousPlayedCombo([]);
     setCurrentTurnCombo('');
     setComboSelect('');
+    console.log(hands.map(playerHand => ({ skipped: false, player: playerHand.player, hand: playerHand.hand })));
     setHands(hands.map(playerHand => ({ skipped: false, player: playerHand.player, hand: playerHand.hand })));
+    setWinnerClause(null);
     setNewRound(true);
   }
 

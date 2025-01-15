@@ -1,6 +1,7 @@
 import {  React, useState, useEffect } from "react";
 import styles from "@/app/page.module.css";
 import Cards from "@/components/cards/cards";
+import PropTypes from 'prop-types';
 
 const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo, passTurn }) => {
   const [hand, setHand] = useState(cards);
