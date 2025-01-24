@@ -44,10 +44,10 @@ const Game = () => {
      * 
      */
     const checkWinner = hands.filter(player => player.hand.length === 0);
-    console.log(hands);
+    // console.log(hands);
     if (playerTurn === 0) {
-      setWinnerClause(true);
-      console.log(`Player ${0} wins!`);
+      setWinnerClause('0');
+      // console.log(`Player ${0} wins!`);
       return;
     }
 
@@ -71,7 +71,7 @@ const Game = () => {
    if (playerTurn !== 0) {
     aiToPlay();
    }
-  }, [playerTurn, hands]);
+  }, [playerTurn]);
 
   useEffect(() => {
     if (endCycleClause) {
@@ -81,28 +81,49 @@ const Game = () => {
   }, [endCycleClause, previousPlayedCombo, currentTurnCombo, selectCombo, newRound, hands]);
 
   useEffect(() => {
-    console.log('hit win use effect');
-    console.log(hands.filter(hands => hands.player !== 0));
-    if (winnerClause) {
-      setHands(hands.filter(hands => hands.player !== 0));
+
+    if (winnerClause === null) {
+      return;
     }
 
-    //restartRound();
-    changeTurn();
-  }, [winnerClause])
+    /*
+    const tempHands = [
+      {player: 0, hand: [], skipped: false, winner: false},
+      {player: 1, hand: [], skipped: false, winner: false},
+      {player: 2, hand: [], skipped: false, winner: false},
+      {player: 3, hand: [], skipped: false, winner: false},
+    ];
+    */
+    // console.log('hit winner clause');
+    const newHand = hands.map((curr, idx) => {
+      if (parseInt(winnerClause) === idx) {
+        return { player: curr.player,  hand: curr.hand, skipped: curr.skipped, winner: true }
+      } else {
+        return curr;
+      }
+    });
+    console.log(newHand);
+    setHands(newHand);
+  }, [winnerClause]);
+
+  useEffect(() => {
+    if (winnerClause) {
+      changeTurn();
+      restartRound();
+    }
+  }, [hands]);
 
   /**
    * @description Starts a new round
    */
   const restartRound = () => {
-    console.log('restarting round');
-    console.log(hands);
+    // console.log('restarting round');
+    // console.log(hands);
     setEndCycleClause(null);
     setPreviousPlayedCombo([]);
     setCurrentTurnCombo('');
     setComboSelect('');
-    console.log(hands.map(playerHand => ({ skipped: false, player: playerHand.player, hand: playerHand.hand })));
-    setHands(hands.map(playerHand => ({ skipped: false, player: playerHand.player, hand: playerHand.hand })));
+    setHands(hands.map(playerHand => ({ skipped: false, player: playerHand.player, hand: playerHand.hand, winner: playerHand.winner })));
     setWinnerClause(null);
     setNewRound(true);
   }
@@ -182,10 +203,10 @@ const Game = () => {
     showIntro(true);
 
     const tempHands = [
-      {player: 0, hand: [], skipped: false},
-      {player: 1, hand: [], skipped: false},
-      {player: 2, hand: [], skipped: false},
-      {player: 3, hand: [], skipped: false},
+      {player: 0, hand: [], skipped: false, winner: false},
+      {player: 1, hand: [], skipped: false, winner: false},
+      {player: 2, hand: [], skipped: false, winner: false},
+      {player: 3, hand: [], skipped: false, winner: false},
     ];
     shuffledDeck.forEach((card, idx) => {
       const player = idx % 4;
@@ -213,9 +234,15 @@ const Game = () => {
   const changeTurn = () => {
     let nextPlayer = playerTurn === 3 ? 0 : playerTurn + 1;
 
-    
+    console.log(hands);
+
     while (nextPlayer !== playerTurn) {
-      if (hands[nextPlayer]?.skipped || !hands[nextPlayer]) {
+      console.log('in loop');
+      if (hands[nextPlayer].winner) {
+        console.log('Skipping winner');
+        nextPlayer = nextPlayer === 3 ? 0 : nextPlayer + 1;
+      } else  if (hands[nextPlayer]?.skipped) {
+        console.log('Next Player', nextPlayer);
         nextPlayer = nextPlayer === 3 ? 0 : nextPlayer + 1;
       } else {
         break;
