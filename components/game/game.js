@@ -22,6 +22,7 @@ const Game = () => {
   const [winnerClause, setWinnerClause] = useState(null);
   const [newRound, setNewRound] = useState(false);
   const [turnMessage, setTurnMessage] = useState('');
+  const [gameOverClause, setGameOverClause] = useState(null);
 
   // Build Card Deck
   const suites = ['spades', 'clubs', 'diamonds', 'hearts'];
@@ -40,10 +41,20 @@ const Game = () => {
     }
 
     /**
-     * @description End logic if hand has won 
+     * @description End logic if 3 hands have won, game over.
      * 
      */
     const checkWinner = hands.filter(player => player.hand.length === 0);
+
+    if (checkWinner.length === 3) {
+      setGameOverClause(true);
+      return;
+    }
+
+    /**
+     * @description End logic if hand has won 
+     * 
+     */
     if (checkWinner.length === 1 && checkWinner[0].winner === false) {
       setWinnerClause(checkWinner[0].player.toString());
       console.log(`Player ${checkWinner[0].player.toString()} wins!`);
@@ -84,7 +95,6 @@ const Game = () => {
       return;
     }
 
-    console.log("Hit Winner useEffect")
     const newHand = hands.map((curr, idx) => {
       if (parseInt(winnerClause) === idx) {
         return { player: curr.player,  hand: curr.hand, skipped: curr.skipped, winner: true }
@@ -92,15 +102,24 @@ const Game = () => {
         return curr;
       }
     });
-    console.log(newHand);
     setHands(newHand);
   }, [winnerClause]);
 
   useEffect(() => {
+    if (gameOverClause) {
+      let loser = hands.filter(player => player.winner === false);
+      console.log(`Player ${loser[0].player + 1} loses!`);
+      setTurnMessage(`Player ${loser[0].player + 1} loses!`);
+    }
+  }, [gameOverClause])
+
+  useEffect(() => {
     if (winnerClause) {
-      changeTurn();
-      restartRound();
-      console.log('Restarting round after winnner');
+      console.log(`\n\nPLAYER ${playerTurn + 1} HAS WON! STARTING NEW ROUND IN 7 SECONDS...`);
+      setTimeout(() => {
+        changeTurn();
+        restartRound()
+      }, 7500);
     }
   }, [hands]);
 
@@ -113,7 +132,6 @@ const Game = () => {
     setCurrentTurnCombo('');
     setComboSelect('');
     setHands(hands.map(playerHand => {
-      console.log(playerHand);
       if (playerHand.winner === true)  {
         return {
           ...playerHand,
@@ -233,16 +251,12 @@ const Game = () => {
    * Goal is to find the player that has the key 'skipped' === false
    */
   const changeTurn = () => {
-    console.log('changing turn');
     let nextPlayer = playerTurn === 3 ? 0 : playerTurn + 1;
 
     while (nextPlayer !== playerTurn) {
-      console.log('in loop');
       if (hands[nextPlayer].winner) {
-        console.log('Skipping winner');
         nextPlayer = nextPlayer === 3 ? 0 : nextPlayer + 1;
       } else  if (hands[nextPlayer]?.skipped) {
-        console.log('Next Player', nextPlayer);
         nextPlayer = nextPlayer === 3 ? 0 : nextPlayer + 1;
       } else {
         break;
@@ -288,7 +302,6 @@ const Game = () => {
 
       if (hands[playerTurn].hand.length === 0 && hands[playerTurn].winner === false) {
         setWinnerClause(hands[playerTurn].player.toString());
-        console.log(`Player ${playerTurn + 1} wins!`);
       } else {
         setTimeout(() => {
           changeTurn();
@@ -345,6 +358,18 @@ const Game = () => {
   }
 
   const shuffleBtn = deckIsShuffled ? null : <button className={gameStyles.shuffleBtn} onClick={onShuffleClick}>Shuffle Deck</button>;
+
+  const listAiHands = hands.reduce((result, hand) => {
+    if (hand.player !== 0) {
+      result.push(hand);
+    }
+    return result;
+  }, []).map((playerObj, idx) => {
+    return (<li key={idx}>
+      <h3>{`Player ${playerObj.player + 1} Hand:`}</h3>
+      <Hand cards={playerObj.hand} player={playerObj.player} />
+    </li>)
+  });
   return (
     <game>
       {introIsVisible
@@ -359,6 +384,7 @@ const Game = () => {
         <div>
           <h2 className={gameStyles.turnIndicator}>{endCycleClause || <div><span>{turnMessage}</span></div>}</h2>
           <h2>{selectCombo ? `Select a combo that fits ${selectCombo}.` : 'Choose Combination Type'}</h2>
+          {listAiHands}
           <h3>Your Hand:</h3>
           <Hand cards={hands[0].hand}
             playerTurn={playerTurn}
