@@ -19,8 +19,10 @@ const Game = () => {
   const [previousPlayedCombo, setPreviousPlayedCombo] = useState([]);
   const [selectCombo, setComboSelect] = useState('');
   const [endCycleClause, setEndCycleClause] = useState(null);
+  const [winnerClause, setWinnerClause] = useState(null);
   const [newRound, setNewRound] = useState(false);
   const [turnMessage, setTurnMessage] = useState('');
+  const [gameOverClause, setGameOverClause] = useState(null);
 
   // Build Card Deck
   const suites = ['spades', 'clubs', 'diamonds', 'hearts'];
@@ -37,6 +39,29 @@ const Game = () => {
     if (!hands.length) {
       return;
     }
+
+    /**
+     * @description End logic if 3 hands have won, game over.
+     * 
+     */
+    const checkWinner = hands.filter(player => player.hand.length === 0);
+
+    if (checkWinner.length === 3) {
+      setGameOverClause(true);
+      return;
+    }
+
+    /**
+     * @description End logic if hand has won 
+     * 
+     */
+    if (checkWinner.length === 1 && checkWinner[0].winner === false) {
+      setWinnerClause(checkWinner[0].player.toString());
+      console.log(`Player ${checkWinner[0].player.toString()} wins!`);
+      return;
+    }
+
+
     /**
      * @description End logic if all hands have passed
      * NOTE: This logic is not complete and does not cater to all use cases.
@@ -49,21 +74,54 @@ const Game = () => {
       setEndCycleClause(`Player ${checkEndCycle[0].player + 1} wins the round.`);
       return;
     }
-    /**
+    /** 
     * @description Prompt ai logic
     * NOTE: This is logic for AI players
     */
    if (playerTurn !== 0) {
     aiToPlay();
    }
-  }, [playerTurn, hands]);
+  }, [playerTurn, newRound]);
 
   useEffect(() => {
     if (endCycleClause) {
       setTimeout(() => restartRound(), 5000);
       console.log(`\n\nPLAYER ${playerTurn + 1} HAS WON ROUND! STARTING NEW ROUND IN 5 SECONDS...`);
     }
-  }, [endCycleClause, previousPlayedCombo, currentTurnCombo, selectCombo, newRound, hands]);
+  }, [endCycleClause, previousPlayedCombo, currentTurnCombo, selectCombo, hands]);
+
+  useEffect(() => {
+    if (winnerClause === null) {
+      return;
+    }
+
+    const newHand = hands.map((curr, idx) => {
+      if (parseInt(winnerClause) === idx) {
+        return { player: curr.player,  hand: curr.hand, skipped: curr.skipped, winner: true }
+      } else {
+        return curr;
+      }
+    });
+    setHands(newHand);
+  }, [winnerClause]);
+
+  useEffect(() => {
+    if (gameOverClause) {
+      let loser = hands.filter(player => player.winner === false);
+      console.log(`Player ${loser[0].player + 1} loses!`);
+      setTurnMessage(`Player ${loser[0].player + 1} loses!`);
+    }
+  }, [gameOverClause])
+
+  useEffect(() => {
+    if (winnerClause) {
+      console.log(`\n\nPLAYER ${playerTurn + 1} HAS WON! STARTING NEW ROUND IN 7 SECONDS...`);
+      setTimeout(() => {
+        changeTurn();
+        restartRound()
+      }, 7500);
+    }
+  }, [hands]);
 
   /**
    * @description Starts a new round
@@ -73,7 +131,20 @@ const Game = () => {
     setPreviousPlayedCombo([]);
     setCurrentTurnCombo('');
     setComboSelect('');
-    setHands(hands.map(playerHand => ({ skipped: false, player: playerHand.player, hand: playerHand.hand })));
+    setHands(hands.map(playerHand => {
+      if (playerHand.winner === true)  {
+        return {
+          ...playerHand,
+          skipped: true
+        }
+      } else {
+        return {
+          ...playerHand,
+          skipped: false
+        }
+      }
+    }));
+    setWinnerClause(null);
     setNewRound(true);
   }
 
@@ -83,8 +154,7 @@ const Game = () => {
    */
   const aiToPlay = () => {
     if (newRound && playerTurn !== 0) {
-      console.log('\n\n***** A NEW ROUND HAS STARTED *****');
-      
+      console.log('\n\n***** A NEW ROUND HAS STARTED *****');      
       const aiMoves = aiPossibleCombinations(hands[playerTurn].hand);
 
       const [combinationType, combination] = determineHardestMove(aiMoves);
@@ -152,10 +222,10 @@ const Game = () => {
     showIntro(true);
 
     const tempHands = [
-      {player: 0, hand: [], skipped: false},
-      {player: 1, hand: [], skipped: false},
-      {player: 2, hand: [], skipped: false},
-      {player: 3, hand: [], skipped: false},
+      {player: 0, hand: [], skipped: false, winner: false},
+      {player: 1, hand: [], skipped: false, winner: false},
+      {player: 2, hand: [], skipped: false, winner: false},
+      {player: 3, hand: [], skipped: false, winner: false},
     ];
     shuffledDeck.forEach((card, idx) => {
       const player = idx % 4;
@@ -182,8 +252,11 @@ const Game = () => {
    */
   const changeTurn = () => {
     let nextPlayer = playerTurn === 3 ? 0 : playerTurn + 1;
+
     while (nextPlayer !== playerTurn) {
-      if (hands[nextPlayer]?.skipped) {
+      if (hands[nextPlayer].winner) {
+        nextPlayer = nextPlayer === 3 ? 0 : nextPlayer + 1;
+      } else  if (hands[nextPlayer]?.skipped) {
         nextPlayer = nextPlayer === 3 ? 0 : nextPlayer + 1;
       } else {
         break;
@@ -193,21 +266,6 @@ const Game = () => {
     setTurnMessage(nextPlayer === 0 ? 'Your Turn.' : `Player ${nextPlayer + 1}'s Turn.`);
     console.log(`SETTING NEXT PLAYER TO: ${nextPlayer + 1}`);
     setPlayerTurn(nextPlayer);
-  }
-
-  /**
-   * @description Determines the combination type for the current turn based on the cards submitted
-   * NOTE: This is currently unused. But will be once we have the logic in place for the AI moves (or if the user has the first turn)
-   * @param {Object[]} combo - Array of card objects
-   */
-  const determineCombination = (combo) => {
-    const [combination] = Object.entries(dictionaryCombinations).find(([key, val]) => val.isValid(combo)) || [];
-    if (combination) {
-      setCurrentTurnCombo(combination);
-    } else {
-      // Invalid combination --> reject combo
-      setComboStatus(false);
-    }
   }
 
   /**
@@ -230,11 +288,6 @@ const Game = () => {
   const requestCombo = (combo, combination) => {
     // Check if combo is valid
     if((previousPlayedCombo.length === 0 && validateCombo(combo, combination)) || (validateCombo(combo, combination) && compareCombo(previousPlayedCombo[previousPlayedCombo.length - 1].value, combo))) {
-
-      if (previousPlayedCombo.length === 0) {
-        console.log(`Current Turn Combo set: ${currentTurnCombo.toUpperCase()}.\n\n`);
-        setNewRound(false);
-      }
       // Accept combo and set player turn
       setComboStatus(true);
       console.log(`PLAYER ${playerTurn + 1} plays: ${combo.map((card) => `${card.number} of ${card.suite}`).join(", ")}\n\n`);
@@ -246,8 +299,29 @@ const Game = () => {
         hands[playerTurn].hand = hands[playerTurn].hand.filter((handCard) => handCard.value !== card.value);
       });
       setHands(hands);
+
+      if (hands[playerTurn].hand.length === 0 && hands[playerTurn].winner === false) {
+        setWinnerClause(hands[playerTurn].player.toString());
+      } else {
+        setTimeout(() => {
+          changeTurn();
+          if (previousPlayedCombo.length === 0) {
+            // console.log(`Current Turn Combo set: ${currentTurnCombo.toUpperCase()}.\n\n`);
+            setNewRound(false);
+          }
+        }, 2500);
+      }
+
+      /*
       // TODO: Remove when done testing. This is just to simulate a fake game.
-      setTimeout(() => changeTurn(), 5000);
+      setTimeout(() => {
+        changeTurn();
+        if (previousPlayedCombo.length === 0) {
+          // console.log(`Current Turn Combo set: ${currentTurnCombo.toUpperCase()}.\n\n`);
+          setNewRound(false);
+        }
+      }, 2500);
+      */
 
     } else {
       console.log(`PLAYER ${playerTurn + 1} ATTEMPTED TO PLAY: ${combo.map((card) => `${card.number} of ${card.suite}`).join(", ")}`);
@@ -284,6 +358,18 @@ const Game = () => {
   }
 
   const shuffleBtn = deckIsShuffled ? null : <button className={gameStyles.shuffleBtn} onClick={onShuffleClick}>Shuffle Deck</button>;
+
+  const listAiHands = hands.reduce((result, hand) => {
+    if (hand.player !== 0) {
+      result.push(hand);
+    }
+    return result;
+  }, []).map((playerObj, idx) => {
+    return (<li key={idx}>
+      <h3>{`Player ${playerObj.player + 1} Hand:`}</h3>
+      <Hand cards={playerObj.hand} player={playerObj.player} />
+    </li>)
+  });
   return (
     <game>
       {introIsVisible
@@ -298,6 +384,7 @@ const Game = () => {
         <div>
           <h2 className={gameStyles.turnIndicator}>{endCycleClause || <div><span>{turnMessage}</span></div>}</h2>
           <h2>{selectCombo ? `Select a combo that fits ${selectCombo}.` : 'Choose Combination Type'}</h2>
+          {listAiHands}
           <h3>Your Hand:</h3>
           <Hand cards={hands[0].hand}
             playerTurn={playerTurn}
