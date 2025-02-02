@@ -1,4 +1,5 @@
 import {  React, useState, useEffect } from "react";
+import PropTypes from 'prop-types';
 import styles from "@/app/page.module.css";
 import Cards from "@/components/cards/cards";
 
@@ -141,3 +142,12 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
 }
 
 export default Hand;
+
+Hand.propTypes = {
+  cards: PropTypes.array,
+  playerTurn: PropTypes.number,
+  comboIsValid: PropTypes.func,
+  requestCombo: PropTypes.func,
+  currentTurnCombo: PropTypes.string,
+  passTurn: PropTypes.func,
+};
