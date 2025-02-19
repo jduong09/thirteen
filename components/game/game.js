@@ -23,6 +23,12 @@ const Game = () => {
   const [playerTurn, setPlayerTurn] = useState(0);
   const [hands, setHands] = useState([]);
   const [comboIsValid, setComboStatus] = useState(null);
+  /**
+   * Testing issue-29--slams requires changing state of currentTurnCombo, currentTurnLength and previousPlayedCombo
+   * currentTurnCombo = 'single' | 'pair' | 'triplet'
+   * currentTurnLength = 1 | 2 | 3
+   * previousPlayedCombo = comboSingleTwo | comboPairTwo | comboTripletTwo
+   */
   const [currentTurnCombo, setCurrentTurnCombo] = useState('pair');
   const [currentTurnLength, setCurrentTurnLength] = useState(2);
   const [previousPlayedCombo, setPreviousPlayedCombo] = useState(comboPairTwo);
