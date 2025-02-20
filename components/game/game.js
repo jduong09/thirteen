@@ -5,7 +5,7 @@ import Hand from "@/components/gameComponents/hand";
 import Cards from "@/components/cards/cards";
 import { dictionaryCombinations, highestValue } from '@/components/utilities/combination';
 import { mapCard, icons } from '../utilities/card';
-import { aiMoves, aiPossibleCombinations, determineHardestMove } from '../utilities/ai';
+import { aiMoves, aiPossibleCombinations, determineHardestMove, determineFirstMove } from '../utilities/ai';
 
 const Game = () => {
   const [shuffledDeck, setDeck] = useState([]);
@@ -23,6 +23,7 @@ const Game = () => {
   const [newRound, setNewRound] = useState(false);
   const [turnMessage, setTurnMessage] = useState('');
   const [gameOverClause, setGameOverClause] = useState(null);
+  const [firstTurnClause, setFirstTurnClause] = useState(true);
 
   // Build Card Deck
   const suites = ['spades', 'clubs', 'diamonds', 'hearts'];
@@ -154,17 +155,19 @@ const Game = () => {
    */
   const aiToPlay = () => {
     if (newRound && playerTurn !== 0) {
-      console.log('\n\n***** A NEW ROUND HAS STARTED *****');      
+      console.log('\n\n***** A NEW ROUND HAS STARTED *****');
       const aiMoves = aiPossibleCombinations(hands[playerTurn].hand);
 
-      const [combinationType, combination] = determineHardestMove(aiMoves);
+      const move = firstTurnClause ? determineFirstMove(hands[playerTurn].hand) : determineHardestMove(aiMoves);
+
+      // const [combinationType, combination] = firstTurnClause ? determineFirstMove(hands[playerTurn].hand) : determineHardestMove(aiMoves);
 
       // Slow down turn phase logic, simulate decision making from AI
       setTimeout(() => {
         setTurnMessage(`Player ${playerTurn + 1} is thinking...`);
-        setCurrentTurnCombo(combinationType);
-        setComboSelect(combinationType);
-        requestCombo(combination, combinationType);
+        setCurrentTurnCombo(move[0]);
+        setComboSelect(move[0]);
+        requestCombo(move[1], move[0]);
       }, 2500);
     } else {
       let valueToBeat = previousPlayedCombo.length === 0 ? 0 : previousPlayedCombo[previousPlayedCombo.length - 1].value;
@@ -306,7 +309,9 @@ const Game = () => {
         setTimeout(() => {
           changeTurn();
           if (previousPlayedCombo.length === 0) {
-            // console.log(`Current Turn Combo set: ${currentTurnCombo.toUpperCase()}.\n\n`);
+            if (firstTurnClause) {
+              setFirstTurnClause(false);
+            }
             setNewRound(false);
           }
         }, 2500);
@@ -392,6 +397,8 @@ const Game = () => {
             requestCombo={requestCombo}
             currentTurnCombo={currentTurnCombo}
             passTurn={passTurn}
+            setTurnMessage={setTurnMessage}
+            firstTurnClause={firstTurnClause}
           />
           <form>
             <label htmlFor='select-combo'>Combination: </label>
