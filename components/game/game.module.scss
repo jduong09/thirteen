@@ -28,6 +28,10 @@ $primary-color: #2600ff;
   align-items: center;
 }
 
+.gameDiv {
+  position: relative;
+}
+
 .fade5 { animation: fadeIn 5s; }
 .fade10 { animation: fadeIn 10s; }
 

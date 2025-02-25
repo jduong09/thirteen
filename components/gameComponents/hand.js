@@ -1,9 +1,10 @@
 import {  React, useState, useEffect } from "react";
 import PropTypes from 'prop-types';
 import styles from "@/app/page.module.css";
+import gameStyles from '../game/game.module.scss';
 import Cards from "@/components/cards/cards";
 
-const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo, passTurn }) => {
+const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo, passTurn, changeCombo, middlePile }) => {
   const [hand, setHand] = useState(cards);
   const [combo, setCombo] = useState([]);
   const [hasReset, resetCombo] = useState(false);
@@ -126,16 +127,31 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
       {comboIsValid === false && <div>Invalid Combo. Try a different combo or press Change Combo Type.</div>}
       {isMyTurn &&
       <div className={styles.handBtns}>
-        <button disabled={!isMyTurn} onClick={finalizeTurn}>Finalize Turn</button>
-        <button disabled={!isMyTurn} onClick={() => passTurn(playerTurn)}>Pass Turn</button>
-        <label>
-          Sort Cards:
-          <select disabled={!isMyTurn} onChange={(e) => {sortPlayerCards(e.target.value)}} className={styles.select} defaultValue={'default'}>
-            <option value="default" disabled>Select a sorting type...</option>
-            <option value="groups">Groups</option>
-            <option value="value">Strength of Card</option>
-          </select>
-        </label>
+        <section>
+          <form>
+            <label htmlFor='select-combo'>Combination: </label>
+            <select id='select-combo' name='select-combo' className={gameStyles.selectCombo} onChange={changeCombo} value={currentTurnCombo} disabled={middlePile.length}>
+              <option value=''>--Please choose an option--</option>
+              <option value='single'>Single</option>
+              <option value='pair'>Pair</option>
+              <option value='triplet'>Triplet</option>
+              <option value='quartet'>Quartet</option>
+              <option value='sequence'>Sequence</option>
+              <option value='double sequence'>Double Sequence</option>
+            </select>
+          </form>
+          <label>
+            <select disabled={!isMyTurn} onChange={(e) => {sortPlayerCards(e.target.value)}} className={styles.select} defaultValue={'default'}>
+              <option value="default" disabled>Sort Cards...</option>
+              <option value="groups">Groups</option>
+              <option value="value">Strength of Card</option>
+            </select>
+          </label>
+        </section>
+        <section>
+          <button disabled={!isMyTurn} onClick={finalizeTurn}>Finalize Turn</button>
+          <button disabled={!isMyTurn} onClick={() => passTurn(playerTurn)}>Pass Turn</button>
+        </section>
       </div>}
     </div>
   );

@@ -381,10 +381,14 @@ const Game = () => {
         : shuffleBtn}
 
       {deckIsShuffled &&
-        <div>
+        <div className={gameStyles.gameDiv}>
+          <div className={gameStyles.middlePile}>
+            <h2>Middle Pile</h2>
+            <Cards cards={previousPlayedCombo} />
+          </div>
           <h2 className={gameStyles.turnIndicator}>{endCycleClause || <div><span>{turnMessage}</span></div>}</h2>
           <h2>{selectCombo ? `Select a combo that fits ${selectCombo}.` : 'Choose Combination Type'}</h2>
-          {listAiHands}
+          {/*listAiHands */}
           <h3>Your Hand:</h3>
           <Hand cards={hands[0].hand}
             playerTurn={playerTurn}
@@ -392,23 +396,9 @@ const Game = () => {
             requestCombo={requestCombo}
             currentTurnCombo={currentTurnCombo}
             passTurn={passTurn}
+            changeCombo={changeCombo}
+            middlePile={previousPlayedCombo}
           />
-          <form>
-            <label htmlFor='select-combo'>Combination: </label>
-            <select id='select-combo' name='select-combo' className={gameStyles.selectCombo} onChange={changeCombo} value={currentTurnCombo}>
-              <option value=''>--Please choose an option--</option>
-              <option value='single'>Single</option>
-              <option value='pair'>Pair</option>
-              <option value='triplet'>Triplet</option>
-              <option value='quartet'>Quartet</option>
-              <option value='sequence'>Sequence</option>
-              <option value='double sequence'>Double Sequence</option>
-            </select>
-          </form>
-          <div className={gameStyles.middlePile}>
-            <h2>Middle Pile</h2>
-            <Cards cards={previousPlayedCombo} />
-          </div>
         </div>
       }
     </game>
