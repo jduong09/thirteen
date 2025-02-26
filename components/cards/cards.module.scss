@@ -1,7 +1,13 @@
 .hand {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
+  > li {
+    width: 50px;
+    overflow-x: hidden;
+  }
+  >li:last-child {
+    width: auto;
+  }
 }
 
 .card {

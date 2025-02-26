@@ -51,7 +51,7 @@ $primary-color: #2600ff;
 
 .turnIndicator {
   padding: 1rem;
-  margin: 1rem;
+  margin: 1rem auto;
   font-weight: bold;
   font-size: large;
   background-color: $primary-color;
@@ -100,7 +100,7 @@ $primary-color: #2600ff;
 }
 
 .middlePile {
-  margin: 1rem;
+  margin: 1rem auto;
   padding: 1rem;
   border: 2px solid #2600ff;
   text-align: center;
@@ -110,4 +110,38 @@ $primary-color: #2600ff;
 .middlePile > h2 {
   font-size: 1.25rem;
   margin-bottom: 1rem;
+}
+
+.hands {
+  display: grid;
+}
+
+.gameBoard {
+  display: grid;
+  grid-template-rows: 1fr 2fr 1fr;
+  grid-template-columns: 1fr 2fr 1fr;
+  > .middlePile {
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+    align-self: center;
+    justify-self: center;
+  }
+  > li:nth-child(2) {
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+    transform: translate(-64%) rotate(90deg);
+  }
+  > li:nth-child(3) {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+  }
+  > li:nth-child(4) {
+    grid-column: 3 / 4;
+    grid-row: 2 / 3;
+    transform: translate(8%) rotate(270deg);
+  }
+  > li:nth-child(5) {
+    grid-column: 2 / 3;
+    grid-row: 3 / 4;
+  }
 }

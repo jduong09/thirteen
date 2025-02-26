@@ -365,7 +365,7 @@ const Game = () => {
     }
     return result;
   }, []).map((playerObj, idx) => {
-    return (<li key={idx}>
+    return (<li className={gameStyles.aiHand} key={idx}>
       <h3>{`Player ${playerObj.player + 1} Hand:`}</h3>
       <Hand cards={playerObj.hand} player={playerObj.player} />
     </li>)
@@ -388,17 +388,42 @@ const Game = () => {
           </div>
           <h2 className={gameStyles.turnIndicator}>{endCycleClause || <div><span>{turnMessage}</span></div>}</h2>
           <h2>{selectCombo ? `Select a combo that fits ${selectCombo}.` : 'Choose Combination Type'}</h2>
-          {/*listAiHands */}
-          <h3>Your Hand:</h3>
-          <Hand cards={hands[0].hand}
-            playerTurn={playerTurn}
-            comboIsValid={comboIsValid}
-            requestCombo={requestCombo}
-            currentTurnCombo={currentTurnCombo}
-            passTurn={passTurn}
-            changeCombo={changeCombo}
-            middlePile={previousPlayedCombo}
-          />
+          <div className={gameStyles.gameBoard}>
+            <div className={gameStyles.middlePile}>
+              <h2>Middle Pile</h2>
+              <Cards cards={previousPlayedCombo} />
+            </div>
+            {listAiHands}
+            <li>
+              <h3>Your Hand:</h3>
+              <Hand cards={hands[0].hand}
+                playerTurn={playerTurn}
+                comboIsValid={comboIsValid}
+                requestCombo={requestCombo}
+                currentTurnCombo={currentTurnCombo}
+                passTurn={passTurn}
+                changeCombo={changeCombo}
+                middlePile={previousPlayedCombo}
+              />
+            </li>
+          </div>
+          {/*
+          <ul className={gameStyles.hands}>
+          {listAiHands}
+            <li>
+              <h3>Your Hand:</h3>
+              <Hand cards={hands[0].hand}
+                playerTurn={playerTurn}
+                comboIsValid={comboIsValid}
+                requestCombo={requestCombo}
+                currentTurnCombo={currentTurnCombo}
+                passTurn={passTurn}
+                changeCombo={changeCombo}
+                middlePile={previousPlayedCombo}
+              />
+            </li>
+          </ul>
+*/}
         </div>
       }
     </game>
