@@ -4,7 +4,31 @@
   flex-wrap: wrap;
 }
 
-.handBtns > button {
+.handBtns {
+  width: 100%;
+  display: flex;
+  padding: 1rem;
+}
+
+.handBtns > section {
+  width: 50%;
+  display: flex;
+}
+
+.handBtns > section:first-child {
+  margin: 0 auto 0 0;
+}
+
+.handBtns > section:last-child {
+  justify-content: flex-end;
+}
+
+.handBtns form {
+  display: flex;
+  align-items: center;
+}
+
+.handBtns button {
   border: 1px solid blue;
   padding: .5rem 1rem;
   cursor: pointer;
