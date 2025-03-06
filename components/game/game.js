@@ -11,11 +11,7 @@ import { aiMoves, aiPossibleCombinations, determineHardestMove } from '../utilit
  * For Testing Purposes on this branch specifically
  * @description variables used to manipulate previousPlayedCombo 
 */
-
-const comboSingleTwo = [{number: 15, suite: 'hearts', value: 52, selected: false}];
-const comboPairTwo = [{number: 15, suite: 'hearts', value: 52, selected: false}, {number: 15, suite: 'spades', value: 49, selected: false}];
-const comboTripletTwo = [{number: 15, suite: 'hearts', value: 52, selected: false}, {number: 15, suite: 'spades', value: 49, selected: false}, {number: 15, suite: 'diamonds', value: 51, selected: false}];
-
+ß
 const Game = () => {
   const [shuffledDeck, setDeck] = useState([]);
   const [deckIsShuffled, shuffleDeck] = useState(false);
@@ -23,15 +19,9 @@ const Game = () => {
   const [playerTurn, setPlayerTurn] = useState(0);
   const [hands, setHands] = useState([]);
   const [comboIsValid, setComboStatus] = useState(null);
-  /**
-   * Testing issue-29--slams requires changing state of currentTurnCombo, currentTurnLength and previousPlayedCombo
-   * currentTurnCombo = 'single' | 'pair' | 'triplet'
-   * currentTurnLength = 1 | 2 | 3
-   * previousPlayedCombo = comboSingleTwo | comboPairTwo | comboTripletTwo
-   */
-  const [currentTurnCombo, setCurrentTurnCombo] = useState('pair');
-  const [currentTurnLength, setCurrentTurnLength] = useState(2);
-  const [previousPlayedCombo, setPreviousPlayedCombo] = useState(comboPairTwo);
+  const [currentTurnCombo, setCurrentTurnCombo] = useState('');
+  const [currentTurnLength, setCurrentTurnLength] = useState(null);
+  const [previousPlayedCombo, setPreviousPlayedCombo] = useState([]);
   const [selectCombo, setComboSelect] = useState('');
   const [endCycleClause, setEndCycleClause] = useState(null);
   const [winnerClause, setWinnerClause] = useState(null);
