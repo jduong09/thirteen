@@ -7,6 +7,11 @@ import { dictionaryCombinations, highestValue } from '@/components/utilities/com
 import { mapCard, icons } from '../utilities/card';
 import { aiMoves, aiPossibleCombinations, determineHardestMove, determineFirstMove } from '../utilities/ai';
 
+/** 
+ * For Testing Purposes on this branch specifically
+ * @description variables used to manipulate previousPlayedCombo 
+*/
+ß
 const Game = () => {
   const [shuffledDeck, setDeck] = useState([]);
   const [deckIsShuffled, shuffleDeck] = useState(false);
@@ -15,7 +20,7 @@ const Game = () => {
   const [hands, setHands] = useState([]);
   const [comboIsValid, setComboStatus] = useState(null);
   const [currentTurnCombo, setCurrentTurnCombo] = useState('');
-  const [currentTurnLength, setCurrentTurnLength] = useState(1);
+  const [currentTurnLength, setCurrentTurnLength] = useState(null);
   const [previousPlayedCombo, setPreviousPlayedCombo] = useState([]);
   const [selectCombo, setComboSelect] = useState('');
   const [endCycleClause, setEndCycleClause] = useState(null);
@@ -61,7 +66,6 @@ const Game = () => {
       console.log(`Player ${checkWinner[0].player.toString()} wins!`);
       return;
     }
-
 
     /**
      * @description End logic if all hands have passed
@@ -238,6 +242,7 @@ const Game = () => {
       };
       
     });
+
     setHands(tempHands);
     setNewRound(true);
 
@@ -278,8 +283,36 @@ const Game = () => {
     if (combination === '') {
       setTurnMessage('Your Turn: Set combination type before playing.');
       return;
+    } else if (combination === 'single' && previousPlayedCombo.length === 1 && previousPlayedCombo[0].number === 15) {
+      if (dictionaryCombinations['double sequence'].isValid(combo) && combo.length >= 6) {
+        setCurrentTurnCombo('double sequence');
+        return true;
+      } else if (dictionaryCombinations['quartet'].isValid(combo)) {
+        setCurrentTurnCombo('quartet');
+        return true;
+      } else {
+        return (dictionaryCombinations[combination].isValid(combo) && compareCombo(previousPlayedCombo[previousPlayedCombo.length - 1].value, combo));
+      }
+    } else if (combination === 'pair' && previousPlayedCombo.length === 2 && previousPlayedCombo.every((card) => card.number === 15)) {
+      if (dictionaryCombinations['double sequence'].isValid(combo) && combo.length >= 8) {
+        setCurrentTurnCombo('double sequence');
+        return true;
+      } else if (dictionaryCombinations['quartet'].isValid(combo)) {
+        setCurrentTurnCombo('quartet');
+        return true;
+      } else {
+        return (dictionaryCombinations[combination].isValid(combo) && compareCombo(previousPlayedCombo[previousPlayedCombo.length - 1].value, combo));
+      }
+    } else if (combination === 'triplet' && previousPlayedCombo.length === 3 && previousPlayedCombo.every((card) => card.number === 15)) {
+      if (dictionaryCombinations['double sequence'].isValid(combo) && combo.length >= 10) {
+        setCurrentTurnCombo('double sequence');
+        return true;
+      } else {
+        return (dictionaryCombinations[combination].isValid(combo) && compareCombo(previousPlayedCombo[previousPlayedCombo.length - 1].value, combo));
+      }
+    } else {
+      return dictionaryCombinations[combination].isValid(combo) && compareCombo(previousPlayedCombo[previousPlayedCombo.length - 1].value, combo);
     }
-    return dictionaryCombinations[combination].isValid(combo);
   }
 
   /**
@@ -288,8 +321,9 @@ const Game = () => {
    */
   const requestCombo = (combo, combination) => {
     // Check if combo is valid
-    if((previousPlayedCombo.length === 0 && validateCombo(combo, combination)) || (validateCombo(combo, combination) && compareCombo(previousPlayedCombo[previousPlayedCombo.length - 1].value, combo))) {
+    if((previousPlayedCombo.length === 0 && validateCombo(combo, combination)) || (validateCombo(combo, combination))) {
       // Accept combo and set player turn
+
       setComboStatus(true);
       console.log(`PLAYER ${playerTurn + 1} plays: ${combo.map((card) => `${card.number} of ${card.suite}`).join(", ")}\n\n`);
       setPreviousPlayedCombo(combo);
