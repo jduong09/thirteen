@@ -159,9 +159,7 @@ const Game = () => {
       const aiMoves = aiPossibleCombinations(hands[playerTurn].hand);
 
       const move = firstTurnClause ? determineFirstMove(hands[playerTurn].hand) : determineHardestMove(aiMoves);
-
-      // const [combinationType, combination] = firstTurnClause ? determineFirstMove(hands[playerTurn].hand) : determineHardestMove(aiMoves);
-
+      
       // Slow down turn phase logic, simulate decision making from AI
       setTimeout(() => {
         setTurnMessage(`Player ${playerTurn + 1} is thinking...`);
