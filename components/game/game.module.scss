@@ -49,7 +49,7 @@ $primary-color: #2600ff;
   to { visibility: visible; }
 }
 
-.turnIndicator {
+.turnIndicator, .currentTurnCombo {
   padding: 1rem;
   margin: 1rem auto;
   font-weight: bold;
@@ -117,10 +117,11 @@ $primary-color: #2600ff;
 }
 
 .gameBoard {
+  width: 100%;
   display: grid;
   grid-template-rows: 1fr 2fr 1fr;
   grid-template-columns: 1fr 2fr 1fr;
-  > .middlePile {
+  > .middleDiv {
     grid-column: 2 / 3;
     grid-row: 2 / 3;
     align-self: center;
@@ -129,7 +130,14 @@ $primary-color: #2600ff;
   > li:nth-child(2) {
     grid-column: 1 / 2;
     grid-row: 2 / 3;
-    transform: translate(-64%) rotate(90deg);
+    position: relative;
+    width: 175px;
+    > div {
+      position: absolute;
+      transform: translate(-40%, -50%) rotate(90deg);
+      top: 50%;
+      left: 0;
+    }
   }
   > li:nth-child(3) {
     grid-column: 2 / 3;
@@ -138,10 +146,25 @@ $primary-color: #2600ff;
   > li:nth-child(4) {
     grid-column: 3 / 4;
     grid-row: 2 / 3;
-    transform: translate(8%) rotate(270deg);
+    position: relative;
+    width: 175px;
+    > div {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      transform: translate(40%, -50%) rotate(270deg);
+    }
   }
   > li:nth-child(5) {
     grid-column: 2 / 3;
     grid-row: 3 / 4;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
   }
+}
+
+.divHand {
+  margin: 0 auto;
 }

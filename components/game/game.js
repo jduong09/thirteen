@@ -1,11 +1,17 @@
+import React, { useState, useEffect } from 'react';
+import { Slackey } from 'next/font/google';
 import gameStyles from './game.module.scss';
 import styles from "@/app/page.module.css";
-import React, { useState, useEffect } from 'react';
 import Hand from "@/components/gameComponents/hand";
 import Cards from "@/components/cards/cards";
 import { dictionaryCombinations, highestValue } from '@/components/utilities/combination';
 import { mapCard, icons } from '../utilities/card';
 import { aiMoves, aiPossibleCombinations, determineHardestMove } from '../utilities/ai';
+
+const slackey = Slackey({
+  weight: '400',
+  subsets: ['latin'],
+})
 
 const Game = () => {
   const [shuffledDeck, setDeck] = useState([]);
@@ -366,12 +372,15 @@ const Game = () => {
     return result;
   }, []).map((playerObj, idx) => {
     return (<li className={gameStyles.aiHand} key={idx}>
-      <h3>{`Player ${playerObj.player + 1} Hand:`}</h3>
-      <Hand cards={playerObj.hand} player={playerObj.player} />
+      <div>
+        <h3>{`Player ${playerObj.player + 1} Hand:`}</h3>
+        {playerObj.skipped && <div className={slackey.className}>PASSED!</div>}
+        <Hand cards={playerObj.hand} player={playerObj.player} passed={playerObj.skipped} />
+      </div>
     </li>)
   });
   return (
-    <game>
+    <div>
       {introIsVisible
         ? <div className={gameStyles.intro}>
           <p className={gameStyles.fade5}>Starting game.</p>
@@ -382,20 +391,34 @@ const Game = () => {
 
       {deckIsShuffled &&
         <div className={gameStyles.gameDiv}>
-          <div className={gameStyles.middlePile}>
-            <h2>Middle Pile</h2>
-            <Cards cards={previousPlayedCombo} />
-          </div>
-          <h2 className={gameStyles.turnIndicator}>{endCycleClause || <div><span>{turnMessage}</span></div>}</h2>
-          <h2>{selectCombo ? `Select a combo that fits ${selectCombo}.` : 'Choose Combination Type'}</h2>
+          {/*<h2>{selectCombo ? `Select a combo that fits ${selectCombo}.` : 'Choose Combination Type'}</h2> */}
           <div className={gameStyles.gameBoard}>
-            <div className={gameStyles.middlePile}>
-              <h2>Middle Pile</h2>
-              <Cards cards={previousPlayedCombo} />
+            <div className={gameStyles.middleDiv}>
+              <div className={gameStyles.middlePile}>
+                <h2>Middle Pile</h2>
+                <Cards cards={previousPlayedCombo} />
+              </div>
+              <h2 className={gameStyles.turnIndicator}>{endCycleClause || <div><span>{turnMessage}</span></div>}</h2>
             </div>
             {listAiHands}
             <li>
-              <h3>Your Hand:</h3>
+              <h3>Your Hand</h3>
+              {hands[0].skipped && <div className={slackey.className}>PASSED!</div>}
+              {currentTurnCombo && previousPlayedCombo.length
+                ? <div>Combination: {currentTurnCombo}</div>
+                : <form>
+                    <label htmlFor='select-combo'>Combination: </label>
+                    <select id='select-combo' name='select-combo' className={gameStyles.selectCombo} onChange={changeCombo} value={currentTurnCombo}>
+                      <option value=''>--Please choose an option--</option>
+                      <option value='single'>Single</option>
+                      <option value='pair'>Pair</option>
+                      <option value='triplet'>Triplet</option>
+                      <option value='quartet'>Quartet</option>
+                      <option value='sequence'>Sequence</option>
+                      <option value='double sequence'>Double Sequence</option>
+                    </select>
+                  </form>
+              }
               <Hand cards={hands[0].hand}
                 playerTurn={playerTurn}
                 comboIsValid={comboIsValid}
@@ -407,26 +430,9 @@ const Game = () => {
               />
             </li>
           </div>
-          {/*
-          <ul className={gameStyles.hands}>
-          {listAiHands}
-            <li>
-              <h3>Your Hand:</h3>
-              <Hand cards={hands[0].hand}
-                playerTurn={playerTurn}
-                comboIsValid={comboIsValid}
-                requestCombo={requestCombo}
-                currentTurnCombo={currentTurnCombo}
-                passTurn={passTurn}
-                changeCombo={changeCombo}
-                middlePile={previousPlayedCombo}
-              />
-            </li>
-          </ul>
-*/}
         </div>
       }
-    </game>
+    </div>
   );
 };
 

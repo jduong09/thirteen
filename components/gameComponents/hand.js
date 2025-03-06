@@ -4,7 +4,7 @@ import styles from "@/app/page.module.css";
 import gameStyles from '../game/game.module.scss';
 import Cards from "@/components/cards/cards";
 
-const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo, passTurn, changeCombo, middlePile }) => {
+const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo, passTurn, passed }) => {
   const [hand, setHand] = useState(cards);
   const [combo, setCombo] = useState([]);
   const [hasReset, resetCombo] = useState(false);
@@ -122,24 +122,12 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
 
   // Line 122: Removed sentence 'Try a different combo or pass' and replaced with 'Try a different combo or press Change Combo Type' for this PR specifically.
   return (
-    <div>
+    <div className={gameStyles.divHand}>
       <Cards cards={hand} selectCard={selectCard} />
       {comboIsValid === false && <div>Invalid Combo. Try a different combo or press Change Combo Type.</div>}
       {isMyTurn &&
       <div className={styles.handBtns}>
         <section>
-          <form>
-            <label htmlFor='select-combo'>Combination: </label>
-            <select id='select-combo' name='select-combo' className={gameStyles.selectCombo} onChange={changeCombo} value={currentTurnCombo} disabled={middlePile.length}>
-              <option value=''>--Please choose an option--</option>
-              <option value='single'>Single</option>
-              <option value='pair'>Pair</option>
-              <option value='triplet'>Triplet</option>
-              <option value='quartet'>Quartet</option>
-              <option value='sequence'>Sequence</option>
-              <option value='double sequence'>Double Sequence</option>
-            </select>
-          </form>
           <label>
             <select disabled={!isMyTurn} onChange={(e) => {sortPlayerCards(e.target.value)}} className={styles.select} defaultValue={'default'}>
               <option value="default" disabled>Sort Cards...</option>

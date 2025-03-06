@@ -7,7 +7,6 @@
 .handBtns {
   width: 100%;
   display: flex;
-  padding: 1rem;
 }
 
 .handBtns > section {
@@ -21,6 +20,7 @@
 
 .handBtns > section:last-child {
   justify-content: flex-end;
+  height: fit-content;
 }
 
 .handBtns form {
@@ -32,11 +32,22 @@
   border: 1px solid blue;
   padding: .5rem 1rem;
   cursor: pointer;
-  margin-right: 1rem;
+  margin: 1rem 1rem 0 0;
+}
+
+.handBtns button:last-of-type {
+  margin-right: 0;
 }
 
 .select {
   border: 1px solid blue;
   padding: .25rem .5rem;
-  margin: 1rem .5rem;
+  margin: 1rem 0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid black;
 }
