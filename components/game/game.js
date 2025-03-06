@@ -225,7 +225,6 @@ const Game = () => {
   const onShuffleClick = () => {
     showIntro(true);
 
-    /*
     const tempHands = [
       {player: 0, hand: [], skipped: false, winner: false},
       {player: 1, hand: [], skipped: false, winner: false},
@@ -242,97 +241,9 @@ const Game = () => {
       };
       
     });
-    */
 
-    // Created 4 hands, with user hand having 5+ pairs to utilize slams for testing.
-    const tempHands = [
-      {
-        player: 0, 
-        hand: [
-          {number: 3, suite: 'spades', value: 1, selected: false},
-          {number: 3, suite: 'hearts', value: 4, selected: false},
-          {number: 3, suite: 'diamonds', value: 3, selected: false},
-          {number: 4, suite: 'spades', value: 5, selected: false},
-          {number: 6, suite: 'hearts', value: 16, selected: false},
-          {number: 8, suite: 'diamonds', value: 23, selected: false},
-          {number: 7, suite: 'clubs', value: 18, selected: false},
-          {number: 6, suite: 'clubs', value: 14, selected: false},
-          {number: 8, suite: 'clubs', value: 22, selected: false},
-          {number: 7, suite: 'spades', value: 17, selected: false},
-          {number: 4, suite: 'clubs', value: 6, selected: false},
-          {number: 5, suite: 'clubs', value: 10, selected: false},
-          {number: 5, suite: 'diamonds', value: 11, selected: false},
-          {number: 3, suite: 'clubs', value: 2, selected: false},
-        ],
-        skipped: false, 
-        winner: false},
-      {
-        player: 1, 
-        hand: [
-          {number: 14, suite: 'spades', value: 45, selected: false},
-          {number: 13, suite: 'clubs', value: 42, selected: false},
-          {number: 11, suite: 'clubs', value: 34, selected: false},
-          {number: 10, suite: 'diamonds', value: 31, selected: false},
-          {number: 10, suite: 'hearts', value: 32, selected: false},
-          {number: 14, suite: 'spades', value: 45, selected: false},
-          {number: 12, suite: 'diamonds', value: 39, selected: false},
-          {number: 11, suite: 'spades', value: 33, selected: false},
-          {number: 15, suite: 'hearts', value: 52, selected: false},
-          {number: 12, suite: 'spades', value: 37, selected: false},
-          {number: 10, suite: 'clubs', value: 30, selected: false},
-          {number: 14, suite: 'spades', value: 45, selected: false},
-          {number: 5, suite: 'hearts', value: 12, selected: false},
-          {number: 13, suite: 'hearts', value: 44, selected: false},
-        ], 
-        skipped: false, 
-        winner: false
-      },
-      {
-        player: 2, 
-        hand: [
-          {number: 12, suite: 'hearts', value: 40, selected: false}, 
-          {number: 13, suite: 'hearts', value: 44, selected: false},
-          {number: 14, suite: 'diamonds', value: 47, selected: false},
-          {number: 6, suite: 'spades', value: 13, selected: false},
-          {number: 15, suite: 'spades', value: 49, selected: false},
-          {number: 7, suite: 'hearts', value: 20, selected: false},
-          {number: 5, suite: 'spades', value: 9, selected: false},
-          {number: 9, suite: 'clubs', value: 26, selected: false},
-          {number: 4, suite: 'hearts', value: 8, selected: false},
-          {number: 14, suite: 'spades', value: 45, selected: false},
-          {number: 14, suite: 'clubs', value: 46, selected: false},
-          {number: 8, suite: 'spades', value: 21, selected: false},
-          {number: 7, suite: 'diamonds', value: 19, selected: false}
-        ], 
-        skipped: false, 
-        winner: false
-      },
-      {
-        player: 3, 
-        hand: [
-          {number: 10, suite: 'spades', value: 29, selected: false},
-          {number: 13, suite: 'diamonds', value: 43, selected: false},
-          {number: 9, suite: 'spades', value: 25, selected: false},
-          {number: 9, suite: 'hearts', value: 28, selected: false},
-          {number: 9, suite: 'diamonds', value: 27, selected: false},
-          {number: 9, suite: 'clubs', value: 26, selected: false},
-          {number: 8, suite: 'hearts', value: 24, selected: false},
-          {number: 15, suite: 'diamonds', value: 51, selected: false},
-          {number: 3, suite: 'clubs', value: 2, selected: false},
-          {number: 4, suite: 'diamonds', value: 7, selected: false},
-          {number: 6, suite: 'diamonds', value: 15, selected: false},
-          {number: 14, suite: 'hearts', value: 48, selected: false},
-          {number: 13, suite: 'spades', value: 41, selected: false}
-        ], 
-        skipped: false, 
-        winner: false
-      },
-    ];
-
-    setPlayerTurn(0);
-    setTurnMessage('Your Turn.');
     setHands(tempHands);
-    // setNewRound(true);
+    setNewRound(true);
 
     setTimeout(() => {
       showIntro(false);
@@ -368,9 +279,6 @@ const Game = () => {
    * @returns {Boolean}
    */
   const validateCombo = (combo, combination) => {
-    console.log('Combo', combo);
-    console.log('Combination', combination);
-    console.log('Previous:', previousPlayedCombo);
     if (combination === '') {
       setTurnMessage('Your Turn: Set combination type before playing.');
       return;
