@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Slackey } from 'next/font/google';
 import gameStyles from './game.module.scss';
 import styles from "@/app/page.module.css";
@@ -350,7 +350,6 @@ const Game = () => {
    */
   const passTurn = (playerTurn) => {
     console.log(`***** PLAYER ${playerTurn + 1} PASSES. ******`);
-    hands[playerTurn].skipped = true;
     setHands(hands);
     setComboStatus(true);
     setTimeout(() => {
@@ -375,6 +374,7 @@ const Game = () => {
       <div>
         <h3>{`Player ${playerObj.player + 1} Hand:`}</h3>
         {playerObj.skipped && <div className={slackey.className}>PASSED!</div>}
+        {playerObj.roundWin && <div>Round Winner!</div>}
         <Hand cards={playerObj.hand} player={playerObj.player} passed={playerObj.skipped} />
       </div>
     </li>)
