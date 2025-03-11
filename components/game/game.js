@@ -58,7 +58,7 @@ const Game = () => {
     }
 
     /**
-     * @description End logic if hand has won 
+     * @description End logic if hand has no cards, declared winner (Up to 3 people can win, 1 person loses)
      * 
      */
     if (checkWinner.length === 1 && checkWinner[0].winner === false) {
@@ -67,15 +67,12 @@ const Game = () => {
       return;
     }
 
-
     /**
      * @description End logic if all hands have passed
      * NOTE: This logic is not complete and does not cater to all use cases.
      * NOTE: THIS IS STRICTLY FOR TESTING
      */
     let checkEndCycle = hands.filter(hand => hand.skipped !== true);
-    // if checkEndCycle is true after checking all hands for skipped property
-    // do not run AI logic.
     if (checkEndCycle.length === 1 && checkEndCycle[0].player === playerTurn) {
       setEndCycleClause(`Player ${checkEndCycle[0].player + 1} wins the round.`);
       return;
@@ -90,11 +87,22 @@ const Game = () => {
   }, [playerTurn, newRound]);
 
   useEffect(() => {
+    let checkEndCycle = hands.filter(hand => hand.skipped !== true);
     if (endCycleClause) {
+      setHands(hands.map(playerHand => {
+        if (checkEndCycle[0].player === playerHand.player)  {
+          return {
+            ...playerHand,
+            roundWin: true,
+          }
+        } else {
+          return playerHand;
+        }
+      }));
       setTimeout(() => restartRound(), 5000);
       console.log(`\n\nPLAYER ${playerTurn + 1} HAS WON ROUND! STARTING NEW ROUND IN 5 SECONDS...`);
     }
-  }, [endCycleClause, previousPlayedCombo, currentTurnCombo, selectCombo, hands]);
+  }, [endCycleClause, previousPlayedCombo, currentTurnCombo, selectCombo]);
 
   useEffect(() => {
     if (winnerClause === null) {
@@ -141,12 +149,14 @@ const Game = () => {
       if (playerHand.winner === true)  {
         return {
           ...playerHand,
-          skipped: true
+          skipped: true,
+          roundWin: false
         }
       } else {
         return {
           ...playerHand,
-          skipped: false
+          skipped: false,
+          roundWin: false
         }
       }
     }));
@@ -228,10 +238,10 @@ const Game = () => {
     showIntro(true);
 
     const tempHands = [
-      {player: 0, hand: [], skipped: false, winner: false},
-      {player: 1, hand: [], skipped: false, winner: false},
-      {player: 2, hand: [], skipped: false, winner: false},
-      {player: 3, hand: [], skipped: false, winner: false},
+      {player: 0, hand: [], skipped: false, winner: false, roundWin: false},
+      {player: 1, hand: [], skipped: false, winner: false, roundWin: false},
+      {player: 2, hand: [], skipped: false, winner: false, roundWin: false},
+      {player: 3, hand: [], skipped: false, winner: false, roundWin: false},
     ];
     shuffledDeck.forEach((card, idx) => {
       const player = idx % 4;
@@ -241,7 +251,6 @@ const Game = () => {
         setPlayerTurn(player);
         setTurnMessage(player === 0 ? 'Your Turn.' : `Player ${player + 1}'s Turn.`);
       };
-      
     });
     setHands(tempHands);
     setNewRound(true);
@@ -350,6 +359,7 @@ const Game = () => {
    */
   const passTurn = (playerTurn) => {
     console.log(`***** PLAYER ${playerTurn + 1} PASSES. ******`);
+    hands[playerTurn].skipped = true;
     setHands(hands);
     setComboStatus(true);
     setTimeout(() => {
@@ -370,15 +380,38 @@ const Game = () => {
     }
     return result;
   }, []).map((playerObj, idx) => {
-    return (<li className={gameStyles.aiHand} key={idx}>
-      <div>
-        <h3>{`Player ${playerObj.player + 1} Hand:`}</h3>
-        {playerObj.skipped && <div className={slackey.className}>PASSED!</div>}
-        {playerObj.roundWin && <div>Round Winner!</div>}
-        <Hand cards={playerObj.hand} player={playerObj.player} passed={playerObj.skipped} />
-      </div>
-    </li>)
+    if (playerObj.winner === true) {
+      return (<li key={idx}>
+        <div className={slackey.className}>\o/ Winner \o/</div>
+      </li>);
+    } else {
+      let roundMessage;
+      if (playerObj.skipped) {
+        roundMessage = 'PASSED!';
+      } else if (playerObj.roundWin) {
+        roundMessage = 'ROUND WINNER!';
+      } else {
+        roundMessage = '';
+      }
+      return (<li className={gameStyles.aiHand} key={idx}>
+        <div>
+          <h3>{`Player ${playerObj.player + 1} Hand:`}</h3>
+          <div className={slackey.className}>{roundMessage}</div>
+          <Hand cards={playerObj.hand} player={playerObj.player} passed={playerObj.skipped} />
+        </div>
+      </li>);
+    }
   });
+
+  let playerRoundMessage;
+
+  if (hands.length && hands[0].skipped) {
+    playerRoundMessage = 'PASSED!';
+  } else if (hands.length && hands[0].roundWin) {
+    playerRoundMessage = 'ROUND WINNER!';
+  } else {
+    playerRoundMessage = '';
+  }
   return (
     <div>
       {introIsVisible
@@ -391,7 +424,6 @@ const Game = () => {
 
       {deckIsShuffled &&
         <div className={gameStyles.gameDiv}>
-          {/*<h2>{selectCombo ? `Select a combo that fits ${selectCombo}.` : 'Choose Combination Type'}</h2> */}
           <div className={gameStyles.gameBoard}>
             <div className={gameStyles.middleDiv}>
               <div className={gameStyles.middlePile}>
@@ -401,9 +433,12 @@ const Game = () => {
               <h2 className={gameStyles.turnIndicator}>{endCycleClause || <div><span>{turnMessage}</span></div>}</h2>
             </div>
             {listAiHands}
+            {hands[0].winner === true
+            ? <li><div className={slackey.className}>\o/ Winner \o/</div></li>
+            :
             <li>
               <h3>Your Hand</h3>
-              {hands[0].skipped && <div className={slackey.className}>PASSED!</div>}
+              <div className={slackey.className}>{playerRoundMessage}</div>
               {currentTurnCombo && previousPlayedCombo.length
                 ? <div>Combination: {currentTurnCombo}</div>
                 : <form>
@@ -428,7 +463,7 @@ const Game = () => {
                 changeCombo={changeCombo}
                 middlePile={previousPlayedCombo}
               />
-            </li>
+            </li>}
           </div>
         </div>
       }
