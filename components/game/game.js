@@ -394,10 +394,16 @@ const Game = () => {
         roundMessage = '';
       }
       return (<li className={gameStyles.aiHand} key={idx}>
-        <div>
-          <h3>{`Player ${playerObj.player + 1} Hand:`}</h3>
-          <div className={slackey.className}>{roundMessage}</div>
-          <Hand cards={playerObj.hand} player={playerObj.player} passed={playerObj.skipped} />
+        <div className={gameStyles.handContainer}>
+          <div className={gameStyles.rotationWrapperOuter}>
+            <div className={gameStyles.rotationWrapperInner}>
+              <div className={gameStyles.rotateDiv}>
+                <h3>{`Player ${playerObj.player + 1} Hand:`}</h3>
+                <div className={slackey.className}>{roundMessage}</div>
+                <Hand cards={playerObj.hand} player={playerObj.player} passed={playerObj.skipped} />
+              </div>
+            </div>
+          </div>
         </div>
       </li>);
     }
