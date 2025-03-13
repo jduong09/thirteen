@@ -187,3 +187,16 @@ $primary-color: #2600ff;
 .gameBoard > li:nth-child(4) .rotateDiv {
   transform: rotate(-90deg) translate(-50%, -50%);
 }
+
+.cardFaceDown {
+  width: 75px;
+  height: 105px;
+  border: 2px solid black;
+  border-radius: 4px;
+}
+
+@media (max-width: 568px) {
+   .handContainer {
+    display: none;
+   }
+}

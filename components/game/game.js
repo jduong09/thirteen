@@ -394,6 +394,10 @@ const Game = () => {
         roundMessage = '';
       }
       return (<li className={gameStyles.aiHand} key={idx}>
+        <div className={gameStyles.aiMobileHand}>
+          <h3>{`Player ${playerObj.player + 1}`}</h3>
+          <div className={gameStyles.cardFaceDown}></div>
+        </div>
         <div className={gameStyles.handContainer}>
           <div className={gameStyles.rotateDiv}>
             <h3>{`Player ${playerObj.player + 1}`}</h3>
