@@ -395,14 +395,10 @@ const Game = () => {
       }
       return (<li className={gameStyles.aiHand} key={idx}>
         <div className={gameStyles.handContainer}>
-          <div className={gameStyles.rotationWrapperOuter}>
-            <div className={gameStyles.rotationWrapperInner}>
-              <div className={gameStyles.rotateDiv}>
-                <h3>{`Player ${playerObj.player + 1} Hand:`}</h3>
-                <div className={slackey.className}>{roundMessage}</div>
-                <Hand cards={playerObj.hand} player={playerObj.player} passed={playerObj.skipped} />
-              </div>
-            </div>
+          <div className={gameStyles.rotateDiv}>
+            <h3>{`Player ${playerObj.player + 1}`}</h3>
+            <div className={slackey.className}>{roundMessage}</div>
+            <Hand cards={playerObj.hand} player={playerObj.player} passed={playerObj.skipped} />
           </div>
         </div>
       </li>);
@@ -443,7 +439,7 @@ const Game = () => {
             ? <li><div className={slackey.className}>\o/ Winner \o/</div></li>
             :
             <li>
-              <h3>Your Hand</h3>
+              <h3>Me</h3>
               <div className={slackey.className}>{playerRoundMessage}</div>
               {currentTurnCombo && previousPlayedCombo.length
                 ? <div>Combination: {currentTurnCombo}</div>
