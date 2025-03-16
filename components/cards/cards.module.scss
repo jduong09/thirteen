@@ -1,9 +1,13 @@
 .hand {
   display: flex;
   align-items: center;
+  overflow-x: auto;
+  width: 100%;
   > li {
     width: 50px;
-    overflow-x: hidden;
+    display: block;
+    z-index: 1;
+    background: white;
   }
   >li:last-child {
     width: auto;
