@@ -7,20 +7,19 @@
 .handBtns {
   width: 100%;
   display: flex;
+  flex-direction: column;
 }
 
 .handBtns > section {
-  width: 50%;
   display: flex;
+  width: 100%;
+  margin: 0;
+  justify-content: center;
 }
 
-.handBtns > section:first-child {
-  margin: 0 auto 0 0;
-}
-
-.handBtns > section:last-child {
-  justify-content: flex-end;
-  height: fit-content;
+.BtnsAction {
+  display: flex;
+  flex-direction: column;
 }
 
 .handBtns form {
@@ -32,7 +31,7 @@
   border: 1px solid blue;
   padding: .5rem 1rem;
   cursor: pointer;
-  margin: 1rem 1rem 0 0;
+  margin-bottom: 1rem;
 }
 
 .handBtns button:last-of-type {

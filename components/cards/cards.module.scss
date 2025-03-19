@@ -3,11 +3,12 @@
   align-items: center;
   overflow-x: auto;
   width: 100%;
+  padding: .5rem .25rem;
+  background-color: beige;
   > li {
     width: 50px;
     display: block;
     z-index: 1;
-    background: white;
   }
   >li:last-child {
     width: auto;
@@ -19,6 +20,7 @@
   width: 75px;
   height: 105px;
   border: 2px solid black;
+  background-color: white;
   border-radius: 4px;
   margin: 2px;
 }

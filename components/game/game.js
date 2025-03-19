@@ -29,6 +29,7 @@ const Game = () => {
   const [newRound, setNewRound] = useState(false);
   const [turnMessage, setTurnMessage] = useState('');
   const [gameOverClause, setGameOverClause] = useState(null);
+  const [showQty, setShowQty] = useState(false);
 
   // Build Card Deck
   const suites = ['spades', 'clubs', 'diamonds', 'hearts'];
@@ -372,6 +373,10 @@ const Game = () => {
     setCurrentTurnCombo(e.target.value);
   }
 
+  const handleShowQty = () => {
+    setShowQty(!showQty);
+  }
+
   const shuffleBtn = deckIsShuffled ? null : <button className={gameStyles.shuffleBtn} onClick={onShuffleClick}>Shuffle Deck</button>;
 
   const listAiHands = hands.reduce((result, hand) => {
@@ -387,16 +392,20 @@ const Game = () => {
     } else {
       let roundMessage;
       if (playerObj.skipped) {
-        roundMessage = 'PASSED!';
+        roundMessage = 'P';
       } else if (playerObj.roundWin) {
-        roundMessage = 'ROUND WINNER!';
+        roundMessage = 'W';
       } else {
         roundMessage = '';
       }
       return (<li className={gameStyles.aiHand} key={idx}>
         <div className={gameStyles.aiMobileHand}>
           <h3>{`Player ${playerObj.player + 1}`}</h3>
-          <div className={gameStyles.cardFaceDown}></div>
+          {roundMessage && <div className={gameStyles.roundMessage}>{roundMessage}</div>}
+          <div className={gameStyles.divMobileFaces}>
+            <div className={showQty ? gameStyles.hide : gameStyles.cardFaceDown} onClick={handleShowQty}></div>
+            <div className={showQty ? gameStyles.cardDisplay : gameStyles.hide} onClick={handleShowQty}>{playerObj.hand.length}</div>
+          </div>
         </div>
         <div className={gameStyles.handContainer}>
           <div className={gameStyles.rotateDiv}>

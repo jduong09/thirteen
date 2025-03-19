@@ -136,7 +136,7 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
             </select>
           </label>
         </section>
-        <section>
+        <section className={styles.BtnsAction}>
           <button disabled={!isMyTurn} onClick={finalizeTurn}>Finalize Turn</button>
           <button disabled={!isMyTurn} onClick={() => passTurn(playerTurn)}>Pass Turn</button>
         </section>
