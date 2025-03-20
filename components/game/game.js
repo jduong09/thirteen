@@ -471,27 +471,23 @@ const Game = () => {
               </h2>
             </div>
             {listAiHands}
-            {hands.length && hands[0].winner === true
-            ? <li><div className={slackey.className}>\o/ Winner \o/</div></li>
-            :
-            <li>
-              <h3>Me</h3>
+            {currentTurnCombo && previousPlayedCombo.length
+              ? <div>Combination: {currentTurnCombo}</div>
+              : <form>
+                  <label htmlFor='select-combo'>Combination: </label>
+                  <select id='select-combo' name='select-combo' className={gameStyles.selectCombo} onChange={changeCombo} value={currentTurnCombo}>
+                    <option value=''>--Please choose an option--</option>
+                    <option value='single'>Single</option>
+                    <option value='pair'>Pair</option>
+                    <option value='triplet'>Triplet</option>
+                    <option value='quartet'>Quartet</option>
+                    <option value='sequence'>Sequence</option>
+                    <option value='double sequence'>Double Sequence</option>
+                  </select>
+                </form>
+            }
+            <div className={gameStyles.containerUser}>
               <div className={slackey.className}>{playerRoundMessage}</div>
-              {currentTurnCombo && previousPlayedCombo.length
-                ? <div>Combination: {currentTurnCombo}</div>
-                : <form>
-                    <label htmlFor='select-combo'>Combination: </label>
-                    <select id='select-combo' name='select-combo' className={gameStyles.selectCombo} onChange={changeCombo} value={currentTurnCombo}>
-                      <option value=''>--Please choose an option--</option>
-                      <option value='single'>Single</option>
-                      <option value='pair'>Pair</option>
-                      <option value='triplet'>Triplet</option>
-                      <option value='quartet'>Quartet</option>
-                      <option value='sequence'>Sequence</option>
-                      <option value='double sequence'>Double Sequence</option>
-                    </select>
-                  </form>
-              }
               <Hand cards={hands[0].hand}
                 playerTurn={playerTurn}
                 comboIsValid={comboIsValid}
@@ -501,7 +497,7 @@ const Game = () => {
                 changeCombo={changeCombo}
                 middlePile={previousPlayedCombo}
               />
-            </li>}
+            </div>
           </div>
         </div>
       }

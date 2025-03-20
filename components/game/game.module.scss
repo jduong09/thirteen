@@ -104,7 +104,6 @@ $primary-color: #2600ff;
   padding: 1rem;
   border: 2px solid #2600ff;
   text-align: center;
-  width: fit-content;
 }
 
 .middlePile > h2 {
@@ -146,16 +145,27 @@ $primary-color: #2600ff;
     grid-row: 2 / 3;
     justify-self: end;
   }
-  > li:nth-child(5) {
+}
+
+.containerUser {
+  width: 100%;
+  grid-column: 1 / 4;
+  grid-row: 3 / 4;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  position: relative;
+  > div {
     width: 100%;
-    grid-column: 1 / 4;
-    grid-row: 3 / 4;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
   }
+}
+
+.divUserHand {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .divHand {
@@ -245,6 +255,18 @@ $primary-color: #2600ff;
 
 .hide {
   display: none !important;
+}
+
+.divSortBtns {
+  display: flex;
+  align-items: center;
+  > button {
+    width: 20px;
+    height: auto;
+  }
+  > button:first {
+    margin-right: 1rem;
+  }
 }
 
 @media (max-width: 568px) {
