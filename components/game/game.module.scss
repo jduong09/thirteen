@@ -120,11 +120,11 @@ $primary-color: #2600ff;
   width: 100%;
   display: grid;
   grid-template-columns: 15% 70% 15%;
-  grid-template-rows: 150px 750px 1fr;
+  grid-template-rows: 150px 450px 1fr;
   > .middleDiv {
     grid-column: 2 / 3;
     grid-row: 2 / 3;
-    align-self: center;
+    align-self: end;
     justify-self: center;
   }
   > li {
@@ -215,12 +215,32 @@ $primary-color: #2600ff;
   border-radius: 50%;
   font-weight: 700;
   position: absolute;
-  top: -1rem;
+  top: 0rem;
   right: -1rem;
 }
 
 .aiMobileHand {
   position: relative;
+}
+
+.winner {
+  padding: 1rem;
+  margin: -1rem;
+  background-color: yellow;
+}
+
+.star {
+  width: 20px;
+  height: auto;
+}
+
+.btnPlayAgain {
+  display: block;
+  margin: 1rem auto 0 auto;
+  width: 100%;
+  padding: 3px;
+  border: 1px solid white;
+  background: white;
 }
 
 .hide {
