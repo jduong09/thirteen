@@ -1,10 +1,13 @@
+$primary-color: #E43D12;
+
 .hand {
   display: flex;
   align-items: center;
-  overflow-x: auto;
+  overflow-x: scroll;
   width: 100%;
   padding: .5rem .25rem;
-  background-color: beige;
+  margin-bottom: 1rem;
+  scrollbar-color: $primary-color white;
   > li {
     width: 50px;
     display: block;
@@ -26,7 +29,7 @@
 }
 
 .card.selected {
-  background-color: beige;
+  background-color: $primary-color;
 }
 
 .cardTopLeft {

@@ -1,4 +1,4 @@
-$primary-color: #2600ff;
+$primary-color: #E43D12;
 
 :export {
   primaryColor: $primary-color;
@@ -89,6 +89,8 @@ $primary-color: #2600ff;
 .selectCombo {
   padding: .5rem;
   border: 1px solid #2600ff;
+  width: 100%;
+  text-align-last: center;
 }
 
 .validCombo {
@@ -162,17 +164,6 @@ $primary-color: #2600ff;
   }
 }
 
-.divUserHand {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-
-.divHand {
-  width: 100%;
-  flex: 1 100%;
-}
-
 .gameBoard > li:nth-child(2) > .handContainer, .gameBoard > li:nth-child(4) > .handContainer {
   position: relative;
   width: 130px;
@@ -207,7 +198,7 @@ $primary-color: #2600ff;
 }
 
 .cardFaceDown {
-  background-color: #2600ff;
+  background: no-repeat url("../../public/cardBackground.jpg");
 }
 
 .cardDisplay {

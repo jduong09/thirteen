@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { Slackey } from 'next/font/google';
 import gameStyles from './game.module.scss';
 import styles from "@/app/page.module.css";
-import Hand from "@/components/gameComponents/hand";
+import Hand from "@/components/hand/hand";
 import Cards from "@/components/cards/cards";
 import { dictionaryCombinations, highestValue } from '@/components/utilities/combination';
 import { mapCard, icons } from '../utilities/card';
@@ -459,7 +459,7 @@ const Game = () => {
           <div className={gameStyles.gameBoard}>
             <div className={gameStyles.middleDiv}>
               <div className={gameStyles.middlePile}>
-                <h2>Middle Pile</h2>
+                <h2>{currentTurnCombo && previousPlayedCombo.length ? `${currentTurnCombo}` : 'Middle Pile'}</h2>
                 <Cards cards={previousPlayedCombo} />
               </div>
               <h2 className={gameStyles.turnIndicator}>
@@ -471,21 +471,6 @@ const Game = () => {
               </h2>
             </div>
             {listAiHands}
-            {currentTurnCombo && previousPlayedCombo.length
-              ? <div>Combination: {currentTurnCombo}</div>
-              : <form>
-                  <label htmlFor='select-combo'>Combination: </label>
-                  <select id='select-combo' name='select-combo' className={gameStyles.selectCombo} onChange={changeCombo} value={currentTurnCombo}>
-                    <option value=''>--Please choose an option--</option>
-                    <option value='single'>Single</option>
-                    <option value='pair'>Pair</option>
-                    <option value='triplet'>Triplet</option>
-                    <option value='quartet'>Quartet</option>
-                    <option value='sequence'>Sequence</option>
-                    <option value='double sequence'>Double Sequence</option>
-                  </select>
-                </form>
-            }
             <div className={gameStyles.containerUser}>
               <div className={slackey.className}>{playerRoundMessage}</div>
               <Hand cards={hands[0].hand}

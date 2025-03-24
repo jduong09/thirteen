@@ -1,0 +1,67 @@
+$primary-color: #E43D12;
+
+.divUserHand {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  background: white;
+  border-radius: 4px;
+  > .handHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 1rem;
+    > h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: $primary-color;
+    }
+    > select {
+      border: 2px solid $primary-color;
+      padding: .25rem .5rem;
+    }
+  }
+}
+
+.divHand {
+  width: 100%;
+  flex: 1 100%;
+}
+
+.hand {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.handBtns {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  > button {
+    border: 2px solid $primary-color;
+    padding: .5rem 1rem;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    font-weight: 500;
+  }
+  > button:focus {
+    background-color: $primary-color;
+    color: white;
+  }
+}
+
+.selectCombination {
+  width: 100%;
+}
+
+.selectCombination > label {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: .5rem;
+}
