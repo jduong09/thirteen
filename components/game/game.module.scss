@@ -103,14 +103,11 @@ $primary-color: #E43D12;
 
 .middlePile {
   margin: 1rem auto;
-  padding: 1rem;
-  border: 2px solid #2600ff;
   text-align: center;
 }
 
 .middlePile > h2 {
   font-size: 1.25rem;
-  margin-bottom: 1rem;
 }
 
 .hands {
@@ -120,8 +117,8 @@ $primary-color: #E43D12;
 .gameBoard {
   width: 100%;
   display: grid;
-  grid-template-columns: 15% 70% 15%;
-  grid-template-rows: 150px 450px 1fr;
+  grid-template-columns: 10% 80% 10%;
+  grid-template-rows: 25px 375px 1fr;
   > .middleDiv {
     grid-column: 2 / 3;
     grid-row: 2 / 3;
