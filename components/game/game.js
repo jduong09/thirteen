@@ -319,7 +319,7 @@ const Game = () => {
         return (dictionaryCombinations[combination].isValid(combo) && compareCombo(previousPlayedCombo[previousPlayedCombo.length - 1].value, combo));
       }
     } else {
-      return dictionaryCombinations[combination].isValid(combo) && compareCombo(previousPlayedCombo[previousPlayedCombo.length - 1].value, combo);
+      return dictionaryCombinations[combination].isValid(combo) && compareCombo(previousPlayedCombo.length ? previousPlayedCombo[previousPlayedCombo.length - 1].value : 0, combo);
     }
   }
 
