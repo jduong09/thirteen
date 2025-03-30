@@ -1,17 +1,10 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { Slackey } from 'next/font/google';
-import gameStyles from './game.module.scss';
-import styles from "@/app/page.module.css";
+import React, { useRef, useState, useEffect } from "react";
+import gameStyles from "./game.module.scss";
+import handStyles from "../hand/hands.module.scss";
 import Hand from "@/components/hand/hand";
 import Cards from "@/components/cards/cards";
-import { dictionaryCombinations, highestValue } from '@/components/utilities/combination';
-import { mapCard, icons } from '../utilities/card';
-import { aiMoves, aiPossibleCombinations, determineHardestMove } from '../utilities/ai';
-
-const slackey = Slackey({
-  weight: '400',
-  subsets: ['latin'],
-})
+import { dictionaryCombinations, highestValue } from "@/components/utilities/combination";
+import { aiMoves, aiPossibleCombinations, determineHardestMove } from "../utilities/ai";
 
 const Game = () => {
   const [shuffledDeck, setDeck] = useState([]);
@@ -150,13 +143,13 @@ const Game = () => {
         return {
           ...playerHand,
           skipped: true,
-          roundWin: false
+          roundWin: false,
         }
       } else {
         return {
           ...playerHand,
           skipped: false,
-          roundWin: false
+          roundWin: false,
         }
       }
     }));
@@ -246,11 +239,14 @@ const Game = () => {
     shuffledDeck.forEach((card, idx) => {
       const player = idx % 4;
       tempHands[player].hand.push(card);
-      
-      if(card.number === 3 && card.suite === 'spades') {
+
+      setPlayerTurn(0);
+      /*
+      if (card.number === 3 && card.suite === 'spades') {
         setPlayerTurn(player);
         setTurnMessage(player === 0 ? 'Your Turn.' : `Player ${player + 1}'s Turn.`);
       };
+      */
     });
     setHands(tempHands);
     setNewRound(true);
@@ -405,26 +401,27 @@ const Game = () => {
   }, []).map((playerObj, idx) => {
     let roundMessage;
     if (playerObj.skipped) {
-      roundMessage = 'P';
+      roundMessage = 'PASSED!';
     } else if (playerObj.roundWin) {
-      roundMessage = 'W';
+      roundMessage = 'WINNER!';
     } else {
       roundMessage = '';
     }
     return (<li className={gameStyles.aiHand} key={idx}>
       <div className={playerObj.winner ? `${gameStyles.aiMobileHand} ${gameStyles.winner}` : gameStyles.aiMobileHand}>
         <h3>{`Player ${playerObj.player + 1}`}</h3>
+        <div className={gameStyles.divMobileFaces}>
+          <div className={showQty ? gameStyles.hide : gameStyles.cardFaceDown} onClick={handleShowQty}></div>
+          <div className={showQty ? gameStyles.cardDisplay : gameStyles.hide} onClick={handleShowQty}>{playerObj.hand.length}</div>
+        </div>
         {roundMessage &&
           <div className={gameStyles.roundMessage}>
             {playerObj.winner 
             ? <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" className={gameStyles.star}><path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"/></svg>
             : roundMessage}
           </div>}
-        <div className={gameStyles.divMobileFaces}>
-          <div className={showQty ? gameStyles.hide : gameStyles.cardFaceDown} onClick={handleShowQty}></div>
-          <div className={showQty ? gameStyles.cardDisplay : gameStyles.hide} onClick={handleShowQty}>{playerObj.hand.length}</div>
-        </div>
       </div>
+      {/*
       <div className={gameStyles.handContainer}>
         <div className={gameStyles.rotateDiv}>
           <h3>{`Player ${playerObj.player + 1}`}</h3>
@@ -432,6 +429,7 @@ const Game = () => {
           <Hand cards={playerObj.hand} player={playerObj.player} passed={playerObj.skipped} />
         </div>
       </div>
+      */}
     </li>);
   });
 
@@ -441,6 +439,8 @@ const Game = () => {
     playerRoundMessage = 'PASSED!';
   } else if (hands.length && hands[0].roundWin) {
     playerRoundMessage = 'ROUND WINNER!';
+  } else if (playerTurn === 0) {
+    playerRoundMessage = 'Your Turn';
   } else {
     playerRoundMessage = '';
   }
@@ -460,19 +460,22 @@ const Game = () => {
             <div className={gameStyles.middleDiv}>
               <div className={gameStyles.middlePile}>
                 <h2>{currentTurnCombo && previousPlayedCombo.length ? `${currentTurnCombo}` : 'Middle Pile'}</h2>
-                <Cards cards={previousPlayedCombo} />
+                {previousPlayedCombo.length ?
+                <Cards cards={previousPlayedCombo} /> :
+                <div className={gameStyles.cardFaceDown}></div>}
               </div>
+              {playerTurn !== 0 &&
               <h2 className={gameStyles.turnIndicator}>
                 {endCycleClause || 
                 <div>
                   <span>{turnMessage}</span>
                   {gameOverClause && <button className={gameStyles.btnPlayAgain} onClick={handleRestartGame}>Play Again?</button>}
                 </div>}
-              </h2>
+              </h2>}
             </div>
             {listAiHands}
             <div className={gameStyles.containerUser}>
-              <div className={slackey.className}>{playerRoundMessage}</div>
+              {playerRoundMessage && <div className={handStyles.divYourTurn}>{playerRoundMessage}</div>}
               <Hand cards={hands[0].hand}
                 playerTurn={playerTurn}
                 comboIsValid={comboIsValid}

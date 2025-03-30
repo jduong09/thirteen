@@ -1,4 +1,5 @@
 $primary-color: #E43D12;
+$secondary-color: #FFA2B6;
 
 .divUserHand {
   display: flex;
@@ -25,6 +26,15 @@ $primary-color: #E43D12;
   }
 }
 
+.divYourTurn {
+  background-color: $secondary-color;
+  color: white;
+  font-weight: 700;
+  text-align: center;
+  padding: .5rem .25rem;
+  border-radius: 4px;
+}
+
 .divHand {
   width: 100%;
   flex: 1 100%;
@@ -38,7 +48,8 @@ $primary-color: #E43D12;
 
 .handBtns {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  flex-wrap: wrap;
   padding: 1rem;
   > button {
     border: 2px solid $primary-color;
@@ -50,6 +61,10 @@ $primary-color: #E43D12;
   > button:focus {
     background-color: $primary-color;
     color: white;
+  }
+  > form {
+    flex: 1 1 100%;
+    margin-bottom: 1rem;
   }
 }
 
@@ -64,4 +79,12 @@ $primary-color: #E43D12;
   font-size: 1.25rem;
   font-weight: 700;
   margin-bottom: .5rem;
+  text-decoration: underline;
+}
+
+.selectCombo {
+  padding: .5rem;
+  border: 2px solid $primary-color;
+  width: 100%;
+  text-align-last: center;
 }

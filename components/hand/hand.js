@@ -1,7 +1,6 @@
 import {  React, useState, useEffect } from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import handStyles from "@/components/hand/hands.module.scss";
-import gameStyles from '../game/game.module.scss';
 import Cards from "@/components/cards/cards";
 
 const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo, passTurn, changeCombo, middlePile }) => {
@@ -139,8 +138,8 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
           {!middlePile.length &&
           <form>
             <p className={handStyles.selectCombination}>
-              <label htmlFor='select-combo'>Combination: </label>
-              <select id='select-combo' name='select-combo' className={gameStyles.selectCombo} onChange={changeCombo} value={currentTurnCombo}>
+              <label htmlFor='select-combo'>Combination</label>
+              <select id='select-combo' name='select-combo' className={handStyles.selectCombo} onChange={changeCombo} value={currentTurnCombo}>
                 <option value=''>--Please choose an option--</option>
                 <option value='single'>Single</option>
                 <option value='pair'>Pair</option>
