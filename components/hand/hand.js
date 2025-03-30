@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import handStyles from "@/components/hand/hands.module.scss";
 import Cards from "@/components/cards/cards";
 
-const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo, passTurn, changeCombo, middlePile }) => {
+const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo, passTurn, changeCombo, middlePile, setTurnMessage, firstTurnClause }) => {
   const [hand, setHand] = useState(cards);
   const [combo, setCombo] = useState([]);
   const [hasReset, resetCombo] = useState(false);
@@ -112,7 +112,12 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
     e.preventDefault();
 
     if (!combo.length) {
-      console.log('Hand submitted nothing, combo not sent to game component.');
+      setTurnMessage('User submitted nothing. Invalid Combo.');
+      return;
+    }
+
+    if (firstTurnClause && !combo.filter((card) => card.value === 1).length) {
+      setTurnMessage('Combo must contain 3 of Spades. Invalid Combo.');
       return;
     }
     requestCombo(combo.map((card) => { return { number: card.number, suite: card.suite, value: card.value } }), currentTurnCombo);

@@ -392,3 +392,41 @@ export const determineHardestMove = (possibleCombinations, valueToBeat) => {
     return ['single', [possibleCombinations['H'][0]]];
   }
 }
+
+
+const mockHand = [{number: 4, suite: 'clubs', value: 6, selected: false},
+{number: 9, suite: 'clubs', value: 26, selected: false},
+{number: 11, suite: 'spades', value: 33, selected: false},
+{number: 15, suite: 'spades', value: 49, selected: false},
+{number: 15, suite: 'diamonds', value: 51, selected: false},
+{number: 11, suite: 'clubs', value: 34, selected: false},
+{number: 3, suite: 'clubs', value: 2, selected: false},
+{number: 7, suite: 'clubs', value: 18, selected: false},
+{number: 3, suite: 'spades', value: 1, selected: false},
+{number: 8, suite: 'diamonds', value: 23, selected: false},
+{number: 3, suite: 'hearts', value: 4, selected: false},
+{number: 6, suite: 'clubs', value: 14, selected: false},
+{number: 7, suite: 'diamonds', value: 19, selected: false}];
+
+
+export const determineFirstMove = (hand) => {
+  const possibleMoves = aiPossibleCombinations(hand);
+  const obj = {
+    'DS': [],
+    'S': [],
+    'Q': [],
+    'T': [],
+    'P': [],
+    'H': [],
+  };
+
+  for (const combination in possibleMoves) {
+    if (combination !== 'H') {
+      possibleMoves[combination].map((move) => {
+        const findSpade = move.filter((card) => card.value === 1);
+        findSpade.length === 1 && obj[combination].push(move);
+      });
+    }
+  }
+  return determineHardestMove(obj, 0);
+}
