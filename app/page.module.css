@@ -17,6 +17,81 @@
   display: flex;
 }
 
-.header li:last-child {
+.header > nav > ul > li:last-child {
   margin-left: .5rem;
+}
+
+.rules {
+  width: 100%;
+  position: absolute;
+  z-index: 99;
+  background-color: white;
+  top: 0;
+  left: 0;
+}
+
+.cardRanks, .suitRanks, .ruleCombinations, .smashes {
+  padding: .5rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.cardRanks > span, .suitRanks > span, .ruleCombinations > span, .smashes > span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: .5rem;
+}
+
+.buttonCaret > svg {
+  width: 16px;
+  height: auto;
+  transform: rotate(270deg);
+}
+
+.buttonCaret.divOpen > svg {
+  transform: rotate(0);
+}
+
+.pageCardRank {
+  background-color: green;
+}
+
+.hide {
+  display: none !important;
+}
+
+.header h2 {
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+
+.ruleCombinations > div > div:first-child, .listCombinations {
+  margin-bottom: 1rem;
+}
+
+.listCombinations {
+  border: 1px solid #E43D12;
+  padding: 1rem;
+}
+
+.listCombinations > li {
+  margin-bottom: 1rem;
+}
+
+.listHands {
+  display: flex;
+}
+
+.listHands > li {
+  margin-right: .25rem;
+}
+
+.listHands > li:last-of-type {
+  margin-right: 0;
+}
+
+.listCombinations h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: .25rem;
 }
