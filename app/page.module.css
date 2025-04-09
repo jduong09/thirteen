@@ -30,7 +30,7 @@
   left: 0;
 }
 
-.cardRanks, .suitRanks, .ruleCombinations, .smashes {
+.cardRanks, .suitRanks, .ruleCombinations, .smashes, .gameplay {
   padding: .5rem 1rem;
   margin-bottom: 1rem;
 }
@@ -65,16 +65,16 @@
   font-size: 1.15rem;
 }
 
-.ruleCombinations > div > div:first-child, .listCombinations {
+.ruleCombinations > div > div:first-child, .listCombinations, .listSmashes, .listGameplay {
   margin-bottom: 1rem;
 }
 
-.listCombinations {
+.listCombinations, .listSmashes {
   border: 1px solid #E43D12;
   padding: 1rem;
 }
 
-.listCombinations > li {
+.listCombinations > li, .listSmashes > li {
   margin-bottom: 1rem;
 }
 
