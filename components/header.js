@@ -6,6 +6,7 @@ import NavHeader from './utilities/navHeader';
 
 const Header = () => {
   const [headerRules, setHeaderRules] = useState({ cardRank: false, suitRank: false, combinations: false, smashes: false, gameplay: false });
+  const [toggleRules, setToggleRules] = useState(false);
 
   const handleClick = (type) => {
     setHeaderRules({
@@ -19,22 +20,28 @@ const Header = () => {
       <h1>Thirteen</h1>
       <nav>
         <ul>
-          <li><button>Rules</button></li>
+          <li><button onClick={() => setToggleRules(true)}>Rules</button></li>
           <li><button>Dark Mode</button></li>
         </ul>
       </nav>
-      <div className={pageStyles.rules}>
+      <div className={toggleRules ? pageStyles.rules : pageStyles.hide}>
+        <div className={pageStyles.rulesHeader}>
+          <h2>Rules</h2>
+          <button onClick={() => setToggleRules(false)}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg>
+          </button>
+        </div>
         <div className={pageStyles.cardRanks}>
           <NavHeader handleClick={handleClick} rules={headerRules} type={'cardRank'} />
-          <div className={headerRules.cardRank ? pageStyles.listCardRank : pageStyles.hide}>2 A K Q J 10 9 8 7 6 5 4 3 2 1</div>
+          <div className={headerRules.cardRank ? `${pageStyles.listCardRank} ${pageStyles.ruleContent}` : pageStyles.hide}>2 A K Q J 10 9 8 7 6 5 4 3 2 1</div>
         </div>
         <div className={pageStyles.suitRanks}>
           <NavHeader handleClick={handleClick} rules={headerRules} type={'suitRank'} />
-          <div className={headerRules.suitRank ? pageStyles.listCardRank : pageStyles.hide}>Hearts - Diamonds - Clubs - Spades</div>
+          <div className={headerRules.suitRank ? `${pageStyles.listCardRank} ${pageStyles.ruleContent}` : pageStyles.hide}>Hearts - Diamonds - Clubs - Spades</div>
         </div>
         <div className={pageStyles.ruleCombinations}>
           <NavHeader handleClick={handleClick} rules={headerRules} type={'combinations'} />
-          <div className={headerRules.combinations ? pageStyles.listCardRank : pageStyles.hide}>
+          <div className={headerRules.combinations ? `${pageStyles.listCardRank} ${pageStyles.ruleContent}` : pageStyles.hide}>
             <div>Lead player will play valid combination, and subsequent players must follow combination or pass.</div>
             <ul className={pageStyles.listCombinations}>
               <li>
@@ -46,7 +53,7 @@ const Header = () => {
                 <div>
                   <ul className={pageStyles.listHands}>
                     <li>{`J ${icons['spades']}`}</li>
-                    <li>{`J ${icons['hearts']}`}</li>
+                    <li className={pageStyles.red}>{`J ${icons['hearts']}`}</li>
                   </ul>
                 </div>
               </li>
@@ -55,7 +62,7 @@ const Header = () => {
                 <div>
                   <ul className={pageStyles.listHands}>
                     <li>{`3 ${icons['spades']}`}</li>
-                    <li>{`3 ${icons['hearts']}`}</li>
+                    <li className={pageStyles.red}>{`3 ${icons['hearts']}`}</li>
                     <li>{`3 ${icons['clubs']}`}</li>
                   </ul>
                 </div>
@@ -65,9 +72,9 @@ const Header = () => {
                 <div>
                   <ul className={pageStyles.listHands}>
                     <li>{`4 ${icons['spades']}`}</li>
-                    <li>{`4 ${icons['hearts']}`}</li>
+                    <li className={pageStyles.red}>{`4 ${icons['hearts']}`}</li>
                     <li>{`4 ${icons['clubs']}`}</li>
-                    <li>{`4 ${icons['diamonds']}`}</li>
+                    <li className={pageStyles.red}>{`4 ${icons['diamonds']}`}</li>
                   </ul>
                 </div>
               </li>
@@ -100,7 +107,7 @@ const Header = () => {
         </div>
         <div className={pageStyles.smashes}>
           <NavHeader handleClick={handleClick} rules={headerRules} type={'smashes'} />
-          <div className={headerRules.smashes ? pageStyles.listCardRank : pageStyles.hide}>
+          <div className={headerRules.smashes ? `${pageStyles.listCardRank} ${pageStyles.ruleContent}` : pageStyles.hide}>
             <div>Smashes can be used when the previous player has played a single, pair or triplet of 2s.</div>
             <ul className={pageStyles.listSmashes}>
               <li>
@@ -108,7 +115,7 @@ const Header = () => {
                 <div>
                   <ul className={pageStyles.listHands}>
                     <li>{`7 ${icons['spades']}`}</li>
-                    <li>{`7 ${icons['hearts']}`}</li>
+                    <li className={pageStyles.red}>{`7 ${icons['hearts']}`}</li>
                     <li>{`8 ${icons['clubs']}`}</li>
                     <li>{`8 ${icons['spades']}`}</li>
                     <li>{`9 ${icons['spades']}`}</li>
@@ -116,9 +123,9 @@ const Header = () => {
                   </ul>
                   <ul className={pageStyles.listHands}>
                     <li>{`7 ${icons['spades']}`}</li>
-                    <li>{`7 ${icons['hearts']}`}</li>
+                    <li className={pageStyles.red}>{`7 ${icons['hearts']}`}</li>
                     <li>{`7 ${icons['clubs']}`}</li>
-                    <li>{`7 ${icons['diamonds']}`}</li>
+                    <li className={pageStyles.red}>{`7 ${icons['diamonds']}`}</li>
                   </ul>
                 </div>
               </li>
@@ -127,7 +134,7 @@ const Header = () => {
                 <div>
                   <ul className={pageStyles.listHands}>
                     <li>{`10 ${icons['spades']}`}</li>
-                    <li>{`10 ${icons['hearts']}`}</li>
+                    <li className={pageStyles.red}>{`10 ${icons['hearts']}`}</li>
                     <li>{`J ${icons['clubs']}`}</li>
                     <li>{`J ${icons['spades']}`}</li>
                     <li>{`Q ${icons['spades']}`}</li>
@@ -137,9 +144,9 @@ const Header = () => {
                   </ul>
                   <ul className={pageStyles.listHands}>
                     <li>{`5 ${icons['spades']}`}</li>
-                    <li>{`5 ${icons['hearts']}`}</li>
+                    <li className={pageStyles.red}>{`5 ${icons['hearts']}`}</li>
                     <li>{`5 ${icons['clubs']}`}</li>
-                    <li>{`5 ${icons['diamonds']}`}</li>
+                    <li className={pageStyles.red}>{`5 ${icons['diamonds']}`}</li>
                   </ul>
                 </div>
               </li>
@@ -148,7 +155,7 @@ const Header = () => {
                 <div>
                   <ul className={pageStyles.listHands}>
                     <li>{`3 ${icons['spades']}`}</li>
-                    <li>{`3 ${icons['hearts']}`}</li>
+                    <li className={pageStyles.red}>{`3 ${icons['hearts']}`}</li>
                     <li>{`4 ${icons['clubs']}`}</li>
                     <li>{`4 ${icons['spades']}`}</li>
                     <li>{`5 ${icons['spades']}`}</li>
@@ -166,7 +173,7 @@ const Header = () => {
           </div>
           <div className={pageStyles.gameplay}>
             <NavHeader handleClick={handleClick} rules={headerRules} type={'gameplay'} />
-            <div className={headerRules.gameplay ? pageStyles.listCardRank : pageStyles.hide}>
+            <div className={headerRules.gameplay ? `${pageStyles.listCardRank} ${pageStyles.ruleContent}` : pageStyles.hide}>
               <ul className={pageStyles.listGameplay}>
                 <li>
                   <h3>Leading</h3>
@@ -186,6 +193,7 @@ const Header = () => {
           </div>
         </div>
       </div>
+      <div className={toggleRules ? pageStyles.background : pageStyles.hide}></div>
     </header>
   )
 };
