@@ -145,6 +145,15 @@
   margin-bottom: .25rem;
 }
 
+.headerCard {
+  width: fit-content;
+  height: auto;
+  border: 2px solid black;
+  padding: .75rem .25rem;
+  border-radius: 4px;
+}
+
 .red {
   color: red;
+  border-color: red;
 }
