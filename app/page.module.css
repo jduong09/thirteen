@@ -79,6 +79,11 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 99;
+  background-color: #EBE9E1;
 }
 
 .rulesHeader > h2 {
@@ -155,5 +160,48 @@
 
 .red {
   color: red;
-  border-color: red;
+}
+
+.listGameplay h3 {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #E43D12;
+  margin-bottom: .25rem;
+}
+
+.listGameplay > li {
+  margin-bottom: 1rem;
+}
+
+.listGameplay > li:last-of-type {
+  margin-bottom: 0;
+}
+
+.following > div {
+  margin-bottom: .5rem;
+}
+
+.followingComparison {
+  display: flex;
+  padding: .5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.followingComparison > ul:first-of-type, .followingComparison:last-of-type > div:first-of-type {
+  margin-right: .5rem;
+}
+
+.followingComparison > ul:last-of-type, .followingComparison:last-of-type > div:last-of-type {
+  margin-left: .5rem;
+}
+
+.following b {
+  font-weight: 700;
+}
+
+.following .inlineCard {
+  display: inline-flex;
+  width: fit-content;
+  color: red;
 }

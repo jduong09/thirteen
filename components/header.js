@@ -177,13 +177,30 @@ const Header = () => {
               <ul className={pageStyles.listGameplay}>
                 <li>
                   <h3>Leading</h3>
-                  <div>The first turn of the game will go to the player with the 3 of Spades. That player MUST play a hand containing the 3 of Spades. In following hands, the player with lead can play any combination they choose.</div>
+                  <div>The first turn of the game will go to the player with the <span className={pageStyles.inlineCard}>{`J ${icons['clubs']}`}</span>. That player MUST play a hand containing the <span className={pageStyles.inlineCard}>{`J ${icons['clubs']}`}</span>. In following turns the player with lead can play any combination they choose.</div>
                 </li>
-                <li>
+                <li className={pageStyles.following}>
                   <h3>Following</h3>
                   <div>During a player's turn, they can pass or play, based on if they have a combination of cards that strictly match the combination type of the middle pile. The key is to match the combination type, and have the highest card of the hand be higher value than the middle pile's highest card.</div>
-                  <div>A triplet can only be beaten by a triplet, where <ul className={pageStyles.listHands}><li className={pageStyles.headerCard}>{`5 ${icons['spades']}`}</li><li className={`${pageStyles.red} ${pageStyles.headerCard}`}>{`5 ${icons['hearts']}`}</li><li className={pageStyles.headerCard}>{`5 ${icons['clubs']}`}</li></ul> beats <ul className={pageStyles.listHands}><li className={pageStyles.headerCard}>{`3 ${icons['spades']}`}</li><li className={`${pageStyles.red} ${pageStyles.headerCard}`}>{`3 ${icons['hearts']}`}</li><li className={pageStyles.headerCard}>{`3 ${icons['clubs']}`}</li></ul></div> because <div className={`${pageStyles.red} ${pageStyles.headerCard}`}>{`5 ${icons['hearts']}`}</div> &gt; <div className={`${pageStyles.red} ${pageStyles.headerCard}`}>{`3 ${icons['hearts']}`}</div>
-                  <div>The exception to the strictly matching of combinations is the use of smashes.</div>
+                  <div>The example below has the first hand beating the second because the <span className={pageStyles.inlineCard}>{`5 ${icons['hearts']}`}</span> is higher value than <span className={pageStyles.inlineCard}>{`3 ${icons['hearts']}`}</span>
+                    <div className={pageStyles.followingComparison}>
+                      <ul className={pageStyles.listHands}>
+                        <li className={pageStyles.headerCard}>{`5 ${icons['spades']}`}</li>
+                        <li className={pageStyles.headerCard}>{`5 ${icons['clubs']}`}</li>
+                        <li className={`${pageStyles.red} ${pageStyles.headerCard}`}>{`5 ${icons['hearts']}`}</li>
+                      </ul> &gt; 
+                      <ul className={pageStyles.listHands}>
+                        <li className={pageStyles.headerCard}>{`3 ${icons['spades']}`}</li>
+                        <li className={pageStyles.headerCard}>{`3 ${icons['clubs']}`}</li>
+                        <li className={`${pageStyles.red} ${pageStyles.headerCard}`}>{`3 ${icons['hearts']}`}</li>
+                        </ul>
+                    </div>
+                    <div className={pageStyles.followingComparison}>
+                      <div className={`${pageStyles.red} ${pageStyles.headerCard}`}>{`5 ${icons['hearts']}`}</div> &gt;
+                      <div className={`${pageStyles.red} ${pageStyles.headerCard}`}>{`3 ${icons['hearts']}`}</div>
+                    </div>
+                  </div>
+                  <div><b>NOTE:</b> The exception to the strictly matching of combinations is the use of smashes.</div>
                 </li>
                 <li>
                   <h3>Round Over and Game Over</h3>
