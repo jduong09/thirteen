@@ -2,8 +2,9 @@ import {  React, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import handStyles from "@/components/hand/hands.module.scss";
 import Cards from "@/components/cards/cards";
+import { determineCombination } from "../utilities/combination";
 
-const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo, passTurn, changeCombo, middlePile, setTurnMessage, firstTurnClause }) => {
+const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, passTurn, changeCombo, setTurnMessage, firstTurnClause }) => {
   const [hand, setHand] = useState(cards);
   const [combo, setCombo] = useState([]);
   const [hasReset, resetCombo] = useState(false);
@@ -116,11 +117,20 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
       return;
     }
 
+    /* Commented Out so we can test that determineCombination function is working.
     if (firstTurnClause && !combo.filter((card) => card.value === 1).length) {
       setTurnMessage('Combo must contain 3 of Spades. Invalid Combo.');
       return;
     }
-    requestCombo(combo.map((card) => { return { number: card.number, suite: card.suite, value: card.value } }), currentTurnCombo);
+    */
+
+    const validCombo = determineCombination(combo);
+    if (validCombo) {
+      changeCombo(validCombo);
+      requestCombo(combo.map((card) => { return { number: card.number, suite: card.suite, value: card.value } }), validCombo);
+    } else {
+      return;
+    }
     resetHand();
   }
 
@@ -128,7 +138,7 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
   return (
     <div className={handStyles.divUserHand}>
       <div className={handStyles.handHeader}>
-        <h3>Me</h3>
+        <h3>Your Hand</h3>
         <select disabled={!isMyTurn} onChange={(e) => {sortPlayerCards(e.target.value)}} className={handStyles.select} defaultValue={'default'}>
           <option value="default" disabled>Sort Cards...</option>
           <option value="groups">Groups</option>
@@ -140,23 +150,8 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
         {comboIsValid === false && <div>Invalid Combo. Try a different combo or press Change Combo Type.</div>}
         {isMyTurn &&
         <div className={handStyles.handBtns}>
-          {!middlePile.length &&
-          <form>
-            <p className={handStyles.selectCombination}>
-              <label htmlFor='select-combo'>Combination</label>
-              <select id='select-combo' name='select-combo' className={handStyles.selectCombo} onChange={changeCombo} value={currentTurnCombo}>
-                <option value=''>--Please choose an option--</option>
-                <option value='single'>Single</option>
-                <option value='pair'>Pair</option>
-                <option value='triplet'>Triplet</option>
-                <option value='quartet'>Quartet</option>
-                <option value='sequence'>Sequence</option>
-                <option value='double sequence'>Double Sequence</option>
-              </select>
-            </p>
-          </form>}
-          <button disabled={!isMyTurn} onClick={finalizeTurn}>Finalize Turn</button>
-          <button disabled={!isMyTurn} onClick={() => passTurn(playerTurn)}>Pass Turn</button>
+          <button disabled={!isMyTurn} onClick={finalizeTurn}>Play</button>
+          <button disabled={!isMyTurn} onClick={() => passTurn(playerTurn)}>Pass</button>
         </div>}
       </div>
     </div>

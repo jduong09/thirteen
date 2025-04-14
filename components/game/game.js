@@ -245,10 +245,14 @@ const Game = () => {
       const player = idx % 4;
       tempHands[player].hand.push(card);
 
+      /*
       if (card.number === 3 && card.suite === 'spades') {
         setPlayerTurn(player);
         setTurnMessage(player === 0 ? 'Your Turn.' : `Player ${player + 1}'s Turn.`);
       };
+      */
+     setPlayerTurn(0);
+     setTurnMessage('Your Turn.');
     });
 
     setHands(tempHands);
@@ -397,9 +401,9 @@ const Game = () => {
     }, 2500);
   }
 
-  const changeCombo = (e) => {
-    setComboSelect(e.target.value);
-    setCurrentTurnCombo(e.target.value);
+  const changeCombo = (combo) => {
+    setComboSelect(combo);
+    setCurrentTurnCombo(combo);
   }
 
   const handleShowQty = () => {
@@ -473,8 +477,6 @@ const Game = () => {
     playerRoundMessage = 'PASSED!';
   } else if (hands.length && hands[0].roundWin) {
     playerRoundMessage = 'ROUND WINNER!';
-  } else if (playerTurn === 0) {
-    playerRoundMessage = 'Your Turn';
   } else {
     playerRoundMessage = '';
   }
@@ -493,19 +495,19 @@ const Game = () => {
           <div className={gameStyles.gameBoard}>
             <div className={gameStyles.middleDiv}>
               <div className={gameStyles.middlePile}>
-                <h2>{currentTurnCombo && previousPlayedCombo.length ? `${currentTurnCombo}` : 'Middle Pile'}</h2>
+                <h2>{currentTurnCombo && previousPlayedCombo.length ? '' : 'Middle Pile'}</h2>
                 {previousPlayedCombo.length ?
                 <Cards cards={previousPlayedCombo} /> :
                 <div className={gameStyles.cardFaceDown}></div>}
               </div>
-              {playerTurn !== 0 &&
+              
               <h2 className={gameStyles.turnIndicator}>
                 {endCycleClause || 
                 <div>
                   <span>{turnMessage}</span>
                   {gameOverClause && <button className={gameStyles.btnPlayAgain} onClick={handleRestartGame}>Play Again?</button>}
                 </div>}
-              </h2>}
+              </h2>
             </div>
             {listAiHands}
             <div className={gameStyles.containerUser}>

@@ -90,3 +90,46 @@ export const highestValue = (combo) => {
   return result;
 };
 
+export const determineCombination = (hand) => {
+  console.log(hand);
+  if (hand.length === 13 || hand.length === 11 || hand.length === 9 || hand.length === 7 || hand.length === 5) {
+    if (dictionaryCombinations['sequence'].isValid(hand)) {
+      return 'sequence';
+    } else {
+      false;
+    }
+  } else if (hand.length === 12 || hand.length === 10 || hand.length === 8 || hand.length === 6) {
+    if (dictionaryCombinations['sequence'].isValid(hand)) {
+      return 'sequence';
+    } else if (dictionaryCombinations['double sequence'].isValid(hand)) {
+      return 'double sequence';
+    } else {
+      return false;
+    }
+  } else if (hand.length === 4) {
+    if (dictionaryCombinations['sequence'].isValid(hand)) {
+      return 'sequence';
+    } else if (dictionaryCombinations['quartet'].isValid(hand)) {
+      return 'quartet';
+    } else {
+      return false;
+    }
+  } else if (hand.length === 3) {
+    if (dictionaryCombinations['sequence'].isValid(hand)) {
+      return 'sequence';
+    } else if (dictionaryCombinations['triplet'].isValid(hand)) {
+      return 'triplet';
+    } else {
+      return false;
+    }
+  } else if (hand.length === 2) {
+    if (dictionaryCombinations['pair'].isValid(hand)) {
+      return 'pair'
+    } else {
+      return false;
+    }
+  } else {
+    return 'single';
+  }
+}
+
