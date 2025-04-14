@@ -512,14 +512,13 @@ const Game = () => {
             {listAiHands}
             <div className={gameStyles.containerUser}>
               {playerRoundMessage && <div className={handStyles.divYourTurn}>{playerRoundMessage}</div>}
-              <Hand cards={hands[0].hand}
+              <Hand 
+                cards={hands[0].hand}
                 playerTurn={playerTurn}
                 comboIsValid={comboIsValid}
                 requestCombo={requestCombo}
-                currentTurnCombo={currentTurnCombo}
                 passTurn={passTurn}
                 changeCombo={changeCombo}
-                middlePile={previousPlayedCombo}
                 setTurnMessage={setTurnMessage}
                 firstTurnClause={firstTurnClause}
               />
