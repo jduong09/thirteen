@@ -126,7 +126,7 @@ $tertiary-color: #D6536D;
   width: 100%;
   display: grid;
   grid-template-columns: 10% 80% 10%;
-  grid-template-rows: min-content 200px 1fr;
+  grid-template-rows: 165px 175px 1fr;
   > .middleDiv {
     grid-column: 2 / 3;
     grid-row: 2 / 3;
