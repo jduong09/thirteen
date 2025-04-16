@@ -15,6 +15,29 @@ const Header = () => {
     });
   }
 
+  const cardElem = ([num, suit], key) => {
+    let elemClass = pageStyles.headerCard;
+    if(['hearts', 'diamonds'].includes(suit)) {
+      elemClass = `${pageStyles.red} ${pageStyles.headerCard}`;
+    } else {
+      elemClass = `${pageStyles.headerCard}`;
+    }
+    return <li key={key} className={elemClass}>{`${num} ${icons[suit]}`}</li>
+  }
+
+  const listPair = [['J', 'spades'], ['J', 'hearts']].map((ele, i) => cardElem(ele, i));
+  const listTriplet = [['3', 'spades'], ['3', 'hearts'], ['3', 'clubs']].map((ele, i) => cardElem(ele, i));
+  const listQuartet = [['4', 'spades'], ['4', 'hearts'], ['4', 'clubs'], ['4', 'diamonds']].map((ele, i) => cardElem(ele, i));
+  const listSequence = [['3', 'spades'], ['4', 'spades'], ['5', 'clubs']].map((ele, i) => cardElem(ele, i));
+  const listDoubleSequence = [['7', 'spades'], ['7', 'hearts'], ['8', 'clubs'], ['8', 'spades'], ['9', 'spades'], ['9', 'clubs']].map((ele, i) => cardElem(ele, i));
+  const listSmashOne = [['7', 'spades'], ['7', 'hearts'], ['8', 'clubs'], ['8', 'spades'], ['9', 'spades'], ['9', 'clubs']].map((ele, i) => cardElem(ele, i));
+  const listSmashTwo = [['7', 'spades'], ['7', 'hearts'], ['7', 'clubs'], ['7', 'diamonds']].map((ele, i) => cardElem(ele, i));
+  const listSmashThree = [['10', 'spades'], ['10', 'hearts'], ['J', 'clubs'], ['J', 'spades'], ['Q', 'spades'], ['Q', 'clubs'], ['K', 'spades'], ['K', 'clubs']].map((ele, i) => cardElem(ele, i));
+  const listSmashFour = [['5', 'spades'], ['5', 'hearts'], ['5', 'clubs'], ['5', 'diamonds']].map((ele, i) => cardElem(ele, i));
+  const listSmashFive = [['3', 'spades'], ['3', 'hearts'], ['4', 'clubs'], ['4', 'spades'], ['5', 'spades'], ['5', 'clubs'], ['6', 'spades'], ['6', 'clubs'], ['7', 'spades'], ['7', 'clubs']].map((ele, i) => cardElem(ele, i));
+  const listGameplayOne = [['5', 'spades'], ['5', 'hearts'], ['5', 'clubs']].map((ele, i) => cardElem(ele, i));
+  const listGameplayTwo = [['3', 'spades'], ['3', 'hearts'], ['3', 'clubs']].map((ele, i) => cardElem(ele, i));
+
   return (
     <header className={pageStyles.header}>
       <h1>Thirteen</h1>
@@ -51,58 +74,35 @@ const Header = () => {
               <li>
                 <h3>Pair</h3>
                 <div>
-                  <ul className={pageStyles.listHands}>
-                    <li className={pageStyles.headerCard}>{`J ${icons['spades']}`}</li>
-                    <li className={`${pageStyles.red} ${pageStyles.headerCard}`}>{`J ${icons['hearts']}`}</li>
-                  </ul>
+                  <ul className={pageStyles.listHands}>{listPair}</ul>
                 </div>
               </li>
               <li>
                 <h3>Three of a Kind</h3>
                 <div>
-                  <ul className={pageStyles.listHands}>
-                    <li className={pageStyles.headerCard}>{`3 ${icons['spades']}`}</li>
-                    <li className={`${pageStyles.red} ${pageStyles.headerCard}`}>{`3 ${icons['hearts']}`}</li>
-                    <li className={pageStyles.headerCard}>{`3 ${icons['clubs']}`}</li>
-                  </ul>
+                  <ul className={pageStyles.listHands}>{listTriplet}</ul>
                 </div>
               </li>
               <li>
                 <h3>Four of a Kind</h3>
                 <div>
-                  <ul className={pageStyles.listHands}>
-                    <li className={pageStyles.headerCard}>{`4 ${icons['spades']}`}</li>
-                    <li className={`${pageStyles.red} ${pageStyles.headerCard}`}>{`4 ${icons['hearts']}`}</li>
-                    <li className={pageStyles.headerCard}>{`4 ${icons['clubs']}`}</li>
-                    <li className={`${pageStyles.red} ${pageStyles.headerCard}`}>{`4 ${icons['diamonds']}`}</li>
-                  </ul>
+                  <ul className={pageStyles.listHands}>{listQuartet}</ul>
                 </div>
               </li>
               <li>
                 <h3>Sequence (3 or More Cards)</h3>
                 <div>
-                  <ul className={pageStyles.listHands}>
-                    <li className={pageStyles.headerCard}>{`3 ${icons['spades']}`}</li>
-                    <li className={pageStyles.headerCard}>{`4 ${icons['spades']}`}</li>
-                    <li className={pageStyles.headerCard}>{`5 ${icons['clubs']}`}</li>
-                  </ul>
+                  <ul className={pageStyles.listHands}>{listSequence}</ul>
                 </div>
               </li>
               <li>
                 <h3>Double Sequence (3 or More Pairs of Cards)</h3>
                 <div>
-                  <ul className={pageStyles.listHands}>
-                    <li className={pageStyles.headerCard}>{`7 ${icons['spades']}`}</li>
-                    <li className={`${pageStyles.red} ${pageStyles.headerCard}`}>{`7 ${icons['hearts']}`}</li>
-                    <li className={pageStyles.headerCard}>{`8 ${icons['clubs']}`}</li>
-                    <li className={pageStyles.headerCard}>{`8 ${icons['spades']}`}</li>
-                    <li className={pageStyles.headerCard}>{`9 ${icons['spades']}`}</li>
-                    <li className={pageStyles.headerCard}>{`9 ${icons['clubs']}`}</li>
-                  </ul>
+                  <ul className={pageStyles.listHands}>{listDoubleSequence}</ul>
                 </div>
               </li>
             </ul>
-            <div>Note: To beat someone's combination, the highest card in challenger's combination must beat the previous played highest card.</div>
+            <div><b>NOTE:</b> To beat someone's combination, the highest card in challenger's combination must beat the previous played highest card.</div>
           </div>
         </div>
         <div className={pageStyles.smashes}>
@@ -113,62 +113,25 @@ const Header = () => {
               <li>
                 <h3>A single 2 can be beaten by a double sequence of 3+ pairs or a quartet</h3>
                 <div>
-                  <ul className={pageStyles.listHands}>
-                    <li className={pageStyles.headerCard}>{`7 ${icons['spades']}`}</li>
-                    <li className={`${pageStyles.red} ${pageStyles.headerCard}`}>{`7 ${icons['hearts']}`}</li>
-                    <li className={pageStyles.headerCard}>{`8 ${icons['clubs']}`}</li>
-                    <li className={pageStyles.headerCard}>{`8 ${icons['spades']}`}</li>
-                    <li className={pageStyles.headerCard}>{`9 ${icons['spades']}`}</li>
-                    <li className={pageStyles.headerCard}>{`9 ${icons['clubs']}`}</li>
-                  </ul>
-                  <ul className={pageStyles.listHands}>
-                    <li className={pageStyles.headerCard}>{`7 ${icons['spades']}`}</li>
-                    <li className={`${pageStyles.red} ${pageStyles.headerCard}`}>{`7 ${icons['hearts']}`}</li>
-                    <li className={pageStyles.headerCard}>{`7 ${icons['clubs']}`}</li>
-                    <li className={`${pageStyles.red} ${pageStyles.headerCard}`}>{`7 ${icons['diamonds']}`}</li>
-                  </ul>
+                  <ul className={pageStyles.listHands}>{listSmashOne}</ul>
+                  <ul className={pageStyles.listHands}>{listSmashTwo}</ul>
                 </div>
               </li>
               <li>
                 <h3>A pair of 2s can be beaten by a double sequence of 4+ pairs or a quartet</h3>
                 <div>
-                  <ul className={pageStyles.listHands}>
-                    <li className={pageStyles.headerCard}>{`10 ${icons['spades']}`}</li>
-                    <li className={`${pageStyles.red} ${pageStyles.headerCard}`}>{`10 ${icons['hearts']}`}</li>
-                    <li className={pageStyles.headerCard}>{`J ${icons['clubs']}`}</li>
-                    <li className={pageStyles.headerCard}>{`J ${icons['spades']}`}</li>
-                    <li className={pageStyles.headerCard}>{`Q ${icons['spades']}`}</li>
-                    <li className={pageStyles.headerCard}>{`Q ${icons['clubs']}`}</li>
-                    <li className={pageStyles.headerCard}>{`K ${icons['spades']}`}</li>
-                    <li className={pageStyles.headerCard}>{`K ${icons['clubs']}`}</li>
-                  </ul>
-                  <ul className={pageStyles.listHands}>
-                    <li className={pageStyles.headerCard}>{`5 ${icons['spades']}`}</li>
-                    <li className={`${pageStyles.red} ${pageStyles.headerCard}`}>{`5 ${icons['hearts']}`}</li>
-                    <li className={pageStyles.headerCard}>{`5 ${icons['clubs']}`}</li>
-                    <li className={`${pageStyles.red} ${pageStyles.headerCard}`}>{`5 ${icons['diamonds']}`}</li>
-                  </ul>
+                  <ul className={pageStyles.listHands}>{listSmashThree}</ul>
+                  <ul className={pageStyles.listHands}>{listSmashFour}</ul>
                 </div>
               </li>
               <li>
                 <h3>A triplet of 2s can only be beaten by a double sequence of 5+ pairs</h3>
                 <div>
-                  <ul className={pageStyles.listHands}>
-                    <li className={pageStyles.headerCard}>{`3 ${icons['spades']}`}</li>
-                    <li className={`${pageStyles.red} ${pageStyles.headerCard}`}>{`3 ${icons['hearts']}`}</li>
-                    <li className={pageStyles.headerCard}>{`4 ${icons['clubs']}`}</li>
-                    <li className={pageStyles.headerCard}>{`4 ${icons['spades']}`}</li>
-                    <li className={pageStyles.headerCard}>{`5 ${icons['spades']}`}</li>
-                    <li className={pageStyles.headerCard}>{`5 ${icons['clubs']}`}</li>
-                    <li className={pageStyles.headerCard}>{`6 ${icons['spades']}`}</li>
-                    <li className={pageStyles.headerCard}>{`6 ${icons['clubs']}`}</li>
-                    <li className={pageStyles.headerCard}>{`7 ${icons['spades']}`}</li>
-                    <li className={pageStyles.headerCard}>{`7 ${icons['clubs']}`}</li>
-                  </ul>
+                  <ul className={pageStyles.listHands}>{listSmashFive}</ul>
                 </div>
               </li>
             </ul>
-            <div>NOTE: Once a smash has been played, its combination type becomes what needs to be beaten by the next player.</div>
+            <div><b>NOTE:</b> Once a smash has been played, its combination type becomes what needs to be beaten by the next player.</div>
           </div>
           </div>
           <div className={pageStyles.gameplay}>
@@ -184,16 +147,8 @@ const Header = () => {
                   <div>During a player's turn, they can pass or play, based on if they have a combination of cards that strictly match the combination type of the middle pile. The key is to match the combination type, and have the highest card of the hand be higher value than the middle pile's highest card.</div>
                   <div>The example below has the first hand beating the second because the <span className={pageStyles.inlineCard}>{`5 ${icons['hearts']}`}</span> is higher value than <span className={pageStyles.inlineCard}>{`3 ${icons['hearts']}`}</span>
                     <div className={pageStyles.followingComparison}>
-                      <ul className={pageStyles.listHands}>
-                        <li className={pageStyles.headerCard}>{`5 ${icons['spades']}`}</li>
-                        <li className={pageStyles.headerCard}>{`5 ${icons['clubs']}`}</li>
-                        <li className={`${pageStyles.red} ${pageStyles.headerCard}`}>{`5 ${icons['hearts']}`}</li>
-                      </ul> &gt; 
-                      <ul className={pageStyles.listHands}>
-                        <li className={pageStyles.headerCard}>{`3 ${icons['spades']}`}</li>
-                        <li className={pageStyles.headerCard}>{`3 ${icons['clubs']}`}</li>
-                        <li className={`${pageStyles.red} ${pageStyles.headerCard}`}>{`3 ${icons['hearts']}`}</li>
-                        </ul>
+                      <ul className={pageStyles.listHands}>{listGameplayOne}</ul> &gt; 
+                      <ul className={pageStyles.listHands}>{listGameplayTwo}</ul>
                     </div>
                     <div className={pageStyles.followingComparison}>
                       <div className={`${pageStyles.red} ${pageStyles.headerCard}`}>{`5 ${icons['hearts']}`}</div> &gt;
