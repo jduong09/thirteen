@@ -407,6 +407,10 @@ export const determineFirstMove = (hand) => {
         const findSpade = move.filter((card) => card.value === 1);
         findSpade.length === 1 && obj[combination].push(move);
       });
+    } else {
+      possibleMoves['H'].find((card) => {
+        card.value === 1 && obj['H'].push(card);
+      })
     }
   }
   return determineHardestMove(obj, 0);

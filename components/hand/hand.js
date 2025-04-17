@@ -117,12 +117,11 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, passTurn, changeC
       return;
     }
 
-    /* Commented Out so we can test that determineCombination function is working.
+    // Commented Out so we can test that determineCombination function is working.
     if (firstTurnClause && !combo.filter((card) => card.value === 1).length) {
       setTurnMessage('Combo must contain 3 of Spades. Invalid Combo.');
       return;
     }
-    */
 
     const validCombo = determineCombination(combo);
     if (validCombo) {
@@ -134,7 +133,6 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, passTurn, changeC
     resetHand();
   }
 
-  // Line 122: Removed sentence 'Try a different combo or pass' and replaced with 'Try a different combo or press Change Combo Type' for this PR specifically.
   return (
     <div className={handStyles.divUserHand}>
       <div className={handStyles.handHeader}>
