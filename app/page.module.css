@@ -124,11 +124,6 @@
   border-radius: 2px;
 }
 
-.listCombinations, .listSmashes {
-  border: 1px solid #E43D12;
-  padding: 1rem;
-}
-
 .listCombinations > li, .listSmashes > li {
   margin-bottom: 1rem;
 }
