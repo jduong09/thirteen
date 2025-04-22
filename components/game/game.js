@@ -506,7 +506,8 @@ const Game = () => {
             </div>
             {listAiHands}
             <div className={gameStyles.containerUser}>
-              {playerRoundMessage && <div className={handStyles.divYourTurn}>{playerRoundMessage}</div>}
+              {(playerTurn === 0 && playerRoundMessage) && <div className={handStyles.divYourTurn}>{playerRoundMessage}</div>}
+              {(playerTurn !== 0 && hands[0].skipped) && <div className={gameStyles.badgePassed}>P</div>}
               <Hand 
                 cards={hands[0].hand}
                 playerTurn={playerTurn}

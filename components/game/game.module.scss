@@ -244,6 +244,12 @@ $tertiary-color: #D6536D;
   font-weight: 700;
 }
 
+.containerUser > .badgePassed {
+  width: fit-content;
+  right: 0;
+  font-size: 1.15rem;
+}
+
 .winner {
   padding: 1rem;
   margin: -1rem;
