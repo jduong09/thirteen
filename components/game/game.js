@@ -507,8 +507,9 @@ const Game = () => {
             {listAiHands}
             <div className={gameStyles.containerUser}>
               {(playerTurn === 0 && playerRoundMessage) && <div className={handStyles.divYourTurn}>{playerRoundMessage}</div>}
-              {(playerTurn !== 0 && hands[0].skipped) && <div className={gameStyles.badgePassed}>P</div>}
               <Hand 
+                skipped={hands[0].skipped}
+                player={0}
                 cards={hands[0].hand}
                 playerTurn={playerTurn}
                 comboIsValid={comboIsValid}
