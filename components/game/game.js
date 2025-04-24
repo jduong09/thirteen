@@ -455,8 +455,6 @@ const Game = () => {
       {/*
       <div className={gameStyles.handContainer}>
         <div className={gameStyles.rotateDiv}>
-          <h3>{`Player ${playerObj.player + 1}`}</h3>
-          <div className={slackey.className}>{roundMessage}</div>
           <Hand cards={playerObj.hand} player={playerObj.player} passed={playerObj.skipped} />
         </div>
       </div>
@@ -507,8 +505,9 @@ const Game = () => {
             {listAiHands}
             <div className={gameStyles.containerUser}>
               {(playerTurn === 0 && playerRoundMessage) && <div className={handStyles.divYourTurn}>{playerRoundMessage}</div>}
-              {(playerTurn !== 0 && hands[0].skipped) && <div className={gameStyles.badgePassed}>P</div>}
-              <Hand 
+              <Hand
+                skipped={hands[0].skipped}
+                player={0}
                 cards={hands[0].hand}
                 playerTurn={playerTurn}
                 comboIsValid={comboIsValid}

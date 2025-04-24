@@ -4,7 +4,7 @@ import handStyles from "@/components/hand/hands.module.scss";
 import Cards from "@/components/cards/cards";
 import { determineCombination } from "../utilities/combination";
 
-const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, passTurn, changeCombo, setTurnMessage, firstTurnClause }) => {
+const Hand = ({ skipped, player, cards, playerTurn, comboIsValid, requestCombo, passTurn, changeCombo, setTurnMessage, firstTurnClause }) => {
   const [hand, setHand] = useState(cards);
   const [combo, setCombo] = useState([]);
   const [hasReset, resetCombo] = useState(false);
@@ -136,12 +136,14 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, passTurn, changeC
   return (
     <div className={handStyles.divUserHand}>
       <div className={handStyles.handHeader}>
-        <h3>Your Hand</h3>
+        <h3>{player === 0 ? 'Your Hand' : `Player ${player + 1}`}</h3>
+        {(playerTurn !== player && skipped) && <div className={handStyles.badgePassed}>P</div>}
+        {player === 0 &&
         <select disabled={!isMyTurn} onChange={(e) => {sortPlayerCards(e.target.value)}} className={handStyles.select} defaultValue={'default'}>
-          <option value="default" disabled>Sort Cards...</option>
+          <option value="default" disabled>Sort...</option>
           <option value="groups">Groups</option>
           <option value="value">Strength of Card</option>
-        </select>
+        </select>}
       </div>
       <div className={handStyles.divHand}>
         <Cards cards={hand} selectCard={selectCard} />

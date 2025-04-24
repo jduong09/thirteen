@@ -178,13 +178,11 @@ $tertiary-color: #D6536D;
 .gameBoard > li:nth-child(2) .rotateDiv, .gameBoard > li:nth-child(4) .rotateDiv {
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: 90%;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   transform-origin: top left;
-  padding: 1rem;
-  background-color: rgb(253, 207, 207);
 }
 
 .gameBoard > li:nth-child(2) .rotateDiv {
@@ -193,6 +191,7 @@ $tertiary-color: #D6536D;
 
 .gameBoard > li:nth-child(4) .rotateDiv {
   transform: rotate(-90deg) translate(-50%, -50%);
+  left: 14%;
 }
 
 .cardFaceDown, .cardDisplay {
@@ -286,10 +285,38 @@ $tertiary-color: #D6536D;
   }
 }
 
-@media (max-width: 568px) {
-   .handContainer {
+@media (min-width: 568px) {
+}
+
+@media (max-width: 586px) {
+  .handContainer {
     display: none;
-   }
+  }
+}
+
+@media (min-width: 1024px) {
+  .gameBoard {
+    grid-template-columns: 20% 60% 20%;
+    grid-template-rows: 200px 200px 1fr;
+  }
+
+  .gameBoard > li:nth-child(2) {
+    grid-column: 1 / 2;
+  }
+
+  .gameBoard > li:nth-child(4) {
+    grid-column: 3 / 4;
+  }
+
+  .containerUser {
+    grid-column: 2 / 3;
+  }
+
+  .gameBoard > li:nth-child(2) > .handContainer, .gameBoard > li:nth-child(4) > .handContainer {
+    position: relative;
+    width: 130px;
+    height: 400px;
+  }  
 }
 
 /* Width Height for Hand in Tablet/Desktop View

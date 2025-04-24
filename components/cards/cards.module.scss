@@ -57,3 +57,16 @@ $primary-color: #E43D12;
 .cardBottomRight > span {
   transform: rotate(180deg);
 }
+
+@media (min-width: 1024px) {
+  .hand {
+    padding: 1rem 0 1rem 1rem;
+    margin-bottom: 0;
+    > li {
+      width: 30px;
+    }
+    > li:last-child {
+      margin-right: 1rem;
+    }
+  }
+}
