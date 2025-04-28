@@ -1,4 +1,4 @@
-$primary-color: #E43D12;
+$primary-color: #e43d12;
 $secondary-color: #FFA2B6;
 $tertiary-color: #D6536D;
 
@@ -141,6 +141,8 @@ $tertiary-color: #D6536D;
     grid-column: 2 / 3;
     grid-row: 1 / 2;
     justify-self: start;
+    left: -30px;
+    top: 30px;
   }
   > li:nth-child(3) {
     grid-column: 2 / 3;
@@ -151,6 +153,8 @@ $tertiary-color: #D6536D;
     grid-column: 2 / 3;
     grid-row: 1 / 2;
     justify-self: end;
+    right: -30px;
+    top: 30px;
   }
 }
 
@@ -223,24 +227,37 @@ $tertiary-color: #D6536D;
   color: white;
 }
 
+
 .aiMobileHand {
   position: relative;
-  > h3 {
-    font-weight: 700;
-    color: $primary-color;
-    font-size: 1.05rem;
-    margin-bottom: .5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #e43d122e;
+  padding: .25rem;
+  > .aiHandHeader {
+    width: 100%;
+    display: flex;
+    > h3 {
+      font-weight: 700;
+      color: $primary-color;
+      font-size: 1.05rem;
+      margin-bottom: .5rem;
+      margin-right: 1rem;
+      align-self: center;
+    }
   }
 }
 
 .badgePassed {
-  position: absolute;
-  top: -10px;
-  right: -15px;
   border: 2px solid black;
   border-radius: 50%;
   padding: .25rem;
   font-weight: 700;
+}
+
+.hideBadge {
+  opacity: .25;
 }
 
 .containerUser > .badgePassed {

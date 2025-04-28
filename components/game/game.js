@@ -439,8 +439,10 @@ const Game = () => {
     }
     return (<li className={gameStyles.aiHand} key={idx}>
       <div className={playerObj.winner ? `${gameStyles.aiMobileHand} ${gameStyles.winner}` : gameStyles.aiMobileHand}>
-        <h3>{`Player ${playerObj.player + 1}`}</h3>
-        {(playerObj.skipped && playerTurn !== playerObj.player) && <div className={gameStyles.badgePassed}>P</div>}
+        <div className={gameStyles.aiHandHeader}>
+          <h3>{`Player ${playerObj.player + 1}`}</h3>
+          {<div className={`${(playerTurn !== playerObj.player && playerObj.skipped) ? `${gameStyles.badgePassed}` : `${gameStyles.badgePassed} ${gameStyles.hideBadge}`}`}>P</div>}
+        </div>
         <div className={gameStyles.divMobileFaces}>
           <div className={showQty ? gameStyles.hide : gameStyles.cardFaceDown} onClick={handleShowQty}></div>
           <div className={showQty ? gameStyles.cardDisplay : gameStyles.hide} onClick={handleShowQty}>{playerObj.hand.length}</div>
@@ -488,7 +490,6 @@ const Game = () => {
           <div className={gameStyles.gameBoard}>
             <div className={gameStyles.middleDiv}>
               <div className={gameStyles.middlePile}>
-                <h2>{currentTurnCombo && previousPlayedCombo.length ? '' : 'Middle Pile'}</h2>
                 {previousPlayedCombo.length ?
                 <Cards cards={previousPlayedCombo} /> :
                 <div className={gameStyles.cardFaceDown}></div>}
