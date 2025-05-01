@@ -440,10 +440,10 @@ const Game = () => {
     return (<li className={gameStyles.aiHand} key={idx}>
       <div className={playerObj.winner ? `${gameStyles.aiMobileHand} ${gameStyles.winner}` : gameStyles.aiMobileHand}>
         <h3>{`Player ${playerObj.player + 1}`}</h3>
-        {(playerObj.skipped && playerTurn !== playerObj.player) && <div className={gameStyles.badgePassed}>P</div>}
         <div className={gameStyles.divMobileFaces}>
           <div className={showQty ? gameStyles.hide : gameStyles.cardFaceDown} onClick={handleShowQty}></div>
           <div className={showQty ? gameStyles.cardDisplay : gameStyles.hide} onClick={handleShowQty}>{playerObj.hand.length}</div>
+          {(playerObj.skipped && playerTurn !== playerObj.player) && <div className={gameStyles.badgePassed}>P</div>}
         </div>
         {(roundMessage && playerTurn === playerObj.player) &&
           <div className={gameStyles.roundMessage}>

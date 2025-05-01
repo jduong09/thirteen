@@ -141,16 +141,16 @@ const Hand = ({ skipped, player, cards, playerTurn, comboIsValid, requestCombo, 
         <select disabled={!isMyTurn} onChange={(e) => {sortPlayerCards(e.target.value)}} className={handStyles.select} defaultValue={'default'}>
           <option value="default" disabled>Sort...</option>
           <option value="groups">Groups</option>
-          <option value="value">Strength of Card</option>
+          <option value="value">Strength</option>
         </select>
       </div>
       <div className={handStyles.divHand}>
         <Cards cards={hand} selectCard={selectCard} />
-        {comboIsValid === false && <div>Invalid Combo. Try a different combo or press Change Combo Type.</div>}
+        {comboIsValid === false && <div className={handStyles.invalidCombo}>Invalid Combo. Try a different combo or press Change Combo Type.</div>}
         {isMyTurn &&
         <div className={handStyles.handBtns}>
-          <button disabled={!isMyTurn} onClick={finalizeTurn}>Play</button>
           <button disabled={!isMyTurn} onClick={() => passTurn(playerTurn)}>Pass</button>
+          <button disabled={!isMyTurn} onClick={finalizeTurn}>Play</button>
         </div>}
       </div>
     </div>
