@@ -233,7 +233,6 @@ $tertiary-color: #D6536D;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #e43d122e;
   padding: .25rem;
   > .aiHandHeader {
     width: 100%;
@@ -311,6 +310,21 @@ $tertiary-color: #D6536D;
   }
 }
 
+@media (min-width: 767px) {
+  .containerUser {
+    width: 80%;
+    margin: 0 auto;
+  }
+
+  .gameBoard > li:nth-child(2) {
+    top: 45px;
+  }
+
+  .gameBoard > li:nth-child(4) {
+    top: 45px;
+  }
+}
+
 @media (min-width: 1024px) {
   .gameBoard {
     grid-template-columns: 20% 60% 20%;
@@ -332,6 +346,7 @@ $tertiary-color: #D6536D;
   }
 
   .containerUser {
+    width: 100%;
     grid-column: 2 / 3;
   }
 
