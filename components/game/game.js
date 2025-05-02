@@ -11,7 +11,6 @@ import { aiMoves, aiPossibleCombinations, determineHardestMove, determineFirstMo
  * For Testing Purposes on this branch specifically
  * @description variables used to manipulate previousPlayedCombo 
 */
-ß
 const Game = () => {
   const [shuffledDeck, setDeck] = useState([]);
   const [deckIsShuffled, shuffleDeck] = useState(false);
