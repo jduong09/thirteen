@@ -6,6 +6,10 @@ import Cards from "@/components/cards/cards";
 import { dictionaryCombinations, highestValue } from '@/components/utilities/combination';
 import { aiMoves, aiPossibleCombinations, determineHardestMove, determineFirstMove } from '../utilities/ai';
 
+/** 
+ * For Testing Purposes on this branch specifically
+ * @description variables used to manipulate previousPlayedCombo 
+*/
 const Game = () => {
   const [shuffledDeck, setDeck] = useState([]);
   const [deckIsShuffled, shuffleDeck] = useState(false);
