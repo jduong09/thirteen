@@ -128,8 +128,14 @@ const Hand = ({ skipped, player, cards, playerTurn, comboIsValid, requestCombo, 
       changeCombo(validCombo);
       requestCombo(combo.map((card) => { return { number: card.number, suite: card.suite, value: card.value } }), validCombo);
     } else {
+      setTurnMessage('Invalid Combo. Submit new combo or pass.');
       return;
     }
+    resetHand();
+  }
+
+  const pass = () => {
+    passTurn(playerTurn);
     resetHand();
   }
 
@@ -149,7 +155,7 @@ const Hand = ({ skipped, player, cards, playerTurn, comboIsValid, requestCombo, 
         {comboIsValid === false && <div className={handStyles.invalidCombo}>Invalid Combo. Try a different combo or press Change Combo Type.</div>}
         {isMyTurn &&
         <div className={handStyles.handBtns}>
-          <button disabled={!isMyTurn} onClick={() => passTurn(playerTurn)}>Pass</button>
+          <button disabled={!isMyTurn} onClick={pass}>Pass</button>
           <button disabled={!isMyTurn} onClick={finalizeTurn}>Play</button>
         </div>}
       </div>
