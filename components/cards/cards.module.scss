@@ -51,7 +51,7 @@ $primary-color: #E43D12;
 }
 
 .cardTopLeft.red, .cardBottomRight.red {
-  color: red;
+  color: red !important;
 }
 
 .cardBottomRight > span {

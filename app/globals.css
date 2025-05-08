@@ -18,7 +18,7 @@ time, mark, audio, video, button, a {
 	font: inherit;
 	vertical-align: baseline;
 	box-sizing: border-box;
-	color: black;
+	color: inherit;
 }
 
 button {
