@@ -118,6 +118,9 @@ $tertiary-color: #D6536D;
   > ul, .cardFaceDown {
     margin: 0 auto;
   }
+  > ul {
+    justify-content: center;
+  }
 }
 
 .hands {
