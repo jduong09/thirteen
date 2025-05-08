@@ -25,6 +25,7 @@ button {
 	border: 0;
 	outline: none;
 	cursor: pointer;
+	color: black;
 }
 
 a {
