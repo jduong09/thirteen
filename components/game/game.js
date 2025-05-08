@@ -6,6 +6,10 @@ import Cards from "@/components/cards/cards";
 import { dictionaryCombinations, highestValue } from '@/components/utilities/combination';
 import { aiMoves, aiPossibleCombinations, determineHardestMove, determineFirstMove } from '../utilities/ai';
 
+/** 
+ * For Testing Purposes on this branch specifically
+ * @description variables used to manipulate previousPlayedCombo 
+*/
 const Game = () => {
   const [shuffledDeck, setDeck] = useState([]);
   const [deckIsShuffled, shuffleDeck] = useState(false);
@@ -439,13 +443,11 @@ const Game = () => {
     }
     return (<li className={gameStyles.aiHand} key={idx}>
       <div className={playerObj.winner ? `${gameStyles.aiMobileHand} ${gameStyles.winner}` : gameStyles.aiMobileHand}>
-        <div className={gameStyles.aiHandHeader}>
-          <h3>{`Player ${playerObj.player + 1}`}</h3>
-          {<div className={`${(playerTurn !== playerObj.player && playerObj.skipped) ? `${gameStyles.badgePassed}` : `${gameStyles.badgePassed} ${gameStyles.hideBadge}`}`}>P</div>}
-        </div>
+        <h3>{`Player ${playerObj.player + 1}`}</h3>
         <div className={gameStyles.divMobileFaces}>
           <div className={showQty ? gameStyles.hide : gameStyles.cardFaceDown} onClick={handleShowQty}></div>
           <div className={showQty ? gameStyles.cardDisplay : gameStyles.hide} onClick={handleShowQty}>{playerObj.hand.length}</div>
+          {(playerObj.skipped && playerTurn !== playerObj.player) && <div className={gameStyles.badgePassed}>P</div>}
         </div>
         {(roundMessage && playerTurn === playerObj.player) &&
           <div className={gameStyles.roundMessage}>
@@ -498,15 +500,14 @@ const Game = () => {
               <h2 className={gameStyles.turnIndicator}>
                 {endCycleClause || 
                 <div>
-                  <span>{turnMessage}</span>
+                  <span className={gameStyles.turnMessage}>{turnMessage}</span>
                   {gameOverClause && <button className={gameStyles.btnPlayAgain} onClick={handleRestartGame}>Play Again?</button>}
                 </div>}
               </h2>
             </div>
             {listAiHands}
             <div className={gameStyles.containerUser}>
-              {(playerTurn === 0 && playerRoundMessage) && <div className={handStyles.divYourTurn}>{playerRoundMessage}</div>}
-              <Hand
+              <Hand 
                 skipped={hands[0].skipped}
                 player={0}
                 cards={hands[0].hand}

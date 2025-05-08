@@ -102,7 +102,7 @@ const Header = () => {
                 </div>
               </li>
             </ul>
-            <div><b>NOTE:</b> To beat someone's combination, the highest card in challenger's combination must beat the previous played highest card.</div>
+            <div><b>NOTE:</b> To beat someone&apos;s combination, the highest card in challenger&apos;s combination must beat the previous played highest card.</div>
           </div>
         </div>
         <div className={pageStyles.smashes}>
@@ -144,7 +144,7 @@ const Header = () => {
                 </li>
                 <li className={pageStyles.following}>
                   <h3>Following</h3>
-                  <div>During a player's turn, they can pass or play, based on if they have a combination of cards that strictly match the combination type of the middle pile. The key is to match the combination type, and have the highest card of the hand be higher value than the middle pile's highest card.</div>
+                  <div>During a player&apos;s turn, they can pass or play, based on if they have a combination of cards that strictly match the combination type of the middle pile. The key is to match the combination type, and have the highest card of the hand be higher value than the middle pile&apos;s highest card.</div>
                   <div>The example below has the first hand beating the second because the <span className={pageStyles.inlineCard}>{`5 ${icons['hearts']}`}</span> is higher value than <span className={pageStyles.inlineCard}>{`3 ${icons['hearts']}`}</span>
                     <div className={pageStyles.followingComparison}>
                       <ul className={pageStyles.listHands}>{listGameplayOne}</ul> &gt; 

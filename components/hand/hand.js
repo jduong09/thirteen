@@ -113,13 +113,13 @@ const Hand = ({ skipped, player, cards, playerTurn, comboIsValid, requestCombo, 
     e.preventDefault();
 
     if (!combo.length) {
-      setTurnMessage('User submitted nothing. Invalid Combo.');
+      setTurnMessage('Submit a Combo.');
       return;
     }
 
     // Commented Out so we can test that determineCombination function is working.
     if (firstTurnClause && !combo.filter((card) => card.value === 1).length) {
-      setTurnMessage('Combo must contain 3 of Spades. Invalid Combo.');
+      setTurnMessage('Combo must contain 3 of Spades.');
       return;
     }
 
@@ -128,30 +128,34 @@ const Hand = ({ skipped, player, cards, playerTurn, comboIsValid, requestCombo, 
       changeCombo(validCombo);
       requestCombo(combo.map((card) => { return { number: card.number, suite: card.suite, value: card.value } }), validCombo);
     } else {
+      setTurnMessage('Invalid Combo. Try again or pass.');
       return;
     }
+    resetHand();
+  }
+
+  const pass = () => {
+    passTurn(playerTurn);
     resetHand();
   }
 
   return (
     <div className={handStyles.divUserHand}>
       <div className={handStyles.handHeader}>
-        <h3>{player === 0 ? 'Your Hand' : `Player ${player + 1}`}</h3>
+        <h3>Your Hand</h3>
         {(playerTurn !== player && skipped) && <div className={handStyles.badgePassed}>P</div>}
-        {player === 0 &&
-        <select disabled={!isMyTurn} onChange={(e) => {sortPlayerCards(e.target.value)}} className={handStyles.select} defaultValue={'default'}>
+        <select onChange={(e) => {sortPlayerCards(e.target.value)}} className={handStyles.select} defaultValue={'default'}>
           <option value="default" disabled>Sort...</option>
           <option value="groups">Groups</option>
-          <option value="value">Strength of Card</option>
-        </select>}
+          <option value="value">Strength</option>
+        </select>
       </div>
       <div className={handStyles.divHand}>
         <Cards cards={hand} selectCard={selectCard} />
-        {comboIsValid === false && <div>Invalid Combo. Try a different combo or press Change Combo Type.</div>}
         {isMyTurn &&
         <div className={handStyles.handBtns}>
+          <button disabled={!isMyTurn} onClick={pass}>Pass</button>
           <button disabled={!isMyTurn} onClick={finalizeTurn}>Play</button>
-          <button disabled={!isMyTurn} onClick={() => passTurn(playerTurn)}>Pass</button>
         </div>}
       </div>
     </div>

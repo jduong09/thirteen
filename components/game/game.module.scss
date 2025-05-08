@@ -108,6 +108,8 @@ $tertiary-color: #D6536D;
 .middlePile {
   margin: 1rem auto;
   text-align: center;
+  width: 100%;
+  overflow-x: auto;
   > h2 {
     font-size: 1.25rem;
     font-weight: 700;
@@ -115,6 +117,9 @@ $tertiary-color: #D6536D;
   }
   > ul, .cardFaceDown {
     margin: 0 auto;
+  }
+  > ul {
+    justify-content: center;
   }
 }
 
@@ -126,12 +131,13 @@ $tertiary-color: #D6536D;
   width: 100%;
   display: grid;
   grid-template-columns: 10% 80% 10%;
-  grid-template-rows: 165px 175px 1fr;
+  grid-template-rows: 165px 110px 1fr;
   > .middleDiv {
     grid-column: 2 / 3;
     grid-row: 2 / 3;
     align-self: center;
     justify-self: center;
+    width: 100%;
   }
   > li {
     position: relative;
@@ -227,32 +233,30 @@ $tertiary-color: #D6536D;
   color: white;
 }
 
-
-.aiMobileHand {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: .25rem;
-  > .aiHandHeader {
-    width: 100%;
-    display: flex;
-    > h3 {
-      font-weight: 700;
-      color: $primary-color;
-      font-size: 1.05rem;
-      margin-bottom: .5rem;
-      margin-right: 1rem;
-      align-self: center;
-    }
-  }
+.turnMessage {
+  color: white;
 }
 
-.badgePassed {
-  border: 2px solid black;
-  border-radius: 50%;
-  padding: .25rem;
-  font-weight: 700;
+.aiMobileHand {
+  > h3 {
+    font-weight: 700;
+    color: $primary-color;
+    font-size: 1.05rem;
+    margin-bottom: .5rem;
+  }
+  > .divMobileFaces {
+    position: relative;
+    > .badgePassed {
+      position: absolute;
+      top: 0;
+      right: 0;
+      border: 2px solid black;
+      border-top-right-radius: 4px;
+      padding: .25rem;
+      font-weight: 700;
+      background-color: #fff;
+    }
+  }
 }
 
 .hideBadge {
