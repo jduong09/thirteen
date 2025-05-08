@@ -113,13 +113,13 @@ const Hand = ({ skipped, player, cards, playerTurn, comboIsValid, requestCombo, 
     e.preventDefault();
 
     if (!combo.length) {
-      setTurnMessage('User submitted nothing. Invalid Combo.');
+      setTurnMessage('Submit a Combo.');
       return;
     }
 
     // Commented Out so we can test that determineCombination function is working.
     if (firstTurnClause && !combo.filter((card) => card.value === 1).length) {
-      setTurnMessage('Combo must contain 3 of Spades. Invalid Combo.');
+      setTurnMessage('Combo must contain 3 of Spades.');
       return;
     }
 
@@ -128,7 +128,7 @@ const Hand = ({ skipped, player, cards, playerTurn, comboIsValid, requestCombo, 
       changeCombo(validCombo);
       requestCombo(combo.map((card) => { return { number: card.number, suite: card.suite, value: card.value } }), validCombo);
     } else {
-      setTurnMessage('Invalid Combo. Submit new combo or pass.');
+      setTurnMessage('Invalid Combo. Try again or pass.');
       return;
     }
     resetHand();
@@ -152,7 +152,6 @@ const Hand = ({ skipped, player, cards, playerTurn, comboIsValid, requestCombo, 
       </div>
       <div className={handStyles.divHand}>
         <Cards cards={hand} selectCard={selectCard} />
-        {comboIsValid === false && <div className={handStyles.invalidCombo}>Invalid Combo. Try a different combo or press Change Combo Type.</div>}
         {isMyTurn &&
         <div className={handStyles.handBtns}>
           <button disabled={!isMyTurn} onClick={pass}>Pass</button>
