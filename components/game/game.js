@@ -1,10 +1,9 @@
-import gameStyles from './game.module.scss';
-import styles from "@/app/page.module.css";
-import React, { useState, useEffect } from 'react';
-import Hand from "@/components/gameComponents/hand";
+import React, { useRef, useState, useEffect } from "react";
+import gameStyles from "./game.module.scss";
+import handStyles from "../hand/hands.module.scss";
+import Hand from "@/components/hand/hand";
 import Cards from "@/components/cards/cards";
 import { dictionaryCombinations, highestValue } from '@/components/utilities/combination';
-import { mapCard, icons } from '../utilities/card';
 import { aiMoves, aiPossibleCombinations, determineHardestMove, determineFirstMove } from '../utilities/ai';
 
 /** 
@@ -27,6 +26,7 @@ const Game = () => {
   const [newRound, setNewRound] = useState(false);
   const [turnMessage, setTurnMessage] = useState('');
   const [gameOverClause, setGameOverClause] = useState(null);
+  const [showQty, setShowQty] = useState(false);
   const [firstTurnClause, setFirstTurnClause] = useState(true);
 
   // Build Card Deck
@@ -51,13 +51,13 @@ const Game = () => {
      */
     const checkWinner = hands.filter(player => player.hand.length === 0);
 
-    if (checkWinner.length === 3) {
+    if (checkWinner.length === 1) {
       setGameOverClause(true);
       return;
     }
 
     /**
-     * @description End logic if hand has won 
+     * @description End logic if hand has no cards, declared winner (Up to 3 people can win, 1 person loses)
      * 
      */
     if (checkWinner.length === 1 && checkWinner[0].winner === false) {
@@ -72,8 +72,6 @@ const Game = () => {
      * NOTE: THIS IS STRICTLY FOR TESTING
      */
     let checkEndCycle = hands.filter(hand => hand.skipped !== true);
-    // if checkEndCycle is true after checking all hands for skipped property
-    // do not run AI logic.
     if (checkEndCycle.length === 1 && checkEndCycle[0].player === playerTurn) {
       setEndCycleClause(`Player ${checkEndCycle[0].player + 1} wins the round.`);
       return;
@@ -88,11 +86,22 @@ const Game = () => {
   }, [playerTurn, newRound]);
 
   useEffect(() => {
+    let checkEndCycle = hands.filter(hand => hand.skipped !== true);
     if (endCycleClause) {
+      setHands(hands.map(playerHand => {
+        if (checkEndCycle[0].player === playerHand.player)  {
+          return {
+            ...playerHand,
+            roundWin: true,
+          }
+        } else {
+          return playerHand;
+        }
+      }));
       setTimeout(() => restartRound(), 5000);
       console.log(`\n\nPLAYER ${playerTurn + 1} HAS WON ROUND! STARTING NEW ROUND IN 5 SECONDS...`);
     }
-  }, [endCycleClause, previousPlayedCombo, currentTurnCombo, selectCombo, hands]);
+  }, [endCycleClause, previousPlayedCombo, currentTurnCombo, selectCombo]);
 
   useEffect(() => {
     if (winnerClause === null) {
@@ -111,9 +120,8 @@ const Game = () => {
 
   useEffect(() => {
     if (gameOverClause) {
-      let loser = hands.filter(player => player.winner === false);
-      console.log(`Player ${loser[0].player + 1} loses!`);
-      setTurnMessage(`Player ${loser[0].player + 1} loses!`);
+      let winner = hands.filter(player => player.winner === true);
+      setTurnMessage(`Player ${winner[0].player + 1} wins!`);
     }
   }, [gameOverClause])
 
@@ -122,7 +130,7 @@ const Game = () => {
       console.log(`\n\nPLAYER ${playerTurn + 1} HAS WON! STARTING NEW ROUND IN 7 SECONDS...`);
       setTimeout(() => {
         changeTurn();
-        restartRound()
+        restartRound();
       }, 7500);
     }
   }, [hands]);
@@ -139,12 +147,14 @@ const Game = () => {
       if (playerHand.winner === true)  {
         return {
           ...playerHand,
-          skipped: true
+          skipped: true,
+          roundWin: false,
         }
       } else {
         return {
           ...playerHand,
-          skipped: false
+          skipped: false,
+          roundWin: false,
         }
       }
     }));
@@ -226,20 +236,19 @@ const Game = () => {
     showIntro(true);
 
     const tempHands = [
-      {player: 0, hand: [], skipped: false, winner: false},
-      {player: 1, hand: [], skipped: false, winner: false},
-      {player: 2, hand: [], skipped: false, winner: false},
-      {player: 3, hand: [], skipped: false, winner: false},
+      {player: 0, hand: [], skipped: false, winner: false, roundWin: false},
+      {player: 1, hand: [], skipped: false, winner: false, roundWin: false},
+      {player: 2, hand: [], skipped: false, winner: false, roundWin: false},
+      {player: 3, hand: [], skipped: false, winner: false, roundWin: false},
     ];
     shuffledDeck.forEach((card, idx) => {
       const player = idx % 4;
       tempHands[player].hand.push(card);
-      
-      if(card.number === 3 && card.suite === 'spades') {
+
+      if (card.number === 3 && card.suite === 'spades') {
         setPlayerTurn(player);
         setTurnMessage(player === 0 ? 'Your Turn.' : `Player ${player + 1}'s Turn.`);
       };
-      
     });
 
     setHands(tempHands);
@@ -310,7 +319,7 @@ const Game = () => {
         return (dictionaryCombinations[combination].isValid(combo) && compareCombo(previousPlayedCombo[previousPlayedCombo.length - 1].value, combo));
       }
     } else {
-      return dictionaryCombinations[combination].isValid(combo) && compareCombo(previousPlayedCombo[previousPlayedCombo.length - 1].value, combo);
+      return dictionaryCombinations[combination].isValid(combo) && compareCombo(previousPlayedCombo.length ? previousPlayedCombo[previousPlayedCombo.length - 1].value : 0, combo);
     }
   }
 
@@ -388,9 +397,32 @@ const Game = () => {
     }, 2500);
   }
 
-  const changeCombo = (e) => {
-    setComboSelect(e.target.value);
-    setCurrentTurnCombo(e.target.value);
+  const changeCombo = (combo) => {
+    setComboSelect(combo);
+    setCurrentTurnCombo(combo);
+  }
+
+  const handleShowQty = () => {
+    setShowQty(!showQty);
+  }
+
+  const handleRestartGame = () => {
+    setDeck(shuffle(deck));
+    shuffleDeck(false);
+    showIntro(false);
+    setPlayerTurn(0);
+    setHands([]);
+    setComboStatus(null);
+    setCurrentTurnCombo('');
+    setCurrentTurnLength(1);
+    setPreviousPlayedCombo([]);
+    setComboSelect('');
+    setEndCycleClause(null);
+    setWinnerClause(null);
+    setNewRound(false);
+    setTurnMessage('');
+    setGameOverClause(null);
+    setShowQty(false);
   }
 
   const shuffleBtn = deckIsShuffled ? null : <button className={gameStyles.shuffleBtn} onClick={onShuffleClick}>Shuffle Deck</button>;
@@ -401,13 +433,54 @@ const Game = () => {
     }
     return result;
   }, []).map((playerObj, idx) => {
-    return (<li key={idx}>
-      <h3>{`Player ${playerObj.player + 1} Hand:`}</h3>
-      <Hand cards={playerObj.hand} player={playerObj.player} />
-    </li>)
+    let roundMessage;
+    if (playerObj.skipped) {
+      roundMessage = 'PASSED!';
+    } else if (playerObj.roundWin) {
+      roundMessage = 'WINNER!';
+    } else {
+      roundMessage = '';
+    }
+    return (<li className={gameStyles.aiHand} key={idx}>
+      <div className={playerObj.winner ? `${gameStyles.aiMobileHand} ${gameStyles.winner}` : gameStyles.aiMobileHand}>
+        <h3>{`Player ${playerObj.player + 1}`}</h3>
+        <div className={gameStyles.divMobileFaces}>
+          <div className={showQty ? gameStyles.hide : gameStyles.cardFaceDown} onClick={handleShowQty}></div>
+          <div className={showQty ? gameStyles.cardDisplay : gameStyles.hide} onClick={handleShowQty}>{playerObj.hand.length}</div>
+          {(playerObj.skipped && playerTurn !== playerObj.player) && <div className={gameStyles.badgePassed}>P</div>}
+        </div>
+        {(roundMessage && playerTurn === playerObj.player) &&
+          <div className={gameStyles.roundMessage}>
+            {playerObj.winner 
+            ? <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" className={gameStyles.star}><path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"/></svg>
+            : roundMessage}
+          </div>}
+      </div>
+      {/*
+      <div className={gameStyles.handContainer}>
+        <div className={gameStyles.rotateDiv}>
+          <h3>{`Player ${playerObj.player + 1}`}</h3>
+          <div className={slackey.className}>{roundMessage}</div>
+          <Hand cards={playerObj.hand} player={playerObj.player} passed={playerObj.skipped} />
+        </div>
+      </div>
+      */}
+    </li>);
   });
+
+  let playerRoundMessage;
+
+  if (hands.length && hands[0].winner) {
+    playerRoundMessage = 'WINNER!';
+  } else if (hands.length && hands[0].skipped) {
+    playerRoundMessage = 'PASSED!';
+  } else if (hands.length && hands[0].roundWin) {
+    playerRoundMessage = 'ROUND WINNER!';
+  } else {
+    playerRoundMessage = '';
+  }
   return (
-    <game>
+    <div>
       {introIsVisible
         ? <div className={gameStyles.intro}>
           <p className={gameStyles.fade5}>Starting game.</p>
@@ -417,39 +490,42 @@ const Game = () => {
         : shuffleBtn}
 
       {deckIsShuffled &&
-        <div>
-          <h2 className={gameStyles.turnIndicator}>{endCycleClause || <div><span>{turnMessage}</span></div>}</h2>
-          <h2>{selectCombo ? `Select a combo that fits ${selectCombo}.` : 'Choose Combination Type'}</h2>
-          {listAiHands}
-          <h3>Your Hand:</h3>
-          <Hand cards={hands[0].hand}
-            playerTurn={playerTurn}
-            comboIsValid={comboIsValid}
-            requestCombo={requestCombo}
-            currentTurnCombo={currentTurnCombo}
-            passTurn={passTurn}
-            setTurnMessage={setTurnMessage}
-            firstTurnClause={firstTurnClause}
-          />
-          <form>
-            <label htmlFor='select-combo'>Combination: </label>
-            <select id='select-combo' name='select-combo' className={gameStyles.selectCombo} onChange={changeCombo} value={currentTurnCombo}>
-              <option value=''>--Please choose an option--</option>
-              <option value='single'>Single</option>
-              <option value='pair'>Pair</option>
-              <option value='triplet'>Triplet</option>
-              <option value='quartet'>Quartet</option>
-              <option value='sequence'>Sequence</option>
-              <option value='double sequence'>Double Sequence</option>
-            </select>
-          </form>
-          <div className={gameStyles.middlePile}>
-            <h2>Middle Pile</h2>
-            <Cards cards={previousPlayedCombo} />
+        <div className={gameStyles.gameDiv}>
+          <div className={gameStyles.gameBoard}>
+            <div className={gameStyles.middleDiv}>
+              <div className={gameStyles.middlePile}>
+                {previousPlayedCombo.length ?
+                <Cards cards={previousPlayedCombo} /> :
+                <div className={gameStyles.cardFaceDown}></div>}
+              </div>
+              
+              <h2 className={gameStyles.turnIndicator}>
+                {endCycleClause || 
+                <div>
+                  <span>{turnMessage}</span>
+                  {gameOverClause && <button className={gameStyles.btnPlayAgain} onClick={handleRestartGame}>Play Again?</button>}
+                </div>}
+              </h2>
+            </div>
+            {listAiHands}
+            <div className={gameStyles.containerUser}>
+              <Hand 
+                skipped={hands[0].skipped}
+                player={0}
+                cards={hands[0].hand}
+                playerTurn={playerTurn}
+                comboIsValid={comboIsValid}
+                requestCombo={requestCombo}
+                passTurn={passTurn}
+                changeCombo={changeCombo}
+                setTurnMessage={setTurnMessage}
+                firstTurnClause={firstTurnClause}
+              />
+            </div>
           </div>
         </div>
       }
-    </game>
+    </div>
   );
 };
 

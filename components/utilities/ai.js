@@ -326,26 +326,8 @@ const getLowestCombination = (possibleCombinations, valueToBeat) => {
   }, possibleCombinations[0]);
 }
 
-// Hierachy of function logic
-// 13 sequence
-// 12 sequence
-// double sequence (12 cards)
-// 11 sequence
-// 10 sequence
-// double sequence (10 cards)
-// 9 sequence
-// 8 sequence
-// double sequence (8 cards)
-// 7 sequence
-// 6 sequence
-// double sequence (6 cards)
-// quartet
-// three of a kind
-// 5 sequeence straight
-// 4 sequence straight
-// pair
-// 3 sequence straight
-// high card
+//Hierachy of function logic
+// 13 sequence > 12 sequence > double sequence (12 cards) > 11 sequence > 10 sequence > double sequence (10 cards) > 9 sequence > 8 sequence > double sequence (8 cards) > 7 sequence > 6 sequence > double sequence (6 cards) > quartet > three of a kind > 5 sequence straight > 4 sequence straight > pair > 3 sequence straight > high card
 export const determineHardestMove = (possibleCombinations, valueToBeat) => {
   if (possibleCombinations['S'].length && possibleCombinations['S'].filter((arr) => arr.length >= 12).length) {
     const sequence = possibleCombinations['S'].filter((arr) => arr.length >= 13);
@@ -408,7 +390,6 @@ const mockHand = [{number: 4, suite: 'clubs', value: 6, selected: false},
 {number: 6, suite: 'clubs', value: 14, selected: false},
 {number: 7, suite: 'diamonds', value: 19, selected: false}];
 
-
 export const determineFirstMove = (hand) => {
   const possibleMoves = aiPossibleCombinations(hand);
   const obj = {
@@ -426,6 +407,10 @@ export const determineFirstMove = (hand) => {
         const findSpade = move.filter((card) => card.value === 1);
         findSpade.length === 1 && obj[combination].push(move);
       });
+    } else {
+      possibleMoves['H'].find((card) => {
+        card.value === 1 && obj['H'].push(card);
+      })
     }
   }
   return determineHardestMove(obj, 0);

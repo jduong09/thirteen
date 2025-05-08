@@ -1,9 +1,10 @@
 import {  React, useState, useEffect } from "react";
-import PropTypes from 'prop-types';
-import styles from "@/app/page.module.css";
+import PropTypes from "prop-types";
+import handStyles from "@/components/hand/hands.module.scss";
 import Cards from "@/components/cards/cards";
+import { determineCombination } from "../utilities/combination";
 
-const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo, passTurn, setTurnMessage, firstTurnClause }) => {
+const Hand = ({ skipped, player, cards, playerTurn, comboIsValid, requestCombo, passTurn, changeCombo, setTurnMessage, firstTurnClause }) => {
   const [hand, setHand] = useState(cards);
   const [combo, setCombo] = useState([]);
   const [hasReset, resetCombo] = useState(false);
@@ -112,36 +113,51 @@ const Hand = ({ cards, playerTurn, comboIsValid, requestCombo, currentTurnCombo,
     e.preventDefault();
 
     if (!combo.length) {
-      setTurnMessage('User submitted nothing. Invalid Combo.');
+      setTurnMessage('Submit a Combo.');
       return;
     }
 
+    // Commented Out so we can test that determineCombination function is working.
     if (firstTurnClause && !combo.filter((card) => card.value === 1).length) {
-      setTurnMessage('Combo must contain 3 of Spades. Invalid Combo.');
+      setTurnMessage('Combo must contain 3 of Spades.');
       return;
     }
-    requestCombo(combo.map((card) => { return { number: card.number, suite: card.suite, value: card.value } }), currentTurnCombo);
+
+    const validCombo = determineCombination(combo);
+    if (validCombo) {
+      changeCombo(validCombo);
+      requestCombo(combo.map((card) => { return { number: card.number, suite: card.suite, value: card.value } }), validCombo);
+    } else {
+      setTurnMessage('Invalid Combo. Try again or pass.');
+      return;
+    }
     resetHand();
   }
 
-  // Line 122: Removed sentence 'Try a different combo or pass' and replaced with 'Try a different combo or press Change Combo Type' for this PR specifically.
+  const pass = () => {
+    passTurn(playerTurn);
+    resetHand();
+  }
+
   return (
-    <div>
-      <Cards cards={hand} selectCard={selectCard} />
-      {comboIsValid === false && <div>Invalid Combo. Try a different combo or press Change Combo Type.</div>}
-      {isMyTurn &&
-      <div className={styles.handBtns}>
-        <button disabled={!isMyTurn} onClick={finalizeTurn}>Finalize Turn</button>
-        <button disabled={!isMyTurn} onClick={() => passTurn(playerTurn)}>Pass Turn</button>
-        <label>
-          Sort Cards:
-          <select disabled={!isMyTurn} onChange={(e) => {sortPlayerCards(e.target.value)}} className={styles.select} defaultValue={'default'}>
-            <option value="default" disabled>Select a sorting type...</option>
-            <option value="groups">Groups</option>
-            <option value="value">Strength of Card</option>
-          </select>
-        </label>
-      </div>}
+    <div className={handStyles.divUserHand}>
+      <div className={handStyles.handHeader}>
+        <h3>Your Hand</h3>
+        {(playerTurn !== player && skipped) && <div className={handStyles.badgePassed}>P</div>}
+        <select onChange={(e) => {sortPlayerCards(e.target.value)}} className={handStyles.select} defaultValue={'default'}>
+          <option value="default" disabled>Sort...</option>
+          <option value="groups">Groups</option>
+          <option value="value">Strength</option>
+        </select>
+      </div>
+      <div className={handStyles.divHand}>
+        <Cards cards={hand} selectCard={selectCard} />
+        {isMyTurn &&
+        <div className={handStyles.handBtns}>
+          <button disabled={!isMyTurn} onClick={pass}>Pass</button>
+          <button disabled={!isMyTurn} onClick={finalizeTurn}>Play</button>
+        </div>}
+      </div>
     </div>
   );
 }

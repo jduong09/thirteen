@@ -1,4 +1,6 @@
-$primary-color: #2600ff;
+$primary-color: #E43D12;
+$secondary-color: #FFA2B6;
+$tertiary-color: #D6536D;
 
 :export {
   primaryColor: $primary-color;
@@ -28,6 +30,10 @@ $primary-color: #2600ff;
   align-items: center;
 }
 
+.gameDiv {
+  position: relative;
+}
+
 .fade5 { animation: fadeIn 5s; }
 .fade10 { animation: fadeIn 10s; }
 
@@ -45,9 +51,9 @@ $primary-color: #2600ff;
   to { visibility: visible; }
 }
 
-.turnIndicator {
+.turnIndicator, .currentTurnCombo {
   padding: 1rem;
-  margin: 1rem;
+  margin: 1rem auto;
   font-weight: bold;
   font-size: large;
   background-color: $primary-color;
@@ -55,12 +61,21 @@ $primary-color: #2600ff;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 5px;
   > span {
     display: flex;
     justify-content: center;
     align-items: center;
   }
+}
+
+.turnIndicator {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  margin: 0;
+  width: 100%;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
 }
 
 .loading {
@@ -82,11 +97,6 @@ $primary-color: #2600ff;
   to { -webkit-transform: rotate(360deg); }
 }
 
-.selectCombo {
-  padding: .5rem;
-  border: 1px solid #2600ff;
-}
-
 .validCombo {
   margin-top: 1rem;
   font-size: large;
@@ -96,14 +106,198 @@ $primary-color: #2600ff;
 }
 
 .middlePile {
-  margin: 1rem;
-  padding: 1rem;
-  border: 2px solid #2600ff;
+  margin: 1rem auto;
   text-align: center;
-  width: fit-content;
+  width: 100%;
+  overflow-x: auto;
+  > h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: .5rem;
+  }
+  > ul, .cardFaceDown {
+    margin: 0 auto;
+  }
 }
 
-.middlePile > h2 {
-  font-size: 1.25rem;
-  margin-bottom: 1rem;
+.hands {
+  display: grid;
 }
+
+.gameBoard {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 10% 80% 10%;
+  grid-template-rows: 165px 110px 1fr;
+  > .middleDiv {
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+    align-self: center;
+    justify-self: center;
+    width: 100%;
+  }
+  > li {
+    position: relative;
+    align-items: center;
+  }
+  > li:nth-child(2) {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    justify-self: start;
+  }
+  > li:nth-child(3) {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    justify-self: center;
+  }
+  > li:nth-child(4) {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    justify-self: end;
+  }
+}
+
+.containerUser {
+  width: 100%;
+  grid-column: 1 / 4;
+  grid-row: 3 / 4;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  position: relative;
+  > div {
+    width: 100%;
+  }
+}
+
+.gameBoard > li:nth-child(2) > .handContainer, .gameBoard > li:nth-child(4) > .handContainer {
+  position: relative;
+  width: 130px;
+  height: 700px;
+}
+
+.gameBoard > li:nth-child(2) .rotateDiv, .gameBoard > li:nth-child(4) .rotateDiv {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  transform-origin: top left;
+  padding: 1rem;
+  background-color: rgb(253, 207, 207);
+}
+
+.gameBoard > li:nth-child(2) .rotateDiv {
+  transform: rotate(-270deg) translate(-50%, -50%);
+}
+
+.gameBoard > li:nth-child(4) .rotateDiv {
+  transform: rotate(-90deg) translate(-50%, -50%);
+}
+
+.cardFaceDown, .cardDisplay {
+  width: 75px;
+  height: 105px;
+  border: 2px solid black;
+  border-radius: 4px;
+}
+
+.cardFaceDown {
+  background: no-repeat url("../../public/cardBackground.jpg");
+}
+
+.cardDisplay {
+  background-color: $primary-color;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: white;
+}
+
+.roundMessage {
+  margin-top: .25rem;
+  padding: 4px;
+  font-weight: 700;
+  background-color: $secondary-color;
+  color: white;
+}
+
+.aiMobileHand {
+  > h3 {
+    font-weight: 700;
+    color: $primary-color;
+    font-size: 1.05rem;
+    margin-bottom: .5rem;
+  }
+  > .divMobileFaces {
+    position: relative;
+    > .badgePassed {
+      position: absolute;
+      top: 0;
+      right: 0;
+      border: 2px solid black;
+      border-top-right-radius: 4px;
+      padding: .25rem;
+      font-weight: 700;
+      background-color: #fff;
+    }
+  }
+}
+
+.containerUser > .badgePassed {
+  width: fit-content;
+  right: 0;
+  font-size: 1.15rem;
+}
+
+.winner {
+  padding: 1rem;
+  margin: -1rem;
+  background-color: yellow;
+}
+
+.star {
+  width: 20px;
+  height: auto;
+}
+
+.btnPlayAgain {
+  display: block;
+  margin: 1rem auto 0 auto;
+  width: 100%;
+  padding: 3px;
+  border: 1px solid white;
+  background: white;
+}
+
+.hide {
+  display: none !important;
+}
+
+.divSortBtns {
+  display: flex;
+  align-items: center;
+  > button {
+    width: 20px;
+    height: auto;
+  }
+  > button:first {
+    margin-right: 1rem;
+  }
+}
+
+@media (max-width: 568px) {
+   .handContainer {
+    display: none;
+   }
+}
+
+/* Width Height for Hand in Tablet/Desktop View
+  width: 130px;
+  height: 700px; 
+*/
