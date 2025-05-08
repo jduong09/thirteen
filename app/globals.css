@@ -18,6 +18,7 @@ time, mark, audio, video, button, a {
 	font: inherit;
 	vertical-align: baseline;
 	box-sizing: border-box;
+	color: black;
 }
 
 button {
@@ -25,12 +26,10 @@ button {
 	border: 0;
 	outline: none;
 	cursor: pointer;
-	color: black;
 }
 
 a {
 	text-decoration: none;
-	color: black;
 }
 
 /* HTML5 display-role reset for older browsers */
