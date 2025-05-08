@@ -144,7 +144,7 @@ const Hand = ({ skipped, player, cards, playerTurn, comboIsValid, requestCombo, 
       <div className={handStyles.handHeader}>
         <h3>Your Hand</h3>
         {(playerTurn !== player && skipped) && <div className={handStyles.badgePassed}>P</div>}
-        <select disabled={!isMyTurn} onChange={(e) => {sortPlayerCards(e.target.value)}} className={handStyles.select} defaultValue={'default'}>
+        <select onChange={(e) => {sortPlayerCards(e.target.value)}} className={handStyles.select} defaultValue={'default'}>
           <option value="default" disabled>Sort...</option>
           <option value="groups">Groups</option>
           <option value="value">Strength</option>
