@@ -502,7 +502,7 @@ const Game = () => {
               <h2 className={gameStyles.turnIndicator}>
                 {endCycleClause || 
                 <div>
-                  <span>{turnMessage}</span>
+                  <span className={gameStyles.turnMessage}>{turnMessage}</span>
                   {gameOverClause && <button className={gameStyles.btnPlayAgain} onClick={handleRestartGame}>Play Again?</button>}
                 </div>}
               </h2>
