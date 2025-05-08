@@ -494,7 +494,6 @@ const Game = () => {
           <div className={gameStyles.gameBoard}>
             <div className={gameStyles.middleDiv}>
               <div className={gameStyles.middlePile}>
-                <h2>{currentTurnCombo && previousPlayedCombo.length ? '' : 'Middle Pile'}</h2>
                 {previousPlayedCombo.length ?
                 <Cards cards={previousPlayedCombo} /> :
                 <div className={gameStyles.cardFaceDown}></div>}
@@ -510,7 +509,6 @@ const Game = () => {
             </div>
             {listAiHands}
             <div className={gameStyles.containerUser}>
-              {(playerTurn === 0 && playerRoundMessage) && <div className={handStyles.divYourTurn}>{playerRoundMessage}</div>}
               <Hand 
                 skipped={hands[0].skipped}
                 player={0}
