@@ -1,4 +1,4 @@
-$primary-color: #E43D12;
+$primary-color: #e43d12;
 $secondary-color: #FFA2B6;
 $tertiary-color: #D6536D;
 
@@ -147,6 +147,8 @@ $tertiary-color: #D6536D;
     grid-column: 2 / 3;
     grid-row: 1 / 2;
     justify-self: start;
+    left: -30px;
+    top: 30px;
   }
   > li:nth-child(3) {
     grid-column: 2 / 3;
@@ -157,6 +159,8 @@ $tertiary-color: #D6536D;
     grid-column: 2 / 3;
     grid-row: 1 / 2;
     justify-self: end;
+    right: -30px;
+    top: 30px;
   }
 }
 
@@ -184,13 +188,11 @@ $tertiary-color: #D6536D;
 .gameBoard > li:nth-child(2) .rotateDiv, .gameBoard > li:nth-child(4) .rotateDiv {
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: 90%;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   transform-origin: top left;
-  padding: 1rem;
-  background-color: rgb(253, 207, 207);
 }
 
 .gameBoard > li:nth-child(2) .rotateDiv {
@@ -199,6 +201,7 @@ $tertiary-color: #D6536D;
 
 .gameBoard > li:nth-child(4) .rotateDiv {
   transform: rotate(-90deg) translate(-50%, -50%);
+  left: 14%;
 }
 
 .cardFaceDown, .cardDisplay {
@@ -256,6 +259,10 @@ $tertiary-color: #D6536D;
   }
 }
 
+.hideBadge {
+  opacity: .25;
+}
+
 .containerUser > .badgePassed {
   width: fit-content;
   right: 0;
@@ -298,10 +305,60 @@ $tertiary-color: #D6536D;
   }
 }
 
-@media (max-width: 568px) {
-   .handContainer {
+@media (min-width: 568px) {
+}
+
+@media (max-width: 586px) {
+  .handContainer {
     display: none;
-   }
+  }
+}
+
+@media (min-width: 767px) {
+  .containerUser {
+    width: 80%;
+    margin: 0 auto;
+  }
+
+  .gameBoard > li:nth-child(2) {
+    top: 45px;
+  }
+
+  .gameBoard > li:nth-child(4) {
+    top: 45px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .gameBoard {
+    grid-template-columns: 20% 60% 20%;
+    grid-template-rows: 200px 200px 1fr;
+  }
+
+  .gameBoard > li:nth-child(2) {
+    grid-column: 1 / 2;
+    justify-self: center;
+    align-self: end;
+    position: initial;
+  }
+
+  .gameBoard > li:nth-child(4) {
+    grid-column: 3 / 4;
+    justify-self: center;
+    align-self: end;
+    position: initial;
+  }
+
+  .containerUser {
+    width: 100%;
+    grid-column: 2 / 3;
+  }
+
+  .gameBoard > li:nth-child(2) > .handContainer, .gameBoard > li:nth-child(4) > .handContainer {
+    position: relative;
+    width: 130px;
+    height: 400px;
+  }  
 }
 
 /* Width Height for Hand in Tablet/Desktop View

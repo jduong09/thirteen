@@ -64,7 +64,6 @@ $secondary-color: #FFA2B6;
     border: 2px solid $primary-color;
     padding: .5rem 1rem;
     cursor: pointer;
-    margin-bottom: 1rem;
     font-weight: 500;
   }
   > button:focus {
@@ -98,6 +97,23 @@ $secondary-color: #FFA2B6;
   text-align-last: center;
 }
 
+.badgePassed {
+  border: 2px solid black;
+  border-radius: 50%;
+  padding: .25rem;
+  font-weight: 700;
+}
+
 .invalidCombo {
   padding: 0 .5rem;
+}
+
+@media (min-width: 1024px) {
+  .divHand {
+    padding-right: 1rem;
+  }
+
+  .divUserHand > .handHeader {
+    padding-bottom: 0;
+  }
 }
