@@ -1,11 +1,26 @@
-@use '/components/utilities/color-themes';
+@import '/components/utilities/color-themes';
 
-.main {
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: .5rem 1rem;
+  /*color: black;*/
   @include themed() {
-    background-color: t('bg');
+    color: t('text');
   }
 }
 
+.header > h1 {
+  font-size: 1.75rem;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-weight: 700;
+  /*color: #E43D12; */
+  @include themed() {
+    color: t('h1-color');
+  }
+}
 
 .header h2 {
   font-weight: 700;
