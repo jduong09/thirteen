@@ -14,8 +14,8 @@ export default function Home() {
   }
 
   return (
-    <main className={`${'theme ' + (darkMode ? 'theme--dark' : 'theme--default')} ${styles.main}`}>
-      <Header changeTheme={changeTheme} />
+    <main className={`${(darkMode ? 'theme-dark' : 'theme-default')}`}>
+      <Header changeTheme={changeTheme} darkMode={darkMode} />
       <Game />
     </main>
   );

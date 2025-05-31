@@ -1,11 +1,3 @@
-@use '/components/utilities/color-themes';
-
-.main {
-  @include themed() {
-    background-color: t('bg');
-  }
-}
-
 
 .header h2 {
   font-weight: 700;

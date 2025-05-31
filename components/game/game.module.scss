@@ -1,4 +1,4 @@
-@use '/components/utilities/color-themes';
+@import '/components/utilities/colorThemes';
 /*:export {
   primaryColor: $primary-color;
 }
@@ -6,7 +6,7 @@
 
 .shuffleBtn {
   /*background-color: $primary-color;*/
-  background-color: color-themes.$primary-dark-color;
+  background-color: $primary-color;
   color: white;
   border: none;
   border-radius: 15px;
@@ -17,12 +17,12 @@
 }
 
 .shuffleBtn:hover {
-  background-color: color-themes.$secondary-dark-color;
+  background-color: $secondary-dark-color;
 }
 
 .intro {
   /*background-color: $primary-color; */
-  background-color: color-themes.$primary-dark-color;
+  background-color: $primary-dark-color;
   color: white;
   margin: 1em;
   padding: 1em;
@@ -60,7 +60,7 @@
   margin: 1rem auto;
   font-weight: bold;
   font-size: large;
-  background-color: color-themes.$primary-color;
+  background-color: $primary-color;
   color: white;
   display: flex;
   justify-content: center;
@@ -220,7 +220,7 @@
 }
 
 .cardDisplay {
-  background-color: color-themes.$secondary-dark-color;
+  background-color: $secondary-dark-color;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -233,7 +233,7 @@
   margin-top: .25rem;
   padding: 4px;
   font-weight: 700;
-  background-color: color-themes.$secondary-dark-color;
+  background-color: $secondary-dark-color;
   color: white;
 }
 
@@ -244,7 +244,7 @@
 .aiMobileHand {
   > h3 {
     font-weight: 700;
-    color: color-themes.$primary-dark-color;
+    color: $primary-dark-color;
     font-size: 1.05rem;
     margin-bottom: .5rem;
   }
@@ -258,7 +258,7 @@
       border-top-right-radius: 4px;
       padding: .25rem;
       font-weight: 700;
-      background-color: color-themes.$white-color;
+      background-color: $white-color;
     }
   }
 }

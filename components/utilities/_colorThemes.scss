@@ -13,7 +13,7 @@ $themes: (
     button: $primary-color,
     border: #000,
     header: $primary-color,
-    text: #000000,
+    text: green,
     h1-color: $primary-color,
   ),
   dark: (
@@ -23,26 +23,28 @@ $themes: (
     button: $primary-dark-color,
     border: #000,
     header: $primary-dark-color,
-    text: #FFFFFF,
+    text: blue,
     h1-color: $primary-dark-color,
   )
 );
 
-@mixin themed() {
+@mixin themify() {
   @each $theme, $map in $themes {
-    .theme--#{$theme} & {
+
+    .theme-#{$theme} & {
       $theme-map: () !global;
       @each $key, $submap in $map {
         $value: map-get(map-get($themes, $theme), '#{$key}');
         $theme-map: map-merge($theme-map, ($key: $value)) !global;
       }
+
       @content;
       $theme-map: null !global;
     }
+
   }
 }
 
-@function t($key) {
-  @debug "key: #{$key}";
+@function themed($key) {
   @return map-get($theme-map, $key);
 }

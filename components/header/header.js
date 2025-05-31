@@ -4,7 +4,7 @@ import headerStyles from '@/components/header/header.module.scss';
 import { icons } from '@/components/utilities/card';
 import NavHeader from '@/components/utilities/navHeader';
 
-const Header = ({ changeTheme }) => {
+const Header = ({ changeTheme, darkMode }) => {
   const [headerRules, setHeaderRules] = useState({ cardRank: false, suitRank: false, combinations: false, smashes: false, gameplay: false });
   const [toggleRules, setToggleRules] = useState(false);
 
@@ -39,7 +39,7 @@ const Header = ({ changeTheme }) => {
   const listGameplayTwo = [['3', 'spades'], ['3', 'hearts'], ['3', 'clubs']].map((ele, i) => cardElem(ele, i));
 
   return (
-    <header className={headerStyles.header}>
+    <header className={`${darkMode ? headerStyles.themedark : headerStyles.themedefault} ${headerStyles.header}`}>
       <h1>Thirteen</h1>
       <nav>
         <ul>
