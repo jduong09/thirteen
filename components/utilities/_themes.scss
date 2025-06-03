@@ -6,7 +6,7 @@ $secondary-dark-color: #D84040;
 $white-color: #EEEEEE;
 
 $themes: (
-  default: (
+  light: (
     bg: #EBE9E1,
     card-bg: $secondary-color,
     hover: $tertiary-color,
@@ -28,23 +28,28 @@ $themes: (
   )
 );
 
-@mixin themify() {
+@mixin gtheme() {
   @each $theme, $map in $themes {
-
-    .theme-#{$theme} & {
-      $theme-map: () !global;
-      @each $key, $submap in $map {
-        $value: map-get(map-get($themes, $theme), '#{$key}');
-        $theme-map: map-merge($theme-map, ($key: $value)) !global;
-      }
-
+    $theme-map: $map !global;
+    .#{$theme} & {
       @content;
-      $theme-map: null !global;
     }
+  }
+  $theme-map: null !global;
+}
 
+@mixin theme() {
+  @each $theme, $map in $themes {
+    @each $theme, $map in $themes {
+      $theme-map: $map !global;
+      :global(.#{$theme}) & {
+        @content;
+      }
+    }
+    $theme-map: null !global;
   }
 }
 
-@function themed($key) {
+@function theme-get($key) {
   @return map-get($theme-map, $key);
 }

@@ -1,21 +1,16 @@
 "use client";
 import React, { useState } from 'react';
-import Image from "next/image";
-import styles from "./page.module.css";
+import { useTheme } from 'next-themes';
 import Header from '@/components/header/header.js';
 import Game from '../components/game/game.js';
 
 export default function Home() {
-  const [darkMode, setDarkMode] = useState(false);
-
-  const changeTheme = () => {
-    setDarkMode(!darkMode);
-    console.log(darkMode);
-  }
+  const { theme, setTheme } = useTheme();
+  console.log(theme);
 
   return (
-    <main className={`${(darkMode ? 'theme-dark' : 'theme-default')}`}>
-      <Header changeTheme={changeTheme} darkMode={darkMode} />
+    <main>
+      <Header changeTheme={setTheme} theme={theme} />
       <Game />
     </main>
   );
