@@ -111,6 +111,12 @@
   height: auto;
 }
 
+.header svg {
+  @include theme() {
+    fill: theme-get('text');
+  }
+}
+
 .buttonCaret > svg {
   width: 16px;
   height: auto;
@@ -119,10 +125,6 @@
 
 .buttonCaret.divOpen > svg {
   transform: rotate(0);
-}
-
-.pageCardRank {
-  background-color: green;
 }
 
 .hide {
@@ -134,9 +136,11 @@
 }
 
 .ruleContent {
-  background-color: white;
   padding: .75rem .5rem;
   border-radius: 2px;
+  @include theme() {
+    background-color: theme-get('header-rule-bg');
+  }
 }
 
 .listCombinations > li, .listSmashes > li {

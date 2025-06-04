@@ -1,4 +1,4 @@
-$primary-color: #e43d12;
+$primary-color: hsl(12, 85%, 48%);
 $secondary-color: #FFA2B6;
 $tertiary-color: #D6536D;
 $primary-dark-color: #8E1616;
@@ -13,18 +13,26 @@ $themes: (
     button: $primary-color,
     border: #000,
     header: $primary-color,
+    header-rule-bg: #fff,
     text: #000,
     h1-color: $primary-color,
+    primary-color: $primary-color,
+    secondary-color: $secondary-color,
+    user-background: #FFF,
   ),
   dark: (
-    bg: #1D1616,
+    bg: #121212,
     card-bg: $secondary-dark-color,
     hover: $tertiary-color,
     button: $primary-dark-color,
     border: #000,
     header: $primary-dark-color,
-    text: #fff,
-    h1-color: $primary-dark-color,
+    header-rule-bg: grey,
+    text: hsla(0, 0, 100, .86),
+    h1-color: hsla(0, 0, 100, .80),
+    primary-color: $primary-dark-color,
+    secondary-color: $secondary-dark-color,
+    user-background: hsl(12, 27%, 28%),
   )
 );
 
