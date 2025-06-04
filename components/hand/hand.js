@@ -171,4 +171,9 @@ Hand.propTypes = {
   requestCombo: PropTypes.func,
   currentTurnCombo: PropTypes.string,
   passTurn: PropTypes.func,
+  skipped: PropTypes.bool,
+  player: PropTypes.number,
+  changeCombo: PropTypes.func,
+  setTurnMessage: PropTypes.func,
+  firstTurnClause: PropTypes.bool,
 };

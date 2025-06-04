@@ -16,13 +16,17 @@
   font-size: 1.75rem;
   font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
   font-weight: 700;
+  @include theme() {
+    color: theme-get('h1-color');
+  }
 }
 
 .header h2 {
   font-weight: 700;
   font-size: 1.15rem;
-  /*color: #E43D12; */
-  color: #8E1616;
+  @include theme() {
+    color: theme-get('h1-color');
+  }
 }
 
 .header > nav > ul {
@@ -38,19 +42,22 @@
   cursor: pointer;
 }
 
-.header > nav > ul > li > button:focus, .header > nav > ul > li > button:hover {
-  /*color: #E43D12; */
-  color: #D84040;
+.header > nav > ul > li > button:hover {
+  @include theme() {
+    color: theme-get('h1-color');
+  }
 }
 
 .rules {
   width: calc(100% - 2rem);
   position: absolute;
   z-index: 99;
-  background-color: #EBE9E1;
   top: 0;
   left: 0;
   margin: 1rem;
+  @include theme() {
+    background-color: theme-get('bg');
+  }
 }
 
 .background {
@@ -90,7 +97,9 @@
   top: 0;
   left: 0;
   z-index: 99;
-  background-color: #EBE9E1;
+  @include theme() {
+    background-color: theme-get('bg');
+  }
 }
 
 .rulesHeader > h2 {
@@ -169,8 +178,10 @@
 .listGameplay h3 {
   font-weight: 700;
   font-size: 1.05rem;
-  color: #E43D12;
   margin-bottom: .25rem;
+  @include theme() {
+    color: theme-get('h1-color');
+  }
 }
 
 .listGameplay > li {

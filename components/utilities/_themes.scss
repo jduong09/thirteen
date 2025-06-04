@@ -13,7 +13,7 @@ $themes: (
     button: $primary-color,
     border: #000,
     header: $primary-color,
-    text: green,
+    text: #000,
     h1-color: $primary-color,
   ),
   dark: (
@@ -23,7 +23,7 @@ $themes: (
     button: $primary-dark-color,
     border: #000,
     header: $primary-dark-color,
-    text: blue,
+    text: #fff,
     h1-color: $primary-dark-color,
   )
 );

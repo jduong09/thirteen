@@ -14,10 +14,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        { /* Header() */}
-        <ThemeProvider attribute="class" disableTransitionOnChange>
-          {children}
-        </ThemeProvider>
+        <ThemeProvider attribute="class" disableTransitionOnChange>{children}</ThemeProvider>
         </body>
     </html>
   );

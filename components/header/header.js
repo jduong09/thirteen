@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import PropTypes from "prop-types";
 import headerStyles from '@/components/header/header.module.scss';
 import { icons } from '@/components/utilities/card';
 import NavHeader from '@/components/utilities/navHeader';
@@ -168,6 +169,11 @@ const Header = ({ changeTheme, theme }) => {
       <div className={toggleRules ? headerStyles.background : headerStyles.hide}></div>
     </header>
   )
+};
+
+Header.propTypes = {
+  changeTheme: PropTypes.func,
+  theme: PropTypes.string,
 };
 
 export default Header;
