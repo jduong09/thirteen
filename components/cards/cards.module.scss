@@ -70,3 +70,14 @@ $primary-color: #E43D12;
     }
   }
 }
+
+@media (orientation: landscape) {
+  .card {
+    width: 55px;
+    height: 80px;
+  }
+
+  .hand {
+    padding: 0;
+  }
+}

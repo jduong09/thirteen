@@ -8,11 +8,11 @@ $secondary-color: #FFA2B6;
   flex-wrap: wrap;
   background: white;
   border-radius: 4px;
+  padding: .5rem 1rem;
   > .handHeader {
     display: flex;
     align-items: center;
     width: 100%;
-    padding: 1rem;
     > h3 {
       font-size: 1.5rem;
       font-weight: 700;
