@@ -68,7 +68,7 @@
   align-items: center;
 
   @include theme() {
-    background-color: theme-get('background-color');
+    background-color: theme-get('primary-color');
   }
   > span {
     display: flex;
@@ -238,8 +238,11 @@
   margin-top: .25rem;
   padding: 4px;
   font-weight: 700;
-  background-color: $secondary-dark-color;
   color: white;
+
+  @include theme() {
+    background-color: theme-get('button');
+  }
 }
 
 .turnMessage {
@@ -298,7 +301,8 @@
   width: 100%;
   padding: 3px;
   border: 1px solid white;
-  background: white;
+  background-color: white;
+  color: black;
 }
 
 .hide {
