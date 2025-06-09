@@ -361,7 +361,7 @@ $tertiary-color: #D6536D;
   }  
 }
 
-@media (orientation: landscape) {
+@media (orientation: landscape) and (max-height: 500px) {
   .gameDiv {
     padding: 0 1rem;
   }
@@ -390,6 +390,10 @@ $tertiary-color: #D6536D;
   .cardFaceDown, .cardDisplay {
     width: 55px;
     height: 80px;
+  }
+
+  .aiMobileHand > .divMobileFaces > .badgePassed {
+    right: calc(100% - 55px);
   }
 
   .containerUser {

@@ -71,7 +71,7 @@ $primary-color: #E43D12;
   }
 }
 
-@media (orientation: landscape) {
+@media (orientation: landscape) and (max-height: 500px) {
   .card {
     width: 55px;
     height: 80px;
