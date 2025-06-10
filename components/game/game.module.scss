@@ -226,11 +226,15 @@ $tertiary-color: #D6536D;
 }
 
 .roundMessage {
+  position: absolute;
+  top: 35px;
+  width: 75px;
   margin-top: .25rem;
   padding: 4px;
   font-weight: 700;
   background-color: $secondary-color;
   color: white;
+  text-align: center;
 }
 
 .turnMessage {
@@ -241,21 +245,11 @@ $tertiary-color: #D6536D;
   > h3 {
     font-weight: 700;
     color: $primary-color;
-    font-size: 1.05rem;
+    font-size: 1rem;
     margin-bottom: .5rem;
   }
   > .divMobileFaces {
     position: relative;
-    > .badgePassed {
-      position: absolute;
-      top: 0;
-      right: 0;
-      border: 2px solid black;
-      border-top-right-radius: 4px;
-      padding: .25rem;
-      font-weight: 700;
-      background-color: #fff;
-    }
   }
 }
 
@@ -267,26 +261,6 @@ $tertiary-color: #D6536D;
   width: fit-content;
   right: 0;
   font-size: 1.15rem;
-}
-
-.winner {
-  padding: 1rem;
-  margin: -1rem;
-  background-color: yellow;
-}
-
-.star {
-  width: 20px;
-  height: auto;
-}
-
-.btnPlayAgain {
-  display: block;
-  margin: 1rem auto 0 auto;
-  width: 100%;
-  padding: 3px;
-  border: 1px solid white;
-  background: white;
 }
 
 .hide {
@@ -302,6 +276,35 @@ $tertiary-color: #D6536D;
   }
   > button:first {
     margin-right: 1rem;
+  }
+}
+
+.divGameOver {
+  width: 100%;
+  position: absolute;
+  padding: 1rem;
+  z-index: 99;
+  background-color: #EBE9E1;
+  left: 0;
+  bottom: 0;
+  > h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: $primary-color;
+  }
+  > .btnPlayAgain {
+    display: block;
+    margin: 1rem auto 0 auto;
+    width: 50%;
+    padding: 8px;
+    border: 2px solid $primary-color;
+    background: white;
+    font-weight: 700;
+  }
+  > .btnPlayAgain:focus {
+    border-color: #EBE9E1;
+    background-color: $primary-color;
+    color: white;
   }
 }
 
@@ -367,12 +370,12 @@ $tertiary-color: #D6536D;
   }
 
   .gameBoard {
-    grid-template-columns: 37% 63%;
+    grid-template-columns: 40% 60%;
     grid-template-rows: max-content 1fr;
     > .middleDiv {
       grid-column: 2 / 3;
       grid-row: 1 / 2;
-      align-self: center ;
+      align-self: end;
     }
     > li:nth-child(2), li:nth-child(3), li:nth-child(4) {
       grid-column: 1 / 2;
@@ -392,10 +395,6 @@ $tertiary-color: #D6536D;
     height: 80px;
   }
 
-  .aiMobileHand > .divMobileFaces > .badgePassed {
-    right: calc(100% - 55px);
-  }
-
   .containerUser {
     grid-column: 1 / 3;
     grid-row: 2 / 3;
@@ -413,6 +412,10 @@ $tertiary-color: #D6536D;
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
     padding: .5rem 1rem;
+  }
+
+  .roundMessage {
+    width: 55px;
   }
 }
 
