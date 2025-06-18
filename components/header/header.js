@@ -1,13 +1,33 @@
 'use client';
 import React, { useState } from 'react';
 import PropTypes from "prop-types";
+import Image from 'next/image';
+import { useTheme } from 'next-themes';
 import headerStyles from '@/components/header/header.module.scss';
 import { icons } from '@/components/utilities/card';
 import NavHeader from '@/components/utilities/navHeader';
+import sunIcon from '@/public/sun.svg';
+import moonIcon from '@/public/moon.svg';
+
 
 const Header = ({ changeTheme, theme }) => {
   const [headerRules, setHeaderRules] = useState({ cardRank: false, suitRank: false, combinations: false, smashes: false, gameplay: false });
   const [toggleRules, setToggleRules] = useState(false);
+  const { resolvedTheme } = useTheme();
+  let src;
+
+
+  switch (resolvedTheme) {
+    case 'light': 
+      src = sunIcon;
+      break;
+    case 'dark':
+      src = moonIcon;
+      break;
+    default: 
+      src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+      break;
+  }
 
   const handleClick = (type) => {
     setHeaderRules({
@@ -45,7 +65,13 @@ const Header = ({ changeTheme, theme }) => {
       <nav>
         <ul>
           <li><button onClick={() => setToggleRules(true)}>Rules</button></li>
-          <li><button onClick={() => changeTheme(theme === 'light' ? 'dark' : 'light')}>Dark Mode</button></li>
+          <li className={headerStyles.listItemDarkMode}>
+            <div className={theme === 'light' ? headerStyles.sunBorder : headerStyles.moonBorder}>
+              <button className={theme === 'light' ? headerStyles.btnLeft : headerStyles.btnRight} onClick={() => changeTheme(theme === 'light' ? 'dark' : 'light')}>
+                <Image priority className={`${headerStyles.imageDarkMode} ${theme === 'light' ? headerStyles.sunIcon : headerStyles.moonIcon}`} src={src} alt='Svg icon of sun or moon' />
+              </button>
+            </div>
+          </li>
         </ul>
       </nav>
       <div className={toggleRules ? headerStyles.rules : headerStyles.hide}>

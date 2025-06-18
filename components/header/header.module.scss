@@ -48,6 +48,47 @@
   }
 }
 
+.listItemDarkMode {
+  display: flex;
+  align-items: center;
+  > div {
+    width: 36px;
+    height: 18px;
+    border-radius: 500px;
+    border: 2px solid black;
+    display: flex;
+    align-items: center;
+    > .btnLeft {
+      margin-left: 2px;
+    }
+    > .btnRight {
+      margin-right: 4px;
+    }
+  }
+  > .sunBorder {
+    border-color: orange;
+    justify-content: flex-start;
+  }
+  > .moonBorder {
+    border-color: white;
+    justify-content: flex-end;
+  }
+}
+
+.imageDarkMode {
+  display: block;
+  width: 12px;
+  height: auto;
+}
+
+.sunIcon {
+  filter: invert(61%) sepia(92%) saturate(1333%) hue-rotate(356deg) brightness(102%) contrast(106%);;
+}
+
+.moonIcon {
+  filter: invert(97%) sepia(0%) saturate(94%) hue-rotate(300deg) brightness(112%) contrast(87%);
+}
+
 .rules {
   width: calc(100% - 2rem);
   position: absolute;
