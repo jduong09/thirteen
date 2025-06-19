@@ -24,7 +24,11 @@ import { mount } from 'cypress/react18';
 //Ensure global styles are loaded
 import '../../app/globals.css';
 
-Cypress.Commands.add('mount', mount)
+Cypress.Commands.add('mount', (component, options) => {
+  // Wrap any parent components needed
+  // ie: return mount(<MyProvider>{component}</MyProvider>, options)
+  return mount(component, options)
+});
 
 // Example use:
 // cy.mount(<MyComponent />)

@@ -268,7 +268,7 @@ const Game = () => {
   }
 
   // Only show shuffle button at start or end of game
-  const shuffleBtn = deckIsShuffled ? null : <button className={gameStyles.shuffleBtn} onClick={onShuffleClick}>Shuffle Deck</button>;
+  const shuffleBtn = deckIsShuffled ? null : <button data-cy='btnShuffle' className={gameStyles.shuffleBtn} onClick={onShuffleClick}>Shuffle Deck</button>;
 
   const listAiHands = hands.reduce((result, hand) => {
     if (hand.player !== 0) {
@@ -307,7 +307,7 @@ const Game = () => {
           />
           <form>
             <label htmlFor='select-combo'>Combination: </label>
-            <select id='select-combo' name='select-combo' className={gameStyles.selectCombo} onChange={changeCombo} value={currentTurnCombo}>
+            <select data-cy='select-combinations' id='select-combo' name='select-combo' className={gameStyles.selectCombo} onChange={changeCombo} value={currentTurnCombo}>
               <option value=''>--Please choose an option--</option>
               <option value='single'>Single</option>
               <option value='pair'>Pair</option>
