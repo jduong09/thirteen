@@ -1,5 +1,5 @@
-import React, { ReactNode } from 'react';
-import { ThemeProvider } from 'next-themes';
+import React, { ReactNode } from "react";
+import { ThemeProvider } from "next-themes";
 import { Inter } from "next/font/google";
 import "./globals.scss";
 

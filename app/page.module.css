@@ -1,8 +1,6 @@
-
 .header h2 {
   font-weight: 700;
   font-size: 1.15rem;
-  /*color: #E43D12; */
   color: #8E1616;
 }
 
@@ -20,7 +18,6 @@
 }
 
 .header > nav > ul > li > button:focus, .header > nav > ul > li > button:hover {
-  /*color: #E43D12; */
   color: #D84040;
 }
 

@@ -74,7 +74,6 @@ const createDuplicatesObject = (array) => {
   return values;
 };
 
-/* AI logic to play a double */
 const pair = (hand) => {
   const dupesObject = createDuplicatesObject(hand);
   const combinations = [];
@@ -93,7 +92,6 @@ const pair = (hand) => {
   return combinations;
 };
 
-/* AI logic to play a triple */
 const triplet = (hand) => {
   const dupesObject = createDuplicatesObject(hand);
   const combinations = [];
@@ -118,7 +116,6 @@ const triplet = (hand) => {
   return combinations;
 };
 
-/* AI logic to play a quartet */
 const quartet = (hand) => {
   const dupesObject = createDuplicatesObject(hand);
   const combinations = [];
@@ -131,7 +128,6 @@ const quartet = (hand) => {
   return combinations;
 };
 
-/* AI logic to play a sequence */
 const sequence = (hand, validLength) => {
   const dupesObject = createDuplicatesObject(hand);
   const sortedHand = mergeSort(hand);
@@ -184,7 +180,6 @@ const sequence = (hand, validLength) => {
   return totalSequences;
 };
 
-/* AI logic to play double sequence */
 const doubleSequence = (hand, validLength) => {
   const dupesObject = createDuplicatesObject(hand);
   const sortedHand = mergeSortNoDupe(hand);
@@ -374,21 +369,6 @@ export const determineHardestMove = (possibleCombinations, valueToBeat) => {
     return ['single', [possibleCombinations['H'][0]]];
   }
 }
-
-
-const mockHand = [{number: 4, suite: 'clubs', value: 6, selected: false},
-{number: 9, suite: 'clubs', value: 26, selected: false},
-{number: 11, suite: 'spades', value: 33, selected: false},
-{number: 15, suite: 'spades', value: 49, selected: false},
-{number: 15, suite: 'diamonds', value: 51, selected: false},
-{number: 11, suite: 'clubs', value: 34, selected: false},
-{number: 3, suite: 'clubs', value: 2, selected: false},
-{number: 7, suite: 'clubs', value: 18, selected: false},
-{number: 3, suite: 'spades', value: 1, selected: false},
-{number: 8, suite: 'diamonds', value: 23, selected: false},
-{number: 3, suite: 'hearts', value: 4, selected: false},
-{number: 6, suite: 'clubs', value: 14, selected: false},
-{number: 7, suite: 'diamonds', value: 19, selected: false}];
 
 export const determineFirstMove = (hand) => {
   const possibleMoves = aiPossibleCombinations(hand);

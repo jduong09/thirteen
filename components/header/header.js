@@ -1,13 +1,13 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import Image from 'next/image';
-import { useTheme } from 'next-themes';
-import headerStyles from '@/components/header/header.module.scss';
-import { icons } from '@/components/utilities/card';
-import NavHeader from '@/components/utilities/navHeader';
-import sunIcon from '@/public/sun.svg';
-import moonIcon from '@/public/moon.svg';
+import Image from "next/image";
+import { useTheme } from "next-themes";
+import headerStyles from "@/components/header/header.module.scss";
+import { icons } from "@/components/utilities/card";
+import NavHeader from "@/components/utilities/navHeader";
+import sunIcon from "@/public/sun.svg";
+import moonIcon from "@/public/moon.svg";
 
 
 const Header = ({ changeTheme, theme }) => {

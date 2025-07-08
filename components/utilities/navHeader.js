@@ -1,5 +1,5 @@
-import React, { useRef} from 'react';
-import pageStyles from '@/app/page.module.css';
+import React from "react";
+import pageStyles from "@/app/page.module.css";
 
 const headers = {
   'cardRank': 'Card Ranks (High - Low)',
