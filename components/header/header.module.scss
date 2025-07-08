@@ -31,6 +31,7 @@
 
 .header > nav > ul {
   display: flex;
+  align-items: center;
 }
 
 .header > nav > ul > li:last-child {
@@ -52,8 +53,8 @@
   display: flex;
   align-items: center;
   > div {
-    width: 36px;
-    height: 18px;
+    width: 42px;
+    height: 24px;
     border-radius: 500px;
     border: 2px solid black;
     display: flex;
@@ -66,18 +67,21 @@
     }
   }
   > .sunBorder {
-    border-color: orange;
+    border-color: white;
+    background-color: white;
     justify-content: flex-start;
   }
   > .moonBorder {
-    border-color: white;
+    @include theme() {
+      background-color: theme-get('h1-color');
+    }
     justify-content: flex-end;
   }
 }
 
 .imageDarkMode {
   display: block;
-  width: 12px;
+  width: 16px;
   height: auto;
 }
 
@@ -86,7 +90,7 @@
 }
 
 .moonIcon {
-  filter: invert(97%) sepia(0%) saturate(94%) hue-rotate(300deg) brightness(112%) contrast(87%);
+  filter: invert(11%) sepia(53%) saturate(3439%) hue-rotate(236deg) brightness(82%) contrast(102%);
 }
 
 .rules {
