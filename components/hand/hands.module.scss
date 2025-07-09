@@ -28,11 +28,12 @@ $secondary-color: #FFA2B6;
   }
 }
 
-.badgePassed {
-  border: 2px solid black;
-  border-radius: 50%;
-  padding: .25rem;
+.passMessage {
+  padding: 4px;
   font-weight: 700;
+  background-color: $secondary-color;
+  color: white;
+  text-align: center;
 }
 
 .divYourTurn {
