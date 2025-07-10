@@ -215,3 +215,9 @@
 .followingComparison > .listHands {
   margin-bottom: 0;
 }
+
+@media (orientation: landscape) {
+  .header {
+    margin-bottom: .5rem;
+  }
+}

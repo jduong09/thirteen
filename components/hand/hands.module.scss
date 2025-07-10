@@ -8,11 +8,11 @@ $secondary-color: #FFA2B6;
   flex-wrap: wrap;
   background: white;
   border-radius: 4px;
+  padding: .5rem 1rem;
   > .handHeader {
     display: flex;
     align-items: center;
     width: 100%;
-    padding: 1rem;
     > h3 {
       font-size: 1.5rem;
       font-weight: 700;
@@ -28,11 +28,12 @@ $secondary-color: #FFA2B6;
   }
 }
 
-.badgePassed {
-  border: 2px solid black;
-  border-radius: 50%;
-  padding: .25rem;
+.passMessage {
+  padding: 4px;
   font-weight: 700;
+  background-color: $secondary-color;
+  color: white;
+  text-align: center;
 }
 
 .divYourTurn {
@@ -64,7 +65,6 @@ $secondary-color: #FFA2B6;
     border: 2px solid $primary-color;
     padding: .5rem 1rem;
     cursor: pointer;
-    margin-bottom: 1rem;
     font-weight: 500;
   }
   > button:focus {
@@ -98,6 +98,23 @@ $secondary-color: #FFA2B6;
   text-align-last: center;
 }
 
+.badgePassed {
+  border: 2px solid black;
+  border-radius: 50%;
+  padding: .25rem;
+  font-weight: 700;
+}
+
 .invalidCombo {
   padding: 0 .5rem;
+}
+
+@media (min-width: 1024px) {
+  .divHand {
+    padding-right: 1rem;
+  }
+
+  .divUserHand > .handHeader {
+    padding-bottom: 0;
+  }
 }

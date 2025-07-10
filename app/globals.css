@@ -71,4 +71,5 @@ button:focus {
 body {
 	background-color: #EBE9E1;
 	position: relative;
+	min-height: 100vh;
 }

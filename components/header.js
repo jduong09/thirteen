@@ -44,7 +44,6 @@ const Header = () => {
       <nav>
         <ul>
           <li><button onClick={() => setToggleRules(true)}>Rules</button></li>
-          <li><button>Dark Mode</button></li>
         </ul>
       </nav>
       <div className={toggleRules ? pageStyles.rules : pageStyles.hide}>
