@@ -1,0 +1,69 @@
+$primary-color: hsl(12, 85%, 48%);
+$secondary-color: #FFA2B6;
+$tertiary-color: #D6536D;
+$primary-dark-color: #8E1616;
+$secondary-dark-color: #D84040;
+$white-color: #EEEEEE;
+
+$themes: (
+  light: (
+    bg: #EBE9E1,
+    card-bg: $secondary-color,
+    card-border: #000,
+    hover: $tertiary-color,
+    button: $primary-color,
+    button-border: $primary-color,
+    border: #000,
+    header: $primary-color,
+    header-rule-bg: #fff,
+    text: #000,
+    card-front-bg: #fff,
+    h1-color: $primary-color,
+    primary-color: $primary-color,
+    secondary-color: $secondary-color,
+    user-background: #FFF,
+  ),
+  dark: (
+    bg: #121212,
+    card-bg: $secondary-dark-color,
+    card-border: hsl(0, 0, 85),
+    hover: $tertiary-color,
+    button: $primary-dark-color,
+    button-border: $primary-dark-color,
+    border: #000,
+    header: $primary-dark-color,
+    header-rule-bg: grey,
+    text: hsla(0, 0, 100, .86),
+    card-front-bg: hsl(0, 0, 85),
+    h1-color: hsla(0, 0%, 100%, 0.8),
+    primary-color: $primary-dark-color,
+    secondary-color: $secondary-dark-color,
+    user-background: hsl(0, 0, 16),
+  )
+);
+
+@mixin gtheme() {
+  @each $theme, $map in $themes {
+    $theme-map: $map !global;
+    .#{$theme} & {
+      @content;
+    }
+  }
+  $theme-map: null !global;
+}
+
+@mixin theme() {
+  @each $theme, $map in $themes {
+    @each $theme, $map in $themes {
+      $theme-map: $map !global;
+      :global(.#{$theme}) & {
+        @content;
+      }
+    }
+    $theme-map: null !global;
+  }
+}
+
+@function theme-get($key) {
+  @return map-get($theme-map, $key);
+}

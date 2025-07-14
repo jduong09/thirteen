@@ -1,4 +1,4 @@
-$primary-color: #E43D12;
+@import "/components/utilities/_themes";
 
 .hand {
   display: flex;
@@ -7,7 +7,10 @@ $primary-color: #E43D12;
   width: 100%;
   padding: .5rem .25rem;
   margin: 0 auto .5rem auto;
-  scrollbar-color: $primary-color white;
+
+  @include theme() {
+    scrollbar-color: theme-get('primary-color') white;
+  }
   > li {
     width: 50px;
     display: block;
@@ -23,9 +26,14 @@ $primary-color: #E43D12;
   width: 75px;
   height: 105px;
   border: 2px solid black;
-  background-color: white;
   border-radius: 4px;
   margin: 2px;
+
+  @include theme() {
+    background-color: theme-get('card-front-bg');
+  }
+
+
 }
 
 .card.selected {

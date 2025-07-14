@@ -1,3 +1,4 @@
+@import "/components/utilities/themes";
 $primary-color: #E43D12;
 $secondary-color: #FFA2B6;
 
@@ -6,9 +7,12 @@ $secondary-color: #FFA2B6;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  background: white;
   border-radius: 4px;
   padding: .5rem 1rem;
+
+  @include theme() {
+    background-color: theme-get('user-background');
+  }
   > .handHeader {
     display: flex;
     align-items: center;
@@ -16,14 +20,21 @@ $secondary-color: #FFA2B6;
     > h3 {
       font-size: 1.5rem;
       font-weight: 700;
-      color: $primary-color;
       margin-right: 1rem;
+
+      @include theme() {
+        color: theme-get('primary-color');
+      }
     }
     > select {
       width: 40%;
-      border: 2px solid $primary-color;
       padding: .25rem .5rem;
       margin: 0 0 0 auto;
+
+      @include theme() {
+        border: 2px solid theme-get('button-border');
+        background-color: theme-get('card-front-bg');
+      }
     }
   }
 }
@@ -34,6 +45,11 @@ $secondary-color: #FFA2B6;
   background-color: $secondary-color;
   color: white;
   text-align: center;
+
+  @include theme() {
+    border: 2px solid theme-get('text');
+    color: theme-get('text');
+  }
 }
 
 .divYourTurn {
@@ -62,14 +78,22 @@ $secondary-color: #FFA2B6;
   flex-wrap: wrap;
   padding: .25rem 1rem;
   > button {
-    border: 2px solid $primary-color;
     padding: .5rem 1rem;
     cursor: pointer;
     font-weight: 500;
+
+    @include theme() {
+      border: 2px solid theme-get('primary-color');
+      background-color: theme-get('card-front-bg');
+    }
   }
   > button:focus {
     background-color: $primary-color;
     color: white;
+
+    @include theme() {
+      background-color: theme-get('primary-color');
+    }
   }
   > form {
     flex: 1 1 100%;
@@ -79,23 +103,6 @@ $secondary-color: #FFA2B6;
 
 .selectCombination {
   width: 100%;
-}
-
-.selectCombination > label {
-  display: block;
-  width: 100%;
-  text-align: center;
-  font-size: 1.25rem;
-  font-weight: 700;
-  margin-bottom: .5rem;
-  text-decoration: underline;
-}
-
-.selectCombo {
-  padding: .5rem;
-  border: 2px solid $primary-color;
-  width: 100%;
-  text-align-last: center;
 }
 
 .badgePassed {

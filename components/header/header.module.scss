@@ -1,11 +1,41 @@
+@import "/components/utilities/_themes";
+
+.header {
+  @include theme() {
+    color: theme-get('text');
+  }
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: .5rem 1rem;
+}
+
+.header > h1 {
+  font-size: 1.75rem;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-weight: 700;
+  @include theme() {
+    color: theme-get('h1-color');
+  }
+}
+
 .header h2 {
   font-weight: 700;
   font-size: 1.15rem;
-  color: #8E1616;
+  @include theme() {
+    color: theme-get('h1-color');
+  }
 }
 
 .header > nav > ul {
   display: flex;
+  align-items: center;
+  > li {
+    font-size: 1.75rem;
+    cursor: pointer;
+  }
 }
 
 .header > nav > ul > li:last-child {
@@ -14,21 +44,68 @@
 
 .header > nav > ul > li > button {
   font-weight: 700;
-  cursor: pointer;
 }
 
-.header > nav > ul > li > button:focus, .header > nav > ul > li > button:hover {
-  color: #D84040;
+.header > nav > ul > li > button:hover {
+  @include theme() {
+    color: theme-get('h1-color');
+  }
+}
+
+.listItemDarkMode {
+  display: flex;
+  align-items: center;
+  > div {
+    width: 46px;
+    height: 28px;
+    border-radius: 500px;
+    border: 2px solid black;
+    display: flex;
+    align-items: center;
+    > .btnLeft {
+      margin-left: 2px;
+    }
+    > .btnRight {
+      margin-right: 4px;
+    }
+  }
+  > .sunBorder {
+    border-color: white;
+    background-color: white;
+    justify-content: flex-start;
+  }
+  > .moonBorder {
+    @include theme() {
+      background-color: theme-get('h1-color');
+    }
+    justify-content: flex-end;
+  }
+}
+
+.imageDarkMode {
+  display: block;
+  width: 16px;
+  height: auto;
+}
+
+.sunIcon {
+  filter: invert(61%) sepia(92%) saturate(1333%) hue-rotate(356deg) brightness(102%) contrast(106%);;
+}
+
+.moonIcon {
+  filter: invert(11%) sepia(53%) saturate(3439%) hue-rotate(236deg) brightness(82%) contrast(102%);
 }
 
 .rules {
   width: calc(100% - 2rem);
   position: absolute;
   z-index: 99;
-  background-color: #EBE9E1;
   top: 0;
   left: 0;
   margin: 1rem;
+  @include theme() {
+    background-color: theme-get('bg');
+  }
 }
 
 .background {
@@ -68,7 +145,9 @@
   top: 0;
   left: 0;
   z-index: 99;
-  background-color: #EBE9E1;
+  @include theme() {
+    background-color: theme-get('bg');
+  }
 }
 
 .rulesHeader > h2 {
@@ -78,6 +157,12 @@
 .rulesHeader svg {
   width: 16px;
   height: auto;
+}
+
+.header svg {
+  @include theme() {
+    fill: theme-get('text');
+  }
 }
 
 .buttonCaret > svg {
@@ -90,10 +175,6 @@
   transform: rotate(0);
 }
 
-.pageCardRank {
-  background-color: green;
-}
-
 .hide {
   display: none !important;
 }
@@ -103,9 +184,11 @@
 }
 
 .ruleContent {
-  background-color: white;
   padding: .75rem .5rem;
   border-radius: 2px;
+  @include theme() {
+    background-color: theme-get('header-rule-bg');
+  }
 }
 
 .listCombinations > li, .listSmashes > li {
@@ -135,9 +218,13 @@
 .headerCard {
   width: fit-content;
   height: auto;
-  border: 2px solid black;
   padding: .75rem .25rem;
   border-radius: 4px;
+  color: #000;
+  @include theme() {
+    background-color: theme-get('card-front-bg');
+    border: 2px solid theme-get('card-border');
+  }
 }
 
 .red {
@@ -147,8 +234,10 @@
 .listGameplay h3 {
   font-weight: 700;
   font-size: 1.05rem;
-  color: #E43D12;
   margin-bottom: .25rem;
+  @include theme() {
+    color: theme-get('h1-color');
+  }
 }
 
 .listGameplay > li {
@@ -198,10 +287,4 @@
 
 .followingComparison > .listHands {
   margin-bottom: 0;
-}
-
-@media (orientation: landscape) {
-  .header {
-    margin-bottom: .5rem;
-  }
 }

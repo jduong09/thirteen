@@ -1,11 +1,10 @@
 import React, { useRef, useState, useEffect } from "react";
-
 import gameStyles from "./game.module.scss";
-import pageStyles from '@/app/page.module.css';
+import pageStyles from "@/app/page.module.css";
 import Hand from "@/components/hand/hand";
 import Cards from "@/components/cards/cards";
-import { dictionaryCombinations, highestValue } from '@/components/utilities/combination';
-import { aiMoves, aiPossibleCombinations, determineHardestMove, determineFirstMove } from '../utilities/ai';
+import { dictionaryCombinations, highestValue } from "@/components/utilities/combination";
+import { aiMoves, aiPossibleCombinations, determineHardestMove, determineFirstMove } from "../utilities/ai";
 
 /** 
  * For Testing Purposes on this branch specifically
@@ -34,7 +33,7 @@ const Game = () => {
   const suites = ['spades', 'clubs', 'diamonds', 'hearts'];
   // 3-10 are normal cards, 11 is Jack, 12 is Queen, 13 is King, 14 is Ace, 15 is 2.
   const numbers = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
-  let value = 1; // 3 of spades is the lowest card
+  let value = 1;
   const deck = numbers.map((number, idx) => suites.map((suite, i) => ({ number, suite, value: value++ }))).flat();
 
   useEffect(() => {
@@ -357,18 +356,6 @@ const Game = () => {
           }
         }, 2500);
       }
-
-      /*
-      // TODO: Remove when done testing. This is just to simulate a fake game.
-      setTimeout(() => {
-        changeTurn();
-        if (previousPlayedCombo.length === 0) {
-          // console.log(`Current Turn Combo set: ${currentTurnCombo.toUpperCase()}.\n\n`);
-          setNewRound(false);
-        }
-      }, 2500);
-      */
-
     } else {
       console.log(`PLAYER ${playerTurn + 1} ATTEMPTED TO PLAY: ${combo.map((card) => `${card.number} of ${card.suite}`).join(", ")}`);
       setComboStatus(false);
@@ -451,13 +438,6 @@ const Game = () => {
         </div>
         {roundMessage && <div className={gameStyles.roundMessage}>{roundMessage}</div>}
       </div>
-      {/*
-      <div className={gameStyles.handContainer}>
-        <div className={gameStyles.rotateDiv}>
-          <Hand cards={playerObj.hand} player={playerObj.player} passed={playerObj.skipped} />
-        </div>
-      </div>
-      */}
     </li>);
   });
 

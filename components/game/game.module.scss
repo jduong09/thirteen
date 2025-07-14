@@ -1,13 +1,6 @@
-$primary-color: #e43d12;
-$secondary-color: #FFA2B6;
-$tertiary-color: #D6536D;
-
-:export {
-  primaryColor: $primary-color;
-}
+@import "/components/utilities/_themes";
 
 .shuffleBtn {
-  background-color: $primary-color;
   color: white;
   border: none;
   border-radius: 15px;
@@ -15,11 +8,19 @@ $tertiary-color: #D6536D;
   margin: 1em;
   cursor: pointer;
   font-size: 1.5em;
+
+  @include theme() {
+    background-color: theme-get('button');
+  }
+}
+
+.shuffleBtn:hover {
+  @include theme() {
+    background-color: theme-get('secondary-color');
+  }
 }
 
 .intro {
-  background-color: $primary-color;
-  color: white;
   margin: 1em;
   padding: 1em;
   line-height: 1.5;
@@ -28,6 +29,11 @@ $tertiary-color: #D6536D;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  @include theme() {
+    background-color: theme-get('primary-color');
+    color: theme-get('text');
+  }
 }
 
 .gameDiv {
@@ -56,11 +62,14 @@ $tertiary-color: #D6536D;
   margin: 1rem auto;
   font-weight: bold;
   font-size: large;
-  background-color: $primary-color;
   color: white;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  @include theme() {
+    background-color: theme-get('primary-color');
+  }
   > span {
     display: flex;
     justify-content: center;
@@ -212,11 +221,13 @@ $tertiary-color: #D6536D;
 }
 
 .cardFaceDown {
-  background: no-repeat url("../../public/cardBackground.jpg");
+  @include theme() {
+    background: 0% 0%/ 25% repeat theme-get('button') url("../../public/star.svg");
+  }
 }
 
 .cardDisplay {
-  background-color: $primary-color;
+  background-color: $secondary-dark-color;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -232,9 +243,12 @@ $tertiary-color: #D6536D;
   margin-top: .25rem;
   padding: 4px;
   font-weight: 700;
-  background-color: $secondary-color;
   color: white;
   text-align: center;
+
+  @include theme() {
+    background-color: theme-get('button');
+  }
 }
 
 .turnMessage {
@@ -247,9 +261,23 @@ $tertiary-color: #D6536D;
     color: $primary-color;
     font-size: 1rem;
     margin-bottom: .5rem;
+
+    @include theme() {
+      color: theme-get('primary-color');
+    }
   }
   > .divMobileFaces {
     position: relative;
+    > .badgePassed {
+      position: absolute;
+      top: 0;
+      right: 0;
+      border: 2px solid black;
+      border-top-right-radius: 4px;
+      padding: .25rem;
+      font-weight: 700;
+      background-color: $white-color;
+    }
   }
 }
 
@@ -261,6 +289,27 @@ $tertiary-color: #D6536D;
   width: fit-content;
   right: 0;
   font-size: 1.15rem;
+}
+
+.winner {
+  padding: 1rem;
+  margin: -1rem;
+  background-color: yellow;
+}
+
+.star {
+  width: 20px;
+  height: auto;
+}
+
+.btnPlayAgain {
+  display: block;
+  margin: 1rem auto 0 auto;
+  width: 100%;
+  padding: 3px;
+  border: 1px solid white;
+  background-color: white;
+  color: black;
 }
 
 .hide {

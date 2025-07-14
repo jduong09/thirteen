@@ -1,14 +1,24 @@
 "use client";
-import React from 'react';
-import Image from "next/image";
-import styles from "./page.module.css";
-import Header from '@/components/header';
-import Game from '../components/game/game.js';
+import React, { useEffect, useState } from 'react';
+import { useTheme } from "next-themes";
+import Header from "@/components/header/header.js";
+import Game from "../components/game/game.js";
 
 export default function Home() {
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return false;
+  }
+  
   return (
-    <main className={styles.main}>
-      <Header />
+    <main>
+      <Header changeTheme={setTheme} theme={theme} />
       <Game />
     </main>
   );

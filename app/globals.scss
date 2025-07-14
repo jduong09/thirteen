@@ -1,3 +1,5 @@
+@import "/components/utilities/_themes";
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -69,7 +71,10 @@ button:focus {
 }
 
 body {
-	background-color: #EBE9E1;
 	position: relative;
 	min-height: 100vh;
+
+	@include gtheme() {
+		background-color: theme-get('bg');
+	}
 }
