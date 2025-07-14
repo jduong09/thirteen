@@ -237,10 +237,14 @@
 }
 
 .roundMessage {
+  position: absolute;
+  top: 35px;
+  width: 75px;
   margin-top: .25rem;
   padding: 4px;
   font-weight: 700;
   color: white;
+  text-align: center;
 
   @include theme() {
     background-color: theme-get('button');
@@ -254,7 +258,8 @@
 .aiMobileHand {
   > h3 {
     font-weight: 700;
-    font-size: 1.05rem;
+    color: $primary-color;
+    font-size: 1rem;
     margin-bottom: .5rem;
 
     @include theme() {
@@ -323,6 +328,35 @@
   }
 }
 
+.divGameOver {
+  width: 100%;
+  position: absolute;
+  padding: 1rem;
+  z-index: 99;
+  background-color: #EBE9E1;
+  left: 0;
+  bottom: 0;
+  > h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: $primary-color;
+  }
+  > .btnPlayAgain {
+    display: block;
+    margin: 1rem auto 0 auto;
+    width: 50%;
+    padding: 8px;
+    border: 2px solid $primary-color;
+    background: white;
+    font-weight: 700;
+  }
+  > .btnPlayAgain:focus {
+    border-color: #EBE9E1;
+    background-color: $primary-color;
+    color: white;
+  }
+}
+
 @media (min-width: 568px) {
 }
 
@@ -378,3 +412,63 @@
     height: 400px;
   }  
 }
+
+@media (orientation: landscape) and (max-height: 500px) {
+  .gameDiv {
+    padding: 0 1rem;
+  }
+
+  .gameBoard {
+    grid-template-columns: 40% 60%;
+    grid-template-rows: max-content 1fr;
+    > .middleDiv {
+      grid-column: 2 / 3;
+      grid-row: 1 / 2;
+      align-self: end;
+    }
+    > li:nth-child(2), li:nth-child(3), li:nth-child(4) {
+      grid-column: 1 / 2;
+      grid-row: 1 / 2;
+      top: initial;
+      left: initial;
+      right: initial;
+    }
+  }
+
+  .middlePile {
+    margin: 0 auto;
+  }
+
+  .cardFaceDown, .cardDisplay {
+    width: 55px;
+    height: 80px;
+  }
+
+  .containerUser {
+    grid-column: 1 / 3;
+    grid-row: 2 / 3;
+    padding: 1rem 0;
+  }
+
+  .turnIndicator {
+    width: 50%;
+    bottom: initial;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    padding: .5rem 1rem;
+  }
+
+  .roundMessage {
+    width: 55px;
+  }
+}
+
+/* Width Height for Hand in Tablet/Desktop View
+  width: 130px;
+  height: 700px; 
+*/

@@ -8,6 +8,7 @@ $secondary-color: #FFA2B6;
   align-items: center;
   flex-wrap: wrap;
   border-radius: 4px;
+  padding: .5rem 1rem;
 
   @include theme() {
     background-color: theme-get('user-background');
@@ -16,7 +17,6 @@ $secondary-color: #FFA2B6;
     display: flex;
     align-items: center;
     width: 100%;
-    padding: 1rem;
     > h3 {
       font-size: 1.5rem;
       font-weight: 700;
@@ -39,11 +39,12 @@ $secondary-color: #FFA2B6;
   }
 }
 
-.badgePassed {
-  border: 2px solid black;
-  border-radius: 50%;
-  padding: .25rem;
+.passMessage {
+  padding: 4px;
   font-weight: 700;
+  background-color: $secondary-color;
+  color: white;
+  text-align: center;
 
   @include theme() {
     border: 2px solid theme-get('text');

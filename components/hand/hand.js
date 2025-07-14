@@ -143,7 +143,7 @@ const Hand = ({ skipped, player, cards, playerTurn, comboIsValid, requestCombo, 
     <div className={handStyles.divUserHand}>
       <div className={handStyles.handHeader}>
         <h3>Your Hand</h3>
-        {(playerTurn !== player && skipped) && <div className={handStyles.badgePassed}>P</div>}
+        {(playerTurn !== player && skipped) && <div className={handStyles.passMessage}>PASS</div>}
         <select onChange={(e) => {sortPlayerCards(e.target.value)}} className={handStyles.select} defaultValue={'default'}>
           <option value="default" disabled>Sort...</option>
           <option value="groups">Groups</option>
