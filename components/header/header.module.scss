@@ -32,6 +32,10 @@
 .header > nav > ul {
   display: flex;
   align-items: center;
+  > li {
+    font-size: 1.75rem;
+    cursor: pointer;
+  }
 }
 
 .header > nav > ul > li:last-child {
@@ -40,7 +44,6 @@
 
 .header > nav > ul > li > button {
   font-weight: 700;
-  cursor: pointer;
 }
 
 .header > nav > ul > li > button:hover {
@@ -53,8 +56,8 @@
   display: flex;
   align-items: center;
   > div {
-    width: 42px;
-    height: 24px;
+    width: 46px;
+    height: 28px;
     border-radius: 500px;
     border: 2px solid black;
     display: flex;

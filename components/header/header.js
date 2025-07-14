@@ -66,8 +66,8 @@ const Header = ({ changeTheme, theme }) => {
         <ul>
           <li><button onClick={() => setToggleRules(true)}>Rules</button></li>
           <li className={headerStyles.listItemDarkMode}>
-            <div className={theme === 'light' ? headerStyles.sunBorder : headerStyles.moonBorder}>
-              <button className={theme === 'light' ? headerStyles.btnLeft : headerStyles.btnRight} onClick={() => changeTheme(theme === 'light' ? 'dark' : 'light')}>
+            <div className={theme === 'light' ? headerStyles.sunBorder : headerStyles.moonBorder} onClick={() => changeTheme(theme === 'light' ? 'dark' : 'light')}>
+              <button className={theme === 'light' ? headerStyles.btnLeft : headerStyles.btnRight}>
                 <Image priority className={`${headerStyles.imageDarkMode} ${theme === 'light' ? headerStyles.sunIcon : headerStyles.moonIcon}`} src={src} alt='Svg icon of sun or moon' />
               </button>
             </div>
