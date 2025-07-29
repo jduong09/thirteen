@@ -24,7 +24,7 @@ const Cards = ({ cards, selectCard }) => {
   });
 
   return (
-    <ul className={cardStyles.hand}>
+    <ul data-cy='cards' className={cardStyles.hand}>
       {listOfCards}
     </ul>
   );

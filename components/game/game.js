@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import gameStyles from "./game.module.scss";
 import pageStyles from "@/app/page.module.css";
 import Hand from "@/components/hand/hand";
@@ -233,8 +233,6 @@ const Game = () => {
    * @description Randomly shuffles the card deck using the fisher-yates shuffle algorithm and deals 13 cards to each player. Established the first player.
    */
   const onShuffleClick = () => {
-    showIntro(true);
-
     const tempHands = [
       {player: 0, hand: [], skipped: false, winner: false, roundWin: false},
       {player: 1, hand: [], skipped: false, winner: false, roundWin: false},
@@ -257,7 +255,7 @@ const Game = () => {
     setTimeout(() => {
       showIntro(false);
       shuffleDeck(true);
-    }, 1000);
+    }, 3000);
   };
 
   /**
@@ -413,7 +411,8 @@ const Game = () => {
     setShowQty(false);
   }
 
-  const shuffleBtn = deckIsShuffled ? null : <button className={gameStyles.shuffleBtn} onClick={onShuffleClick}>Shuffle Deck</button>;
+  // Only show shuffle button at start or end of game
+  const shuffleBtn = deckIsShuffled ? null : <button data-cy='btnShuffle' className={gameStyles.shuffleBtn} onClick={onShuffleClick}>Shuffle Deck</button>;
 
   const listAiHands = hands.reduce((result, hand) => {
     if (hand.player !== 0) {
