@@ -1,3 +1,5 @@
+@import "/components/utilities/_themes";
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -18,12 +20,14 @@ time, mark, audio, video, button, a {
 	font: inherit;
 	vertical-align: baseline;
 	box-sizing: border-box;
+	color: inherit;
 }
 
 button {
 	background: none;
 	border: 0;
 	outline: none;
+	cursor: pointer;
 }
 
 a {
@@ -40,7 +44,7 @@ body {
 	line-height: 1;
 }
 
-ol, ul {
+ol, ul, li {
 	list-style: none;
 }
 
@@ -64,4 +68,13 @@ select:focus,
 textarea:focus,
 button:focus {
     outline: none;
+}
+
+body {
+	position: relative;
+	min-height: 100vh;
+
+	@include gtheme() {
+		background-color: theme-get('bg');
+	}
 }

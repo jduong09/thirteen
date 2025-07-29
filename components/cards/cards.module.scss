@@ -1,7 +1,24 @@
+@import "/components/utilities/_themes";
+
 .hand {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
+  overflow-x: auto;
+  width: 100%;
+  padding: .5rem .25rem;
+  margin: 0 auto .5rem auto;
+
+  @include theme() {
+    scrollbar-color: theme-get('primary-color') white;
+  }
+  > li {
+    width: 50px;
+    display: block;
+    z-index: 1;
+  }
+  >li:last-child {
+    width: auto;
+  }
 }
 
 .card {
@@ -11,10 +28,16 @@
   border: 2px solid black;
   border-radius: 4px;
   margin: 2px;
+
+  @include theme() {
+    background-color: theme-get('card-front-bg');
+  }
+
+
 }
 
 .card.selected {
-  background-color: beige;
+  background-color: #f1b9b4;
 }
 
 .cardTopLeft {
@@ -36,9 +59,33 @@
 }
 
 .cardTopLeft.red, .cardBottomRight.red {
-  color: red;
+  color: red !important;
 }
 
 .cardBottomRight > span {
   transform: rotate(180deg);
+}
+
+@media (min-width: 1024px) {
+  .hand {
+    padding: 1rem 0 1rem 1rem;
+    margin-bottom: 0;
+    > li {
+      width: 30px;
+    }
+    > li:last-child {
+      margin-right: 1rem;
+    }
+  }
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+  .card {
+    width: 55px;
+    height: 80px;
+  }
+
+  .hand {
+    padding: 0;
+  }
 }
